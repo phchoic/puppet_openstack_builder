@@ -136,6 +136,12 @@ if reposource != 'downstream'
 end
 mod 'stackforge/openstack_extras', :git => "#{git_protocol}://github.com/#{author}/puppet-openstack_extras.git", :ref => ref
 
+# puppeels
+if reposource != 'downstream'
+  author = 'michaeltchapman'
+end
+mod 'michaeltchapman/puppeels', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
+
 # rabbitmq
 if reposource != 'downstream'
   author = 'puppetlabs'
