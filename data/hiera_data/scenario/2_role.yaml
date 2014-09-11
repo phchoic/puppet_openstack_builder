@@ -1,0 +1,17 @@
+#################
+# Data Mappings #
+#################
+
+# swift_internal_address
+swift::keystone::auth::internal_address: "%{hiera('swift_internal_address')}"
+
+# swift_local_net_ip
+openstack::swift::proxy::swift_local_net_ip: "%{hiera('swift_local_net_ip')}"
+openstack::swift::storage-node::swift_local_net_ip: "%{hiera('swift_local_net_ip')}"
+
+# swift_public_address
+swift::keystone::auth::public_address: "%{hiera('swift_public_address')}"
+openstack::swift::proxy::swift_proxy_net_ip: "%{hiera('swift_public_address')}"
+
+# swift_admin_address
+swift::keystone::auth::admin_address: "%{hiera('swift_admin_address')}"

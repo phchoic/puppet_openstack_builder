@@ -1,0 +1,4 @@
+class_groups:
+  - "nova_compute"
+  - "cinder_volume"
+  - "ceilometer_compute"

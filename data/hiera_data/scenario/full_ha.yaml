@@ -1,0 +1,19 @@
+#################
+# Data Mappings #
+#################
+
+# swift_proxy_net_ip
+swift::ringserver::local_net_ip: "%{hiera('swift_proxy_net_ip')}"
+openstack::swift::storage-node::ring_server: "%{hiera('swift_proxy_net_ip')}"
+openstack::swift::proxy::swift_local_net_ip: "%{hiera('swift_proxy_net_ip')}"
+# Global Hiera Params:
+enable_ha: true
+compute_type: libvirt
+glance_backend: swift
+db_type: galera
+rpc_type: rabbitmq
+cinder_backend: iscsi
+network_service: neutron
+tenant_network_type: vlan
+network_type: provider-router
+network_plugin: ovs

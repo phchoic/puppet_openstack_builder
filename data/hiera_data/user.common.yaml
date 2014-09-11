@@ -355,15 +355,15 @@ glance::api::show_image_direct_url: false
 
 # A boolean specifying whether to enable the Neutron Load Balancing
 # as a Service agent.
-enable_lbaas: true
+enable_lbaas: &enable_lbaas  true
 
 # A boolean specifying whether to enable the Neutron Firewall as
 # a Service feature.
-enable_fwaas: true
+enable_fwaas: &enable_fwaas  true
 
 # A boolean specifying whether to enable the Neutron VPN as a
 # Service feature.
-enable_vpnaas: true
+enable_vpnaas: &enable_vpnaas  true
 
 # Neutron core plugin to use. This should always be
 # ML2 from Juno onwards
@@ -388,7 +388,7 @@ external_network_bridge: 'br-ex'
 # enable_lb: Enables Neutron LBaaS agent support.
 # enable_firewall: Enables Neutron FWaaS support.
 # enable_vpn: Enables Neutron VPNaaS support
-horizon_neutron_options:
+horizon_neutron_options: &horizon_neutron_options 
   'enable_lb': true
   'enable_firewall': true
   'enable_vpn': true
@@ -398,13 +398,13 @@ horizon_neutron_options:
 # cases this is not necessary and may cause problems if the database
 # connection information is only located in the neutron.conf file
 # rather than also being present in the Neturon plugin's conf file.
-neutron_sync_db: false
+neutron_sync_db: &neutron_sync_db  false
 
 ## The following parameters are used to enable SSL endpoint support
 # in keystone.
 
 # Enable ssl in keystone config
-enable_ssl: false
+enable_ssl: &enable_ssl  false
 
 ### NOTE: If enable_ssl is true, Replace the following lines
 ### with valid SSL certs. To generate you own self signed certs
@@ -479,3 +479,14 @@ mysql::server::restart: true
 #  coe::compute::migration::nfs_mount_device: 'nfs.domain.com:/myinstances'
 #  coe::compute::migration::nfs_fs_type: 'nfs'
 #  coe::compute::migration::nfs_mount_options: 'auto'
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+neutron::agents::vpnaas::enabled: *enable_vpnaas
+neutron::server::sync_db: *neutron_sync_db
+neutron::agents::lbaas::enabled: *enable_lbaas
+keystone::enable_ssl: *enable_ssl
+neutron::services::fwaas::enabled: *enable_fwaas
+horizon::neutron_options: *horizon_neutron_options

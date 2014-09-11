@@ -1,0 +1,189 @@
+build:
+  - "apache"
+  - "collectd"
+  - "coi::profiles::cache_server"
+  - "coi::profiles::puppet::master"
+  - "graphite"
+
+ceilometer_compute:
+  - "ceilometer"
+  - "ceilometer::agent::auth"
+  - "ceilometer::agent::compute"
+
+ceilometer_controller:
+  - "ceilometer"
+  - "ceilometer::db"
+  - "ceilometer::collector"
+  - "ceilometer::agent::auth"
+  - "ceilometer::agent::central"
+  - "ceilometer::api"
+  - "ceilometer::alarm::notifier"
+  - "ceilometer::alarm::evaluator"
+
+ceph_all:
+
+ceph_mon:
+  - "cephdeploy::mon"
+
+ceph_osd:
+  - "cephdeploy::osdwrapper"
+
+cinder_all:
+
+cinder_controller:
+  - "cinder"
+  - "cinder::api"
+  - "cinder::config"
+  - "cinder::scheduler"
+
+cinder_volume:
+  - "cinder"
+  - "cinder::volume"
+  - "cinder::config"
+  - "cinder::volume::%{cinder_backend}"
+
+firewall_compute:
+  - "openstacklib::firewall"
+  - "openstacklib::firewall::base"
+  - "openstacklib::firewall::ssh"
+  - "openstacklib::firewall::compute"
+
+firewall_control:
+  - "openstacklib::firewall"
+  - "openstacklib::firewall::base"
+  - "openstacklib::firewall::ssh"
+  - "openstacklib::firewall::memcached"
+  - "openstacklib::firewall::nova"
+  - "openstacklib::firewall::dhcp"
+  - "openstacklib::firewall::keystone"
+  - "openstacklib::firewall::ceilometer"
+  - "openstacklib::firewall::glance"
+  - "openstacklib::firewall::heat"
+  - "openstacklib::firewall::neutron"
+  - "openstacklib::firewall::cinder"
+  - "openstacklib::firewall::rabbitmq"
+  - "openstacklib::firewall::dashboard"
+  - "openstacklib::firewall::keepalived"
+
+galera_database:
+  - "galera"
+  - "mysql::server::account_security"
+  - "coi::profiles::openstack::databases::mysql"
+
+glance_all:
+  - "glance"
+  - "glance::api"
+  - "glance::config"
+  - "glance::registry"
+  - "glance::backend::%{glance_backend}"
+  - "glance::cache::pruner"
+  - "glance::cache::cleaner"
+  - "glance::notify::%{rpc_type}"
+
+heat_all:
+  - "heat"
+  - "heat::api"
+  - "heat::api_cfn"
+  - "heat::api_cloudwatch"
+  - "heat::db::mysql"
+  - "heat::engine"
+
+horizon:
+  - "memcached"
+  - "horizon"
+  - "apache"
+
+keystone_all:
+  - "keystone"
+  - "keystone::roles::admin"
+  - "keystone::config"
+  - "coi::profiles::openstack::endpoints"
+
+loadbalance_control:
+  - "openstacklib::loadbalance::haproxy"
+  - "openstacklib::loadbalance::haproxy::mysql"
+  - "openstacklib::loadbalance::haproxy::nova"
+  - "openstacklib::loadbalance::haproxy::keystone"
+  - "openstacklib::loadbalance::haproxy::ceilometer"
+  - "openstacklib::loadbalance::haproxy::glance"
+  - "openstacklib::loadbalance::haproxy::heat"
+  - "openstacklib::loadbalance::haproxy::neutron"
+  - "openstacklib::loadbalance::haproxy::cinder"
+  - "openstacklib::loadbalance::haproxy::rabbitmq"
+  - "openstacklib::loadbalance::haproxy::dashboard"
+
+mysql_database:
+  - "mysql::server"
+  - "mysql::server::account_security"
+  - "coi::profiles::openstack::databases::mysql"
+
+network_controller:
+  - "%{network_service}"
+  - "%{network_service}::server"
+  - "%{network_service}::server::notifications"
+  - "%{network_service}::config"
+  - "%{network_service}::agents::metadata"
+  - "%{network_service}::agents::l3"
+  - "%{network_service}::agents::lbaas"
+  - "%{network_service}::agents::vpnaas"
+  - "%{network_service}::agents::dhcp"
+  - "%{network_service}::agents::%{network_plugin}"
+  - "%{network_service}::services::fwaas"
+  - "%{network_service}::plugins::%{network_plugin}"
+
+network_controller_ml2:
+  - "%{network_service}"
+  - "%{network_service}::server"
+  - "%{network_service}::server::notifications"
+  - "%{network_service}::agents::metadata"
+  - "%{network_service}::agents::l3"
+  - "%{network_service}::agents::lbaas"
+  - "%{network_service}::agents::vpnaas"
+  - "%{network_service}::agents::dhcp"
+  - "%{network_service}::agents::ml2::%{network_plugin}"
+  - "%{network_service}::services::fwaas"
+  - "%{network_service}::plugins::ml2"
+
+nova_compute:
+  - "nova"
+  - "nova::compute"
+  - "nova::config"
+  - "nova::compute::%{compute_type}"
+  - "nova::network::%{network_service}"
+  - "nova::compute::%{network_service}"
+  - "%{network_service}"
+  - "%{network_service}::agents::%{network_plugin}"
+
+nova_compute_ml2:
+  - "nova"
+  - "nova::compute"
+  - "nova::config"
+  - "nova::compute::%{compute_type}"
+  - "nova::network::%{network_service}"
+  - "nova::compute::%{network_service}"
+  - "%{network_service}::agents::ml2::%{network_plugin}"
+  - "%{network_service}"
+  - "%{network_service}::plugins::ml2"
+
+nova_controller:
+  - "nova"
+  - "nova::api"
+  - "nova::config"
+  - "nova::scheduler"
+  - "nova::objectstore"
+  - "nova::cert"
+  - "nova::consoleauth"
+  - "nova::conductor"
+  - "nova::network::%{network_service}"
+  - "nova::vncproxy"
+
+provider_network_controller:
+  - "%{network_service}"
+  - "%{network_service}::agents::dhcp"
+  - "%{network_service}::agents::%{network_plugin}"
+
+test_file:
+  - "openstack::client"
+  - "openstack::auth_file"
+  - "openstack::test_file"
+

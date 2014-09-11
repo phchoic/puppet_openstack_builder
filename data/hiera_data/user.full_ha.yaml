@@ -21,14 +21,14 @@ horizon::keystone_url: 'http://192.168.220.40:5000/v2.0/'
 # need to be customized for full_ha are defined here.
 #
 # metadata_shared_secret needs to be undefined for full_ha deployments
-metadata_shared_secret: false
+metadata_shared_secret: &metadata_shared_secret  false
 
 #
 # HA connections
 #
 # controller_names sets the short hostnames (not FQDN) of the
 # controller nodes.
-controller_names:
+controller_names: &controller_names 
   - control01
   - control02
   - control03
@@ -71,7 +71,7 @@ openstack::swift::proxy::swift_memcache_servers:
   - 192.168.222.62:11211
 # rabbit_hosts lists the short hostnames (not FQDN) and ports of the
 # RabbitMQ services on the control nodes.
-rabbit_hosts:
+rabbit_hosts: &rabbit_hosts 
   - control01:5672
   - control02:5672
   - control03:5672
@@ -97,14 +97,14 @@ galera_master_ipaddress: 192.168.220.41
 # galera_backup_ipaddresses lists the IP addresses of the other nodes in
 # the Galera cluster. HAProxy will direct writes to them if
 # galera_master_ipaddress is not reachable
-galera_backup_ipaddresses:
+galera_backup_ipaddresses: &galera_backup_ipaddresses 
   - 192.168.220.42
   - 192.168.220.43
 # galera_master_name is the bare hostname (not FQDN) of galera_master_ipaddress
 galera_master_name: control01
 # galera_backup_names is the bare hostname (not FQDN) of the nodes listed in
 # galera_backup_ipaddresses
-galera_backup_names:
+galera_backup_names: &galera_backup_names 
   - control02
   - control03
 
@@ -149,3 +149,21 @@ openstack::swift::storage-node::storage_devices:
   - 'sdd'
   - 'sde'
   - 'sdf'
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+quantum::rabbit_hosts: *rabbit_hosts
+neutron::rabbit_hosts: *rabbit_hosts
+nova::rabbit_hosts: *rabbit_hosts
+cinder::rabbit_hosts: *rabbit_hosts
+heat::rabbit_hosts: *rabbit_hosts
+openstack-ha::load-balancer::galera_backup_ipaddresses: *galera_backup_ipaddresses
+openstack-ha::load-balancer::galera_backup_names: *galera_backup_names
+quantum::agents::metadata::shared_secret: *metadata_shared_secret
+neutron::agents::metadata::shared_secret: *metadata_shared_secret
+nova::api::quantum_metadata_proxy_shared_secret: *metadata_shared_secret
+nova::api::neutron_metadata_proxy_shared_secret: *metadata_shared_secret
+nova::rabbitmq::cluster_disk_nodes: *controller_names
+openstack-ha::load-balancer::controller_names: *controller_names

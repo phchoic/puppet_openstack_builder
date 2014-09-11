@@ -1,0 +1,3 @@
+classes:
+  - "coe::base"
+  - "openstack::swift::storage-node"

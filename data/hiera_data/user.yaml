@@ -1,0 +1,262 @@
+# This is the sample user.yaml for the stacktira scenario
+# For additional things that can be configured, look at
+# user.stacktira.yaml, or user.common.
+#
+# Warning:
+# When working with non-string types, remember to keep yaml
+# anchors within a single file - hiera cannot look them
+# up across files. For this reason, editing the lower section
+# of this file is not recommended.
+
+#) The scenario to use.
+scenario: stacktira
+
+# The default network config is as follows:
+# eth0: vagrant network in testing
+# eth1: deploy network
+# eth2: public api network + external VM traffic
+# eth3: private service network + internal VM traffic
+
+# Domain to use for fqdns and public services
+domain_name: domain.name
+
+# Name of the server for monitoring, provisioning
+# and puppet master
+build_server_name: build-server
+
+# IP of the server for monitoring, provisioning
+# and puppet master
+build_server_ip: 192.168.242.100
+
+# This can be used to set a name for your public VIP
+# Set this to your certname if you're using ssl
+controller_public_address: public.stacktira.domain.name
+
+# This can be used to set a name for your internal VIP
+# Set this to your certname if you're using ssl
+controller_internal_address: private.stacktira.domain.name
+
+# This can be used to set a name for your internal VIP
+# Set this to your certname if you're using ssl
+controller_admin_address: private.stacktira.domain.name
+
+# Protocol to use to access public endpoints
+controller_public_protocol: https
+
+# Protocol to use to access internal endpoints
+controller_internal_protocol: http
+
+# Protocol to use to access internal endpoints
+controller_admin_protocol: http
+
+# Interface that will be used by the l3 router on
+# the control node.
+external_interface: eth2
+
+# for a provider network on this interface instead of
+# an l3 agent use these options
+#openstacklib::openstack::provider::interface: eth4
+#neutron::plugins::ovs::network_vlan_ranges: default
+#network_type: provider-router
+
+# If you are not using provider networks, and your public interface
+# is used for both data (l3 agent) and API services, we need to
+# put our HA features on the external bridge, rather than the external
+# interface, as the interface is plugged into the bridge by OVS.
+openstacklib::loadbalance::haproxy::public_iface: br-ex
+
+# Gre tunnel bind address for each node
+internal_ip: "%{ipaddress_eth3}"
+
+# The bind ip for management and deployment services
+deploy_bind_ip: "%{ipaddress_eth1}"
+
+# The bind ip for public services
+public_bind_ip: "%{ipaddress_eth2}"
+
+# The bind ip for private services
+private_bind_ip: "%{ipaddress_eth3}"
+
+# The interface for management and deployment services
+deploy_bind_if: eth1
+
+# The interface for public services
+public_bind_if: eth2
+
+# The interface for private services
+private_bind_if: eth3
+
+# The public VIP, where all API services are exposed to users.
+public_vip: 10.2.3.5
+
+# The private VIP, where internal services are exposed to other services.
+private_vip: 10.3.3.5
+
+# List of IP addresses for controllers on the private network
+control_servers_private: &control_servers_private  [ '10.3.3.10', '10.3.3.11', '10.3.3.12']
+
+# Hosts that will be permitted to access MySQL
+allowed_hosts: 10.3.3.%
+
+# The master node for clustered control services. This should
+# match the FQDN fact on the node to be designated the galera
+# and keepalived master
+control_master_fqdn: control1.domain.name
+
+# Hostname of node to use as the master node in Galera master/slave
+control_master_name: control1
+
+# Address of node to use as the master node in Galera master/slave
+control_master_address: 10.3.3.10
+
+# A Hash of /etc/hosts entries. Used for rabbitmq hosts
+# resolution, and for adding names to the public and private VIPs.
+# The top three used for rabbitmq must be of the form <hostname>private
+openstacklib::hosts::cluster_hash:
+  control1private:
+    ip: '10.3.3.10'
+  control2private:
+    ip: '10.3.3.11'
+  control3private:
+    ip: '10.3.3.12'
+  "%{hiera('controller_public_address')}":
+    ip: "%{hiera('public_vip')}"
+  "%{hiera('controller_internal_address')}":
+    ip: "%{hiera('private_vip')}"
+
+# List of controller hostnames. Used for rabbitmq hosts list
+cluster_names: &cluster_names  [ 'control1private', 'control2private', 'control3private' ]
+
+# For the case where the node hostname already resolves to something else,
+# force the nodename to be the private shortname we're using above.
+rabbitmq::environment_variables:
+  'NODENAME': "rabbit@%{hostname}private"
+
+# Path to the SSL cert to use for the public API endpoints and dashboard
+haproxy_cert_path: /etc/ssl/certs/testing_stacktira.pem
+
+# Bind options to be passed to HAproxy if ssl is enabled. This
+# will only affect the public endpoints and dashboard.
+ssl_bind_options: &ssl_bind_options
+  - ssl
+  - crt
+  - "%{hiera('haproxy_cert_path')}"
+
+# Enable SSL on the public dashboard VIP port
+openstacklib::loadbalance::haproxy::dashboard::enable_ssl: true
+
+# A hash describing the regions and their endpoints
+openstacklib::openstack::regions::regions_hash:
+  RegionOne:
+    public_ip: "%{hiera('controller_public_address')}"
+    private_ip: "%{hiera('controller_internal_address')}"
+    services:
+      - heat
+      - nova
+      - neutron
+      - ceilometer
+      - cinder
+      - glance
+      - keystone
+      - ec2
+
+# Libvirt type use 'kvm' on bare metal, qemu on VMs
+nova::compute::libvirt::libvirt_virt_type: qemu
+
+# Proxy host to use for package downloads
+proxy_host: 192.168.0.18
+
+# Proxy port to use for package downloads
+proxy_port: 8000
+
+# Allow CIDR for the deploy network
+deploy_control_firewall_source: '192.168.242.0/24'
+
+# Allow CIDR for the public network
+public_control_firewall_source: '10.2.3.0/24'
+
+# Allow CIDR for the private network
+private_control_firewall_source: '10.3.3.0/24'
+
+# Mirror to use for epel
+yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
+
+# Mirror to use for base
+yum_base_mirror: 'http://centos.mirror.uber.com.au'
+
+# Service to create databases for
+enabled_services: &enabled_services
+  - keystone
+  - glance
+  - ceilometer
+  - nova
+  - neutron
+  - cinder
+  - heat
+
+galera::status::status_password: clustercheck
+openstacklib::loadbalance::haproxy::vip_secret: vip_password
+cinder_db_password: cinder_pass
+glance_db_password: glance_pass
+keystone_db_password: key_pass
+nova_db_password: nova_pass
+network_db_password: quantum_pass
+database_root_password: mysql_pass
+cinder_service_password: cinder_pass
+glance_service_password: glance_pass
+nova_service_password: nova_pass
+ceilometer_service_password: ceilometer_pass
+admin_password: Cisco123
+admin_token: keystone_admin_token
+network_service_password: quantum_pass
+rpc_password: openstack_rabbit_password
+metadata_shared_secret: metadata_shared_secret
+horizon_secret_key: horizon_secret_key
+ceilometer_metering_secret: ceilometer_metering_secret
+ceilometer_db_password: ceilometer
+heat_db_password: heat
+eat_service_password: heat_pass
+heat::engine::auth_encryption_key: 'notgood but just long enough i think'
+
+# Openstack version to install
+openstack_release: icehouse
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+neutron::rabbit_hosts: *cluster_names
+ceilometer::rabbit_hosts: *cluster_names
+nova::rabbit_hosts: *cluster_names
+cinder::rabbit_hosts: *cluster_names
+heat::rabbit_hosts: *cluster_names
+glance::notify::rabbitmq::rabbit_hosts: *cluster_names
+rabbitmq::cluster_nodes: *cluster_names
+openstacklib::loadbalance::haproxy::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::ceilometer::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::cinder::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::dashboard::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::glance::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::heat::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::keystone::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::mysql::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::neutron::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::nova::cluster_names: *cluster_names
+openstacklib::loadbalance::haproxy::rabbitmq::cluster_names: *cluster_names
+
+openstacklib::loadbalance::haproxy::ceilometer::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::cinder::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::dashboard::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::glance::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::heat::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::keystone::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::neutron::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::nova::cluster_addresses: *control_servers_private
+
+openstacklib::loadbalance::haproxy::mysql::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::rabbitmq::cluster_addresses: *control_servers_private
+openstacklib::loadbalance::haproxy::keystone::cluster_addresses: *control_servers_private
+nova::memcached_servers: *control_servers_private
+galera::galera_servers: *control_servers_private
+
+openstacklib::openstack::databases::enabled_services: *enabled_services

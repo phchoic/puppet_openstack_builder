@@ -1,0 +1,107 @@
+#################
+# Data Mappings #
+#################
+
+# rpc_password
+cinder::rabbit_password: "%{hiera('rpc_password')}"
+cinder::qpid_password: "%{hiera('rpc_password')}"
+nova::qpid::password: "%{hiera('rpc_password')}"
+nova::rabbitmq::password: "%{hiera('rpc_password')}"
+nova::rabbit_password: "%{hiera('rpc_password')}"
+nova::qpid_password: "%{hiera('rpc_password')}"
+quantum::rabbit_password: "%{hiera('rpc_password')}"
+quantum::qpid_password: "%{hiera('rpc_password')}"
+neutron::rabbit_password: "%{hiera('rpc_password')}"
+neutron::qpid_password: "%{hiera('rpc_password')}"
+ceilometer::rabbit_password: "%{hiera('rpc_password')}"
+ceilometer::qpid_password: "%{hiera('rpc_password')}"
+heat::rabbit_password: "%{hiera('rpc_password')}"
+
+# admin_token
+keystone::admin_token: "%{hiera('admin_token')}"
+
+# swift_service_password
+swift::keystone::auth::password: "%{hiera('swift_service_password')}"
+openstack::swift::proxy::swift_user_password: "%{hiera('swift_service_password')}"
+
+# cinder_db_password
+cinder::db::mysql::password: "%{hiera('cinder_db_password')}"
+cinder::db::postgresql::password: "%{hiera('cinder_db_password')}"
+
+# heat_service_password
+heat::keystone::auth::password: "%{hiera('heat_service_password')}"
+heat::keystone::auth_cfn::password: "%{hiera('heat_service_password')}"
+heat::keystone_password: "%{hiera('heat_service_password')}"
+
+# nova_service_password
+nova::keystone::auth::password: "%{hiera('nova_service_password')}"
+nova::api::admin_password: "%{hiera('nova_service_password')}"
+neutron::server::notifications::nova_admin_password: "%{hiera('nova_service_password')}"
+
+# heat_db_password
+heat::db::mysql::password: "%{hiera('heat_db_password')}"
+
+# keystone_db_password
+keystone::db::mysql::password: "%{hiera('keystone_db_password')}"
+keystone::db::postgresql::password: "%{hiera('keystone_db_password')}"
+
+# nova_db_password
+nova::db::mysql::password: "%{hiera('nova_db_password')}"
+nova::db::postgresql::password: "%{hiera('nova_db_password')}"
+
+# swift_hash
+openstack::swift::proxy::swift_hash_suffix: "%{hiera('swift_hash')}"
+openstack::swift::storage-node::swift_hash_suffix: "%{hiera('swift_hash')}"
+swift::swift_hash_suffix: "%{hiera('swift_hash')}"
+
+# glance_service_password
+glance::keystone::auth::password: "%{hiera('glance_service_password')}"
+glance::api::keystone_password: "%{hiera('glance_service_password')}"
+glance::registry::keystone_password: "%{hiera('glance_service_password')}"
+
+# ceilometer_service_password
+ceilometer::keystone::auth::password: "%{hiera('ceilometer_service_password')}"
+ceilometer::api::keystone_password: "%{hiera('ceilometer_service_password')}"
+ceilometer::agent::auth::auth_password: "%{hiera('ceilometer_service_password')}"
+
+# network_db_password
+quantum::db::mysql::password: "%{hiera('network_db_password')}"
+quantum::db::postgresql::password: "%{hiera('network_db_password')}"
+neutron::db::mysql::password: "%{hiera('network_db_password')}"
+neutron::db::postgresql::password: "%{hiera('network_db_password')}"
+
+# network_service_password
+quantum::keystone::auth::password: "%{hiera('network_service_password')}"
+neutron::keystone::auth::password: "%{hiera('network_service_password')}"
+quantum::server::auth_password: "%{hiera('network_service_password')}"
+neutron::server::auth_password: "%{hiera('network_service_password')}"
+nova::network::quantum::quantum_admin_password: "%{hiera('network_service_password')}"
+nova::network::neutron::neutron_admin_password: "%{hiera('network_service_password')}"
+quantum::agents::metadata::auth_password: "%{hiera('network_service_password')}"
+neutron::agents::metadata::auth_password: "%{hiera('network_service_password')}"
+
+# glance_db_password
+glance::db::mysql::password: "%{hiera('glance_db_password')}"
+glance::db::postgresql::password: "%{hiera('glance_db_password')}"
+
+# ceilometer_metering_secret
+ceilometer::metering_secret: "%{hiera('ceilometer_metering_secret')}"
+
+# ceilometer_db_password
+ceilometer::db::mysql::password: "%{hiera('ceilometer_db_password')}"
+
+# admin_password
+keystone::roles::admin::password: "%{hiera('admin_password')}"
+openstack::auth_file::admin_password: "%{hiera('admin_password')}"
+
+# horizon_secret_key
+horizon::secret_key: "%{hiera('horizon_secret_key')}"
+
+# database_root_password
+mysql::config::root_password: "%{hiera('database_root_password')}"
+galera::root_password: "%{hiera('database_root_password')}"
+postgresql::config::postgres_password: "%{hiera('database_root_password')}"
+
+# cinder_service_password
+cinder::api::keystone_password: "%{hiera('cinder_service_password')}"
+cinder::keystone::auth::password: "%{hiera('cinder_service_password')}"

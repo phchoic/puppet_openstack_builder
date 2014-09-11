@@ -26,7 +26,7 @@
 coe::base::package_repo: cisco_repo
 openstack_repo_location: 'http://openstack-repo.cisco.com/openstack/cisco'
 # supplemental_repo is not needed for icehouse+trusty
-supplemental_repo: false
+supplemental_repo: &supplemental_repo  false
 puppet_repo_location: 'http://openstack-repo.cisco.com/openstack/puppet'
 puppet_repo: 'cisco_repo'
 pocket: ''
@@ -36,3 +36,10 @@ puppet::master::version: latest
 puppet::agent::version: latest
 coi::profiles::puppet::master::puppetlabs_repo: false
 
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+coe::base::supplemental_repo: *supplemental_repo
+coi::profiles::cobbler_server::supplemental_repo: *supplemental_repo

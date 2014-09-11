@@ -1,0 +1,8 @@
+classes:
+  - "openstack_extras::repo::redhat::redhat"
+  - "openstacklib::hosts"
+  - "openstacklib::puppet::master"
+  - "edeploy"
+  - "dnsmasq"
+  - "openstacklib::firewall::edeploy"
+  - "openstacklib::firewall::puppet"

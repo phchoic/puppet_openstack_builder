@@ -1,0 +1,263 @@
+#################
+# Data Mappings #
+#################
+
+# mysql_module
+ceilometer::db::mysql_module: "%{hiera('mysql_module')}"
+ceilometer::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+cinder::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+glance::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+glance::api::mysql_module: "%{hiera('mysql_module')}"
+glance::registry::mysql_module: "%{hiera('mysql_module')}"
+heat::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+heat::mysql_module: "%{hiera('mysql_module')}"
+keystone::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+keystone::mysql_module: "%{hiera('mysql_module')}"
+neutron::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+neutron::server::mysql_module: "%{hiera('mysql_module')}"
+nova::mysql_module: "%{hiera('mysql_module')}"
+nova::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+
+# %{controller_public_protocol}://%{controller_public_address}:5000/
+keystone::public_endpoint: "%{hiera('controller_public_protocol')}://%{hiera('controller_public_address')}:5000/"
+
+# deploy_bind_if
+openstacklib::hosts::mgmt_ip: "%{hiera('deploy_bind_if')}"
+
+# %{controller_admin_protocol}://%{controller_admin_address}:35357/v2.0
+keystone::validate_auth_url: "%{hiera('controller_admin_protocol')}://%{hiera('controller_admin_address')}:35357/v2.0"
+
+# cluster_names
+quantum::rabbit_hosts: "%{hiera('cluster_names')}"
+neutron::rabbit_hosts: "%{hiera('cluster_names')}"
+nova::rabbit_hosts: "%{hiera('cluster_names')}"
+heat::rabbit_hosts: "%{hiera('cluster_names')}"
+cinder::rabbit_hosts: "%{hiera('cluster_names')}"
+rabbitmq::cluster_nodes: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::ceilometer::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::cinder::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::dashboard::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::glance::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::heat::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::keystone::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::mysql::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::neutron::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::nova::cluster_names: "%{hiera('cluster_names')}"
+openstacklib::loadbalance::haproxy::rabbitmq::cluster_names: "%{hiera('cluster_names')}"
+
+# %{controller_admin_protocol}://%{controller_admin_address}:35357/v2.0/
+neutron::server::notifications::nova_admin_auth_url: "%{hiera('controller_admin_protocol')}://%{hiera('controller_admin_address')}:35357/v2.0/"
+
+# private_bind_if
+openstacklib::loadbalance::haproxy::private_iface: "%{hiera('private_bind_if')}"
+openstacklib::firewall::compute::interface: "%{hiera('private_bind_if')}"
+
+# private_control_firewall_source
+openstacklib::firewall::rabbitmq::source: "%{hiera('private_control_firewall_source')}"
+galera::firewall::source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::cinder::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::ceilometer::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::memcached::source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::glance::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::heat::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::keystone::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::nova::internal_source: "%{hiera('private_control_firewall_source')}"
+openstacklib::firewall::neutron::internal_source: "%{hiera('private_control_firewall_source')}"
+
+# controller_internal_protocol
+openstacklib::openstack::regions::internal_protocol: "%{hiera('controller_internal_protocol')}"
+
+# public_vip
+openstacklib::loadbalance::haproxy::cluster_public_vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::ceilometer::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::cinder::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::dashboard::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::glance::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::heat::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::keystone::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::nova::vip: "%{hiera('public_vip')}"
+openstacklib::loadbalance::haproxy::neutron::vip: "%{hiera('public_vip')}"
+
+# private_bind_ip
+galera::bind_address: "%{hiera('private_bind_ip')}"
+galera::local_ip: "%{hiera('private_bind_ip')}"
+rabbitmq::node_ip_address: "%{hiera('private_bind_ip')}"
+keystone::admin_bind_host: "%{hiera('private_bind_ip')}"
+keystone::public_bind_host: "%{hiera('private_bind_ip')}"
+nova::compute::vncserver_proxyclient_address: "%{hiera('private_bind_ip')}"
+cinder::api::bind_host: "%{hiera('private_bind_ip')}"
+ceilometer::api::host: "%{hiera('private_bind_ip')}"
+glance::api::bind_host: "%{hiera('private_bind_ip')}"
+glance::registry::bind_host: "%{hiera('private_bind_ip')}"
+heat::api_cfn::bind_host: "%{hiera('private_bind_ip')}"
+heat::api_cloudwatch::bind_host: "%{hiera('private_bind_ip')}"
+heat::api::bind_host: "%{hiera('private_bind_ip')}"
+neutron::bind_host: "%{hiera('private_bind_ip')}"
+nova::api::api_bind_address: "%{hiera('private_bind_ip')}"
+nova::api::metadata_listen: "%{hiera('private_bind_ip')}"
+nova::objectstore::bind_address: "%{hiera('private_bind_ip')}"
+nova::vncproxy::host: "%{hiera('private_bind_ip')}"
+horizon::wsgi::apache::bind_address: "%{hiera('private_bind_ip')}"
+horizon::bind_address: "%{hiera('private_bind_ip')}"
+
+# public_bind_if
+openstacklib::loadbalance::haproxy::public_iface: "%{hiera('public_bind_if')}"
+
+# controller_admin_protocol
+openstacklib::openstack::regions::admin_protocol: "%{hiera('controller_admin_protocol')}"
+
+# control_master_name
+openstacklib::loadbalance::haproxy::mysql::master_name: "%{hiera('control_master_name')}"
+
+# controller_public_protocol
+openstacklib::openstack::regions::public_protocol: "%{hiera('controller_public_protocol')}"
+nova::compute::vncproxy_protocol: "%{hiera('controller_public_protocol')}"
+
+# openstack_release
+openstacklib::compat::nova::openstack_release: "%{hiera('openstack_release')}"
+openstacklib::compat::keystone::openstack_release: "%{hiera('openstack_release')}"
+
+# deploy_control_firewall_source
+openstacklib::firewall::edeploy::source: "%{hiera('deploy_control_firewall_source')}"
+openstacklib::firewall::puppet::source: "%{hiera('deploy_control_firewall_source')}"
+openstacklib::firewall::ssh::source: "%{hiera('deploy_control_firewall_source')}"
+
+# build_server_name
+openstacklib::hosts::build_server_name: "%{hiera('build_server_name')}"
+
+# %{controller_admin_protocol}://%{controller_admin_address}:35357/
+keystone::admin_endpoint: "%{hiera('controller_admin_protocol')}://%{hiera('controller_admin_address')}:35357/"
+
+# domain_name
+openstacklib::hosts::domain: "%{hiera('domain_name')}"
+
+# private_vip
+glance::api::registry_host: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::cluster_private_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::mysql::vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::rabbitmq::vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::keystone::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::ceilometer::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::cinder::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::dashboard::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::glance::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::heat::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::keystone::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::nova::internal_vip: "%{hiera('private_vip')}"
+openstacklib::loadbalance::haproxy::neutron::internal_vip: "%{hiera('private_vip')}"
+glance::notify::rabbitmq::rabbit_host: "%{hiera('private_vip')}"
+cinder::qpid_hostname: "%{hiera('private_vip')}"
+cinder::rabbit_host: "%{hiera('private_vip')}"
+nova::rabbit_host: "%{hiera('private_vip')}"
+nova::qpid_hostname: "%{hiera('private_vip')}"
+heat::qpid_hostname: "%{hiera('private_vip')}"
+heat::rabbit_host: "%{hiera('private_vip')}"
+quantum::rabbit_host: "%{hiera('private_vip')}"
+quantum::qpid_hostname: "%{hiera('private_vip')}"
+neutron::qpid_hostname: "%{hiera('private_vip')}"
+neutron::rabbit_host: "%{hiera('private_vip')}"
+ceilometer::db::mysql::host: "%{hiera('private_vip')}"
+ceilometer::rabbit_host: "%{hiera('private_vip')}"
+ceilometer::qpid_hostname: "%{hiera('private_vip')}"
+cinder::db::mysql::host: "%{hiera('private_vip')}"
+glance::db::mysql::host: "%{hiera('private_vip')}"
+keystone::db::mysql::host: "%{hiera('private_vip')}"
+nova::db::mysql::host: "%{hiera('private_vip')}"
+quantum::db::mysql::host: "%{hiera('private_vip')}"
+neutron::db::mysql::host: "%{hiera('private_vip')}"
+cinder::keystone::auth::internal_address: "%{hiera('private_vip')}"
+glance::keystone::auth::internal_address: "%{hiera('private_vip')}"
+nova::keystone::auth::internal_address: "%{hiera('private_vip')}"
+heat::keystone::auth::internal_address: "%{hiera('private_vip')}"
+heat::keystone::auth_cfn::internal_address: "%{hiera('private_vip')}"
+cinder::api::keystone_auth_host: "%{hiera('private_vip')}"
+keystone::endpoint::internal_address: "%{hiera('private_vip')}"
+glance::api::auth_host: "%{hiera('private_vip')}"
+glance::registry::auth_host: "%{hiera('private_vip')}"
+horizon::keystone_host: "%{hiera('private_vip')}"
+nova::api::auth_host: "%{hiera('private_vip')}"
+quantum::server::auth_host: "%{hiera('private_vip')}"
+neutron::server::auth_host: "%{hiera('private_vip')}"
+quantum::keystone::auth::internal_address: "%{hiera('private_vip')}"
+neutron::keystone::auth::internal_address: "%{hiera('private_vip')}"
+openstack::auth_file::controller_node: "%{hiera('private_vip')}"
+quantum::agents::metadata::metadata_ip: "%{hiera('private_vip')}"
+neutron::agents::metadata::metadata_ip: "%{hiera('private_vip')}"
+openstack::swift::proxy::keystone_host: "%{hiera('private_vip')}"
+swift::keystone::auth::internal_address: "%{hiera('private_vip')}"
+ceilometer::keystone::auth::internal_address: "%{hiera('private_vip')}"
+ceilometer::api::keystone_host: "%{hiera('private_vip')}"
+heat::keystone_host: "%{hiera('private_vip')}"
+heat::db::mysql::host: "%{hiera('private_vip')}"
+cinder::keystone::auth::admin_address: "%{hiera('private_vip')}"
+glance::keystone::auth::admin_address: "%{hiera('private_vip')}"
+nova::keystone::auth::admin_address: "%{hiera('private_vip')}"
+heat::keystone::auth::admin_address: "%{hiera('private_vip')}"
+heat::keystone::auth_cfn::admin_address: "%{hiera('private_vip')}"
+keystone::endpoint::admin_address: "%{hiera('private_vip')}"
+quantum::keystone::auth::admin_address: "%{hiera('private_vip')}"
+neutron::keystone::auth::admin_address: "%{hiera('private_vip')}"
+swift::keystone::auth::admin_address: "%{hiera('private_vip')}"
+ceilometer::keystone::auth::admin_address: "%{hiera('private_vip')}"
+openstacklib::openstack::auth_file::controller_node: "%{hiera('private_vip')}"
+galera::status::status_host: "%{hiera('private_vip')}"
+
+# control_servers_private
+galera::galera_servers: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::mysql::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::rabbitmq::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::keystone::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::ceilometer::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::cinder::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::dashboard::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::glance::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::heat::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::neutron::cluster_addresses: "%{hiera('control_servers_private')}"
+openstacklib::loadbalance::haproxy::nova::cluster_addresses: "%{hiera('control_servers_private')}"
+
+# control_master_address
+openstacklib::loadbalance::haproxy::mysql::master_address: "%{hiera('control_master_address')}"
+
+# admin_password
+openstacklib::openstack::auth_file::admin_password: "%{hiera('admin_password')}"
+
+# %{controller_internal_protocol}://%{controller_internal_address}:8774/v2
+neutron::server::notifications::nova_url: "%{hiera('controller_internal_protocol')}://%{hiera('controller_internal_address')}:8774/v2"
+
+# allowed_hosts
+galera::status::status_allow: "%{hiera('allowed_hosts')}"
+
+# haproxy_cert_path
+openstacklib::loadbalance::haproxy::dashboard::cert_path: "%{hiera('haproxy_cert_path')}"
+
+# build_server_ip
+openstacklib::hosts::build_server_ip: "%{hiera('build_server_ip')}"
+
+# public_control_firewall_source
+openstacklib::firewall::cinder::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::ceilometer::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::dashboard::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::glance::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::heat::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::keystone::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::nova::source: "%{hiera('public_control_firewall_source')}"
+openstacklib::firewall::neutron::source: "%{hiera('public_control_firewall_source')}"
+
+# control_master_fqdn
+openstacklib::loadbalance::haproxy::cluster_master: "%{hiera('control_master_fqdn')}"
+galera::galera_master: "%{hiera('control_master_fqdn')}"
+openstacklib::openstack::singleton::cluster_master: "%{hiera('control_master_fqdn')}"
+# Global Hiera Params:
+cinder_backend: iscsi
+compute_type: libvirt
+glance_backend: file
+db_type: mysql
+ceilometer_db_type: mysql
+rpc_type: rabbitmq
+password_management: individual
+network_service: neutron
+tenant_network_type: gre
+install_tempest: false
+network_type: per-tenant-router
+network_plugin: ovs

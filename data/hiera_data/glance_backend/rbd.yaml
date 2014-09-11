@@ -1,0 +1,12 @@
+#################
+# Data Mappings #
+#################
+
+# glance_ceph_pool
+glance::backend::rbd::rbd_store_pool: "%{hiera('glance_ceph_pool')}"
+
+# ceph_openstack_user
+glance::backend::rbd::rbd_store_user: "%{hiera('ceph_openstack_user')}"
+
+# ceph_configuration_file
+glance::backend::rbd::rbd_store_ceph_conf: "%{hiera('ceph_configuration_file')}"

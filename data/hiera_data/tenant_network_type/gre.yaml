@@ -23,3 +23,16 @@ neutron::plugins::ml2::tenant_network_types:
   - gre
 neutron::plugins::ml2::mechanism_drivers:
   - openvswitch
+#################
+# Data Mappings #
+#################
+
+# internal_ip
+quantum::agents::ovs::local_ip: "%{hiera('internal_ip')}"
+neutron::agents::ovs::local_ip: "%{hiera('internal_ip')}"
+neutron::agents::ml2::ovs::local_ip: "%{hiera('internal_ip')}"
+
+# %{external_network_bridge}:%{external_interface}
+quantum::agents::ovs::bridge_uplinks: "%{hiera('external_network_bridge')}:%{hiera('external_interface')}"
+neutron::agents::ovs::bridge_uplinks: "%{hiera('external_network_bridge')}:%{hiera('external_interface')}"
+neutron::agents::ml2::ovs::bridge_uplinks: "%{hiera('external_network_bridge')}:%{hiera('external_interface')}"

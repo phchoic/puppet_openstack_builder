@@ -1,0 +1,2 @@
+class_groups:
+  - "ceph_mon"

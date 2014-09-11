@@ -1,0 +1,12 @@
+classes:
+  - "openstack_extras::repo::redhat::redhat"
+  - "openstacklib::hosts"
+  - "openstacklib::openstack::netns"
+  - "openstacklib::compat::nova"
+  - "mysql::bindings"
+  - "openstacklib::firewall::compute"
+class_groups:
+  - "cinder_volume"
+  - "ceilometer_compute"
+  - "nova_compute_ml2"
+  - "firewall_compute"

@@ -1,0 +1,6 @@
+#################
+# Data Mappings #
+#################
+
+# cinder_volumes_name
+cinder::volume::iscsi::volume_group: "%{hiera('cinder_volumes_name')}"

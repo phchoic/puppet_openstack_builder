@@ -15,10 +15,10 @@ def parse_vagrant_config(
 )
   config = {
     'gui_mode'        => false,
-    'operatingsystem' => 'ubuntu',
+    'operatingsystem' => 'redhat',
     'verbose'         => false,
     'update_repos'    => true,
-    'scenario'        => '2_role'
+    'scenario'        => 'stacktira'
   }
   if File.exists?(config_file)
     overrides = YAML.load_file(config_file)
@@ -45,12 +45,6 @@ def process_nodes(config)
 
   (YAML.load_file(node_group_file)['nodes'] || {}).each do |name, options|
     config.vm.define(options['vagrant_name'] || name) do |config|
-      apt_cache_proxy = ''
-      unless options['apt_cache'] == false || options['apt_cache'] == 'false'
-        if v_config['apt_cache'] != 'false'
-          apt_cache_proxy = 'echo "Acquire::http { Proxy \"http://%s:3142\"; };" > /etc/apt/apt.conf.d/01apt-cacher-ng-proxy;' % ( options['apt_cache'] || v_config['apt_cache'] )
-        end
-      end
       configure_openstack_node(
         config,
         name,
@@ -58,8 +52,10 @@ def process_nodes(config)
         options['image_name'] || v_config['operatingsystem'],
         options['ip_number'],
         options['puppet_type'] || 'agent',
-        apt_cache_proxy,
         v_config,
+        options['environment'],
+        options['role'],
+        options['network'],
         options['post_config']
       )
     end
@@ -73,7 +69,7 @@ def get_box(config, box_type)
     config.vm.box     = 'precise64'
     config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
   elsif box_type == 'centos' || box_type == 'redhat'
-    config.vm.box     = 'centos'
+    config.vm.box     = 'centos64'
     config.vm.box_url = 'http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-x86_64-v20130427.box'
   else
     abort("Box type: #{box_type} is no good.")
@@ -95,118 +91,26 @@ end
 #   options - additional options
 #     eth1_mac - mac address to set for eth1 (used for PXE booting)
 #
-def setup_networks(config, number, options = {})
-  config.vm.network :hostonly, "192.168.242.#{number}", :mac => options[:eth1_mac]
-  config.vm.network :hostonly, "10.2.3.#{number}"
-  config.vm.network :hostonly, "10.3.3.#{number}"
+def setup_networks(config, number, network)
+  config.vm.network "private_network", :ip => "192.168.242.#{number}"
+  config.vm.network "private_network", ip: "#{network}.2.3.#{number}"
+  config.vm.network "private_network", ip: "#{network}.3.3.#{number}"
   # set eth3 in promiscuos mode
-  config.vm.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+  config.vm.provider "virtualbox" do |vconfig|
+    vconfig.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
   # set the boot priority to use eth1
-  config.vm.customize(['modifyvm', :id ,'--nicbootprio2','1'])
+    vconfig.customize(['modifyvm', :id ,'--nicbootprio2','1'])
+  end
 end
 
 #
 # setup the hostname of our box
 #
 def setup_hostname(config, hostname)
-  config.vm.customize ['modifyvm', :id, '--name', hostname]
+  config.vm.provider "virtualbox" do |vconfig|
+    vconfig.customize ['modifyvm', :id, '--name', hostname]
+  end
   config.vm.host_name = hostname
-end
-
-#
-# run puppet apply on the site manifest
-#
-def apply_manifest(config, v_config, manifest_name='site.pp', certname=nil, puppet_type=nil)
-
-  options = []
-
-  if v_config['verbose']
-    options = options + ['--verbose', '--trace', '--debug', '--show_diff']
-  end
-
-  if certname
-    options.push("--certname #{certname}")
-  else
-    # I need to add a special certname here to
-    # ensure it's hostname does not match the ENC
-    # which could cause the node to be configured
-    # from the setup manifest on the second run
-    options.push('--certname setup')
-  end
-
-  # ensure that when puppet applies the site manifest, it has hiera configured
-  if manifest_name == 'site.pp'
-    config.vm.share_folder("data", '/etc/puppet/data', './data')
-  end
-  config.vm.share_folder("ssh", '/root/.ssh', './dot-ssh')
-
-  # Explicitly mount the shared folders, so we dont break with newer versions of vagrant
-  config.vm.share_folder("modules", '/etc/puppet/modules', './modules/')
-  config.vm.share_folder("manifests", '/etc/puppet/manifests', './manifests/')
-
-  config.vm.provision :shell do |shell|
-    script =
-      "if grep 127.0.1.1 /etc/hosts ; then \n" +
-      " sed -i -e \"s/127.0.1.1.*/127.0.1.1 $(hostname).#{v_config['domain']} $(hostname)/\" /etc/hosts\n" +
-      "else\n" +
-      "  echo '127.0.1.1 $(hostname).#{v_config['domain']} $(hostname)' >> /etc/hosts\n" +
-      "fi ;"
-    shell.inline = script
-  end
-
-  config.vm.provision(:puppet, :pp_path => "/etc/puppet") do |puppet|
-    puppet.manifests_path = 'manifests'
-    puppet.manifest_file  = manifest_name
-    puppet.module_path    = 'modules'
-    puppet.options        = options
-    puppet.facter = {
-      "build_server_ip"          => "192.168.242.100",
-      "build_server_domain_name" => v_config['domain'],
-      "puppet_run_mode"          => puppet_type,
-    }
-  end
-
-  # uninstall the puppet gem b/c setup.pp installs the puppet package
-  if manifest_name == 'setup.pp'
-    config.vm.provision :shell do |shell|
-      shell.inline = "gem uninstall -x -a puppet;echo -e '#!/bin/bash\npuppet agent $@' > /sbin/puppetd;chmod a+x /sbin/puppetd"
-    end
-  end
-
-end
-
-# run the puppet agent
-def run_puppet_agent(
-  config,
-  node_name,
-  v_config = {},
-  master = "build-server.#{v_config['domain']}"
-)
-  options = ["--certname #{node_name}", '-t', '--pluginsync']
-
-  if v_config['verbose']
-    options = options + ['--trace', '--debug', '--show_diff']
-  end
-
-  config.vm.provision(:puppet_server) do |puppet|
-    puppet.puppet_server = master
-    puppet.options       = options
-  end
-end
-
-#
-# configure apt repos with mirrors and proxies and what-not
-# I really want to move this to puppet
-#
-def configure_apt_mirror(config, apt_mirror, apt_cache_proxy)
-  # Configure apt mirror
-  config.vm.provision :shell do |shell|
-    shell.inline = "sed -i 's/us.archive.ubuntu.com/%s/g' /etc/apt/sources.list" % apt_mirror
-  end
-
-  config.vm.provision :shell do |shell|
-    shell.inline = '%s apt-get update;apt-get install ubuntu-cloud-keyring' % apt_cache_proxy
-  end
 end
 
 #
@@ -219,27 +123,53 @@ def configure_openstack_node(
   box_name,
   net_id,
   puppet_type,
-  apt_cache_proxy,
   v_config,
+  environment = false,
+  role = false,
+  network = false,
   post_config = false
 )
   cert_name = node_name
   get_box(config, box_name)
   setup_hostname(config, node_name)
-  config.vm.customize ["modifyvm", :id, "--memory", memory]
-  setup_networks(config, net_id)
-  if v_config['operatingsystem'] == 'ubuntu' and apt_cache_proxy
-    configure_apt_mirror(config, v_config['apt_mirror'], apt_cache_proxy)
+  config.vm.provider "virtualbox" do |vconfig|
+    vconfig.customize ["modifyvm", :id, "--memory", memory]
+    vconfig.cpus = 2
   end
 
-  apply_manifest(config, v_config, 'setup.pp', nil, puppet_type)
+  network ||= '10'
+  setup_networks(config, net_id, network)
 
-  if puppet_type == 'apply'
-    apply_manifest(config, v_config, 'site.pp', cert_name)
-  elsif puppet_type == 'agent'
-    run_puppet_agent(config, cert_name, v_config)
-  else
-    abort("Unexpected puppet_type #{puppet_type}")
+  config.vm.synced_folder "./modules", "/etc/puppet/modules"
+  config.vm.synced_folder "./", "/root/stacktira"
+
+  # Generate some certs
+  config.vm.provision :shell do |shell|
+    shell.inline  = 'if [ ! -f /etc/ssl/certs/testing_stacktira.pem ]; then ' +
+                    'openssl x509 -text -in /vagrant/contrib/aptira/build/testing_stacktira_ca.crt >> /etc/pki/tls/certs/ca-bundle.crt; ' +
+                    'cp /vagrant/contrib/aptira/build/testing_stacktira.pem /etc/ssl/certs; ' +
+                    'fi'
+  end
+
+  options = ''
+  if v_config['proxy']
+    options += " -p " + v_config['proxy']
+  end
+
+  if role
+    options += " -o " + role
+  end
+
+  if environment
+    options += " -e " + environment
+  end
+
+  config.vm.provision :shell do |shell|
+    shell.inline  = '/root/stacktira/contrib/aptira/installer/bootstrap.sh' + options
+  end
+
+  config.vm.provision :shell do |shell|
+    shell.inline  = 'puppet apply /etc/puppet/manifests/site.pp'
   end
 
   if post_config
@@ -252,8 +182,36 @@ def configure_openstack_node(
 
 end
 
-Vagrant::Config.run do |config|
-
+Vagrant.configure("2") do |config|
   process_nodes(config)
+end
 
+Vagrant.configure("2") do |config|
+  # A 'blank' node that will pxeboot on the first private network
+  # use this to test deployment tools like cobbler
+  config.vm.define "target" do |target|
+    target.vm.box = "blank"
+    # This IP won't actually come up - you'll need to run a dhcp
+    # server on another node
+    target.vm.network "private_network", ip: "192.168.242.55"
+    target.vm.provider "virtualbox" do |vconfig|
+      vconfig.customize ['modifyvm', :id ,'--nicbootprio2','1']
+      vconfig.customize ['modifyvm', :id ,'--memory','1024']
+      vconfig.gui = true
+    end
+  end
+
+  # a node with no mounts, that will test a web install
+  # hostname is also not set to force --certname usage
+  config.vm.define "rawbox" do |target|
+    target.vm.box = "centos64"
+    setup_networks(target, 150, '10')
+    config.vm.provision :shell do |shell|
+      shell.inline  = '\curl -sSL https://raw.github.com/michaeltchapman/puppet_openstack_builder/stacktira/contrib/aptira/installer/bootstrap.sh | bash'
+    end
+
+    config.vm.provision :shell do |shell|
+      shell.inline  = 'puppet apply /etc/puppet/manifests/site.pp --certname control1'
+    end
+  end
 end

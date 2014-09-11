@@ -1,0 +1,2 @@
+classes:
+  - "coi::profiles::cache_server"

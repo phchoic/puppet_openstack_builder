@@ -12,7 +12,7 @@ puppet_master_address: "%{fqdn}"
 puppet::master::reports: 'store,puppetdb'
 
 # Services to be enabled.
-enabled_services:
+enabled_services: &enabled_services 
   - glance
   - cinder
   - keystone
@@ -43,8 +43,8 @@ rpc_user: openstack_rabbit_user
 # and/or 'debug' in their config files in order to increase
 # logging verbosity.  Set these to 'true' to set the corresponding
 # values in OpenStack services.
-verbose: false
-debug: false
+verbose: &verbose  false
+debug: &debug  false
 
 # The scheduler driver to be used for Cinder.
 cinder::scheduler::scheduler_driver: 'cinder.scheduler.simple.SimpleScheduler'
@@ -139,19 +139,19 @@ openstack_release: icehouse
 # repository you can can specify the -proposed pocket ('-proposed') to
 # use unreleased development code or a snapshot ('/snapshots/h.0') to
 # use code from prior Cisco releases.
-pocket: false
+pocket: &pocket  false
 
 # The 'openstack_repo_location' parameter should be the complete
 # URL of the repository you want to use to fetch OpenStack
 # packages (e.g. http://openstack-repo.cisco.com/openstack/cisco).
 # This setting is not used by all vendors.
-openstack_repo_location: false
+openstack_repo_location: &openstack_repo_location  false
 
 # The 'supplemental_repo' parameter should be the complete URL
 # of the repository you want to use for supplemental packages
 # (e.g. http://openstack-repo.cisco.com/openstack/cisco_supplemental).
 # This setting is not used by all vendors.
-supplemental_repo: false
+supplemental_repo: &supplemental_repo  false
 
 
 # If you wish to run a basic functionality test after the cloud is set
@@ -220,11 +220,11 @@ openstack::provision::change_password_available: false
 openstack::provision::public_network_name: nova
 
 # Syslog
-use_syslog: false
+use_syslog: &use_syslog  false
 log_facility: LOG_USER
 
 # Enable nova services.
-enable_nova: true
+enable_nova: &enable_nova  true
 
 # Package status
 ensure_package: installed
@@ -242,3 +242,433 @@ rabbitmq::server::wipe_db_on_cookie_change: true
 # Default character set and collation order for MySQL
 mysql_default_charset: utf8
 mysql_default_collation: utf8_unicode_ci
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+coe::base::openstack_repo_location: *openstack_repo_location
+coi::profiles::cobbler_server::openstack_repo_location: *openstack_repo_location
+coe::base::supplemental_repo: *supplemental_repo
+coi::profiles::cobbler_server::supplemental_repo: *supplemental_repo
+cinder::verbose: *verbose
+glance::api::verbose: *verbose
+glance::registry::verbose: *verbose
+keystone::verbose: *verbose
+quantum::verbose: *verbose
+neutron::verbose: *verbose
+ceilometer::verbose: *verbose
+heat::verbose: *verbose
+nova::verbose: *verbose
+nova::cert::enabled: *enable_nova
+nova::api::enabled: *enable_nova
+nova::compute::enabled: *enable_nova
+nova::conductor::enabled: *enable_nova
+nova::consoleauth::enabled: *enable_nova
+nova::network::enabled: *enable_nova
+nova::objectstore::enabled: *enable_nova
+nova::qpid::enabled: *enable_nova
+nova::scheduler::enabled: *enable_nova
+nova::vncproxy::enabled: *enable_nova
+nova::volume::enabled: *enable_nova
+coe::base::pocket: *pocket
+coi::profiles::cobbler_server::pocket: *pocket
+ceilometer::use_syslog: *use_syslog
+cinder::use_syslog: *use_syslog
+glance::registry::use_syslog: *use_syslog
+glance::api::use_syslog: *use_syslog
+heat::use_syslog: *use_syslog
+keystone::use_syslog: *use_syslog
+neutron::use_syslog: *use_syslog
+nova::use_syslog: *use_syslog
+coi::profiles::openstack::endpoints::enabled_services: *enabled_services
+coi::profiles::openstack::databases::mysql::enabled_services: *enabled_services
+cinder::debug: *debug
+glance::api::debug: *debug
+glance::registry::debug: *debug
+horizon::django_debug: *debug
+keystone::debug: *debug
+quantum::debug: *debug
+neutron::debug: *debug
+neutron::agents::lbaas::debug: *debug
+quatum::agents::dhcp::debug: *debug
+quatum::agents::metadata::debug: *debug
+ceilometer::debug: *debug
+heat::debug: *debug
+nova::debug: *debug
+#################
+# Data Mappings #
+#################
+
+# controller_public_url
+keystone::endpoint::public_url: "%{hiera('controller_public_url')}"
+
+# %{controller_internal_protocol}://%{controller_internal_address}:5000/v2.0/
+keystone::public_endpoint: "%{hiera('controller_internal_protocol')}://%{hiera('controller_internal_address')}:5000/v2.0/"
+
+# public_interface
+collectd::management_interface: "%{hiera('public_interface')}"
+
+# http://%{controller_internal_address}:9696
+nova::network::quantum::quantum_url: "http://%{hiera('controller_internal_address')}:9696"
+nova::network::neutron::neutron_url: "http://%{hiera('controller_internal_address')}:9696"
+
+# %{controller_internal_url}/v2.0/
+neutron::server::notifications::nova_admin_auth_url: "%{hiera('controller_internal_url')}/v2.0/"
+
+# http://%{controller_internal_address}:5000/v2.0/ec2tokens
+heat::keystone_ec2_uri: "http://%{hiera('controller_internal_address')}:5000/v2.0/ec2tokens"
+
+# controller_internal_url
+keystone::endpoint::internal_url: "%{hiera('controller_internal_url')}"
+
+# ssl_keyfile
+keystone::ssl_keyfile: "%{hiera('ssl_keyfile')}"
+
+# http://%{controller_internal_address}:8003
+heat::engine::heat_watch_server_url: "http://%{hiera('controller_internal_address')}:8003"
+
+# http://%{controller_internal_address}:8000
+heat::engine::heat_metadata_server_url: "http://%{hiera('controller_internal_address')}:8000"
+
+# rpc_password
+cinder::qpid_password: "%{hiera('rpc_password')}"
+cinder::rabbit_password: "%{hiera('rpc_password')}"
+ceilometer::qpid_password: "%{hiera('rpc_password')}"
+ceilometer::rabbit_password: "%{hiera('rpc_password')}"
+glance::notify::qpid::qpid_password: "%{hiera('rpc_password')}"
+glance::notify::rabbitmq::rabbit_password: "%{hiera('rpc_password')}"
+heat::rabbit_password: "%{hiera('rpc_password')}"
+neutron::qpid_password: "%{hiera('rpc_password')}"
+neutron::rabbit_password: "%{hiera('rpc_password')}"
+nova::qpid_password: "%{hiera('rpc_password')}"
+nova::rabbit_password: "%{hiera('rpc_password')}"
+nova::qpid::qpid_password: "%{hiera('rpc_password')}"
+nova::rabbitmq::password: "%{hiera('rpc_password')}"
+
+# service_tenant
+keystone::roles::admin::service_tenant: "%{hiera('service_tenant')}"
+neutron::server::notifications::nova_admin_tenant_name: "%{hiera('service_tenant')}"
+
+# %{controller_admin_protocol}://%{controller_admin_address}:35357/v2.0/
+keystone::admin_endpoint: "%{hiera('controller_admin_protocol')}://%{hiera('controller_admin_address')}:35357/v2.0/"
+
+# controller_public_address
+nova::vncproxy::host: "%{hiera('controller_public_address')}"
+nova::compute::vncproxy_host: "%{hiera('controller_public_address')}"
+cinder::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+glance::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+nova::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+heat::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+heat::keystone::auth_cfn::public_address: "%{hiera('controller_public_address')}"
+quantum::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+neutron::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+swift::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+ceilometer::keystone::auth::public_address: "%{hiera('controller_public_address')}"
+openstack::swift::proxy::swift_proxy_net_ip: "%{hiera('controller_public_address')}"
+horizon::fqdn: "%{hiera('controller_public_address')}"
+horizon::servername: "%{hiera('controller_public_address')}"
+
+# %{controller_public_protocol}://%{controller_public_address}:8774/v2
+neutron::server::notifications::nova_url: "%{hiera('controller_public_protocol')}://%{hiera('controller_public_address')}:8774/v2"
+
+# mysql_default_charset
+ceilometer::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+cinder::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+glance::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+heat::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+keystone::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+neutron::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+nova::db::mysql::charset: "%{hiera('mysql_default_charset')}"
+
+# admin_tenant
+keystone::roles::admin::admin_tenant: "%{hiera('admin_tenant')}"
+openstack::controller::nova_admin_tenant_name: "%{hiera('admin_tenant')}"
+
+# %{db_type}://nova:%{nova_db_password}@%{controller_internal_address}/nova
+nova::database_connection: "%{hiera('db_type')}://nova:%{hiera('nova_db_password')}@%{hiera('controller_internal_address')}/nova"
+
+# openstack_release
+coe::base::openstack_release: "%{hiera('openstack_release')}"
+coi::profiles::cobbler_server::openstack_release: "%{hiera('openstack_release')}"
+
+# %{ceilometer_db_type}://ceilometer:%{ceilometer_db_password}@%{controller_internal_address}/ceilometer
+ceilometer::db::database_connection: "%{hiera('ceilometer_db_type')}://ceilometer:%{hiera('ceilometer_db_password')}@%{hiera('controller_internal_address')}/ceilometer"
+
+# controller_public_protocol
+ceilometer::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+cinder::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+glance::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+heat::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+heat::keystone::auth_cfn::public_protocol: "%{hiera('controller_public_protocol')}"
+neutron::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+nova::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+swift::keystone::auth::public_protocol: "%{hiera('controller_public_protocol')}"
+
+# %{db_type}://heat:%{heat_db_password}@%{controller_internal_address}/heat
+heat::sql_connection: "%{hiera('db_type')}://heat:%{hiera('heat_db_password')}@%{hiera('controller_internal_address')}/heat"
+
+# %{db_type}://keystone:%{keystone_db_password}@%{controller_internal_address}/keystone
+keystone::sql_connection: "%{hiera('db_type')}://keystone:%{hiera('keystone_db_password')}@%{hiera('controller_internal_address')}/keystone"
+
+# rpc_user
+cinder::qpid_username: "%{hiera('rpc_user')}"
+cinder::rabbit_userid: "%{hiera('rpc_user')}"
+nova::qpid::user: "%{hiera('rpc_user')}"
+nova::rabbitmq::userid: "%{hiera('rpc_user')}"
+nova::rabbit_userid: "%{hiera('rpc_user')}"
+nova::qpid_username: "%{hiera('rpc_user')}"
+quantum::rabbit_user: "%{hiera('rpc_user')}"
+neutron::rabbit_user: "%{hiera('rpc_user')}"
+quantum::qpid_username: "%{hiera('rpc_user')}"
+neutron::qpid_username: "%{hiera('rpc_user')}"
+ceilometer::rabbit_userid: "%{hiera('rpc_user')}"
+ceilometer::qpid_username: "%{hiera('rpc_user')}"
+heat::rabbit_userid: "%{hiera('rpc_user')}"
+glance::notify::rabbitmq::rabbit_userid: "%{hiera('rpc_user')}"
+
+# external_network_bridge
+neutron::agents::vpnaas::external_network_bridge: "%{hiera('external_network_bridge')}"
+
+# %{db_type}://glance:%{glance_db_password}@%{controller_internal_address}/glance
+glance::api::sql_connection: "%{hiera('db_type')}://glance:%{hiera('glance_db_password')}@%{hiera('controller_internal_address')}/glance"
+glance::registry::sql_connection: "%{hiera('db_type')}://glance:%{hiera('glance_db_password')}@%{hiera('controller_internal_address')}/glance"
+
+# admin_email
+keystone::roles::admin::email: "%{hiera('admin_email')}"
+ceilometer::keystone::auth::email: "%{hiera('admin_email')}"
+
+# ssl_cert_subject
+keystone::ssl_cert_subject: "%{hiera('ssl_cert_subject')}"
+
+# controller_admin_url
+keystone::endpoint::admin_url: "%{hiera('controller_admin_url')}"
+
+# interface_driver
+neutron::agents::vpnaas::interface_driver: "%{hiera('interface_driver')}"
+
+# swift_local_net_ip
+openstack::swift::proxy::swift_local_net_ip: "%{hiera('swift_local_net_ip')}"
+openstack::swift::storage-node::swift_local_net_ip: "%{hiera('swift_local_net_ip')}"
+
+# http://%{controller_internal_address}:8000/v1/waitcondition
+heat::engine::heat_waitcondition_server_url: "http://%{hiera('controller_internal_address')}:8000/v1/waitcondition"
+
+# ssl_ca_certs
+keystone::ssl_ca_certs: "%{hiera('ssl_ca_certs')}"
+
+# controller_internal_address
+glance::api::registry_host: "%{hiera('controller_internal_address')}"
+glance::notify::rabbitmq::rabbit_host: "%{hiera('controller_internal_address')}"
+cinder::qpid_hostname: "%{hiera('controller_internal_address')}"
+cinder::rabbit_host: "%{hiera('controller_internal_address')}"
+nova::rabbit_host: "%{hiera('controller_internal_address')}"
+nova::qpid_hostname: "%{hiera('controller_internal_address')}"
+heat::qpid_hostname: "%{hiera('controller_internal_address')}"
+heat::rabbit_host: "%{hiera('controller_internal_address')}"
+quantum::rabbit_host: "%{hiera('controller_internal_address')}"
+quantum::qpid_hostname: "%{hiera('controller_internal_address')}"
+neutron::qpid_hostname: "%{hiera('controller_internal_address')}"
+neutron::rabbit_host: "%{hiera('controller_internal_address')}"
+ceilometer::db::mysql::host: "%{hiera('controller_internal_address')}"
+ceilometer::rabbit_host: "%{hiera('controller_internal_address')}"
+ceilometer::qpid_hostname: "%{hiera('controller_internal_address')}"
+cinder::db::mysql::host: "%{hiera('controller_internal_address')}"
+glance::db::mysql::host: "%{hiera('controller_internal_address')}"
+keystone::db::mysql::host: "%{hiera('controller_internal_address')}"
+nova::db::mysql::host: "%{hiera('controller_internal_address')}"
+quantum::db::mysql::host: "%{hiera('controller_internal_address')}"
+neutron::db::mysql::host: "%{hiera('controller_internal_address')}"
+cinder::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+glance::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+nova::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+heat::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+heat::keystone::auth_cfn::internal_address: "%{hiera('controller_internal_address')}"
+cinder::api::keystone_auth_host: "%{hiera('controller_internal_address')}"
+glance::api::auth_host: "%{hiera('controller_internal_address')}"
+glance::registry::auth_host: "%{hiera('controller_internal_address')}"
+nova::api::auth_host: "%{hiera('controller_internal_address')}"
+quantum::server::auth_host: "%{hiera('controller_internal_address')}"
+neutron::server::auth_host: "%{hiera('controller_internal_address')}"
+quantum::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+neutron::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+openstack::auth_file::controller_node: "%{hiera('controller_internal_address')}"
+postgresql::config::listen_addresses: "%{hiera('controller_internal_address')}"
+mysql::config::bind_address: "%{hiera('controller_internal_address')}"
+quantum::agents::metadata::metadata_ip: "%{hiera('controller_internal_address')}"
+neutron::agents::metadata::metadata_ip: "%{hiera('controller_internal_address')}"
+openstack::swift::proxy::keystone_host: "%{hiera('controller_internal_address')}"
+swift::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+ceilometer::keystone::auth::internal_address: "%{hiera('controller_internal_address')}"
+ceilometer::api::keystone_host: "%{hiera('controller_internal_address')}"
+heat::keystone_host: "%{hiera('controller_internal_address')}"
+coe::base::controller_node_internal: "%{hiera('controller_internal_address')}"
+heat::db::mysql::host: "%{hiera('controller_internal_address')}"
+
+# domain_name
+coe::base::domain_name: "%{hiera('domain_name')}"
+
+# mysql_default_collation
+ceilometer::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+cinder::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+glance::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+heat::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+keystone::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+neutron::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+nova::db::mysql::collate: "%{hiera('mysql_default_collation')}"
+
+# http://%{controller_internal_address}:35357/v2.0
+nova::network::quantum::quantum_admin_auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+quantum::agents::metadata::auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+neutron::agents::metadata::auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+ceilometer::agent::compute::auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+ceilometer::agent::auth::auth_url: "http://%{hiera('controller_internal_address')}:35357/v2.0"
+
+# nova_admin_username
+nova::keystone::auth_name: "%{hiera('nova_admin_username')}"
+neutron::server::notifications::nova_admin_username: "%{hiera('nova_admin_username')}"
+
+# puppet_repo
+coi::profiles::openstack::base::puppet_repo: "%{hiera('puppet_repo')}"
+coe::base::puppet_repo: "%{hiera('puppet_repo')}"
+
+# ssl_certfile
+keystone::ssl_certfile: "%{hiera('ssl_certfile')}"
+
+# %{db_type}://cinder:%{cinder_db_password}@%{controller_internal_address}/cinder
+cinder::database_connection: "%{hiera('db_type')}://cinder:%{hiera('cinder_db_password')}@%{hiera('controller_internal_address')}/cinder"
+
+# %{controller_public_url}/v2.0/
+horizon::keystone_url: "%{hiera('controller_public_url')}/v2.0/"
+
+# log_facility
+ceilometer::log_facility: "%{hiera('log_facility')}"
+cinder::log_facility: "%{hiera('log_facility')}"
+glance::registry::log_facility: "%{hiera('log_facility')}"
+glance::api::log_facility: "%{hiera('log_facility')}"
+heat::log_facility: "%{hiera('log_facility')}"
+keystone::log_facility: "%{hiera('log_facility')}"
+neutron::log_facility: "%{hiera('log_facility')}"
+nova::log_facility: "%{hiera('log_facility')}"
+
+# puppet_repo_location
+coi::profiles::openstack::base::puppet_repo_location: "%{hiera('puppet_repo_location')}"
+coe::base::puppet_repo_location: "%{hiera('puppet_repo_location')}"
+
+# allowed_hosts
+ceilometer::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+cinder::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+glance::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+keystone::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+nova::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+quantum::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+neutron::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+heat::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+
+# package_ensure
+cinder::api::package_ensure: "%{hiera('package_ensure')}"
+cinder::scheduler::package_ensure: "%{hiera('package_ensure')}"
+cinder::volume::package_ensure: "%{hiera('package_ensure')}"
+glance::package_ensure: "%{hiera('package_ensure')}"
+keystone::package_ensure: "%{hiera('package_ensure')}"
+nova::api::ensure_package: "%{hiera('package_ensure')}"
+nova::cert::ensure_package: "%{hiera('package_ensure')}"
+nova::client::ensure: "%{hiera('package_ensure')}"
+nova::compute::ensure_package: "%{hiera('package_ensure')}"
+nova::conductor::ensure_package: "%{hiera('package_ensure')}"
+nova::consoleauth::ensure_package: "%{hiera('package_ensure')}"
+nova::ensure_package: "%{hiera('package_ensure')}"
+nova::network::ensure_package: "%{hiera('package_ensure')}"
+nova::objectstore::ensure_package: "%{hiera('package_ensure')}"
+nova::scheduler::ensure_package: "%{hiera('package_ensure')}"
+nova::vncproxy::ensure_package: "%{hiera('package_ensure')}"
+ceilometer::package_ensure: "%{hiera('package_ensure')}"
+heat::package_ensure: "%{hiera('package_ensure')}"
+ntp::package_ensure: "%{hiera('package_ensure')}"
+neutron::agents::vpnaas::package_ensure: "%{hiera('package_ensure')}"
+
+# controller_admin_address
+cinder::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+glance::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+nova::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+heat::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+heat::keystone::auth_cfn::admin_address: "%{hiera('controller_admin_address')}"
+quantum::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+neutron::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+swift::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+ceilometer::keystone::auth::admin_address: "%{hiera('controller_admin_address')}"
+
+# ssl_ca_key
+keystone::ssl_ca_key: "%{hiera('ssl_ca_key')}"
+
+# puppet_mysql_version
+cinder::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+cinder::mysql_module: "%{hiera('puppet_mysql_version')}"
+glance::api::mysql_module: "%{hiera('puppet_mysql_version')}"
+glance::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+glance::registry::mysql_module: "%{hiera('puppet_mysql_version')}"
+heat::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+heat::mysql_module: "%{hiera('puppet_mysql_version')}"
+neutron::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+neutron::server::mysql_module: "%{hiera('puppet_mysql_version')}"
+keystone::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+keystone::mysql_module: "%{hiera('puppet_mysql_version')}"
+ceilometer::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+ceilometer::db::mysql_module: "%{hiera('puppet_mysql_version')}"
+nova::db::mysql::mysql_module: "%{hiera('puppet_mysql_version')}"
+nova::mysql_module: "%{hiera('puppet_mysql_version')}"
+
+# region
+cinder::keystone::auth::region: "%{hiera('region')}"
+glance::keystone::auth::region: "%{hiera('region')}"
+nova::keystone::auth::region: "%{hiera('region')}"
+quantum::keystone::auth::region: "%{hiera('region')}"
+neutron::keystone::auth::region: "%{hiera('region')}"
+neutron::server::notifications::nova_region_name: "%{hiera('region')}"
+keystone::endpoint::region: "%{hiera('region')}"
+nova::network::quantumclient::quantum_region_name: "%{hiera('region')}"
+nova::network::neutronclient::neutron_region_name: "%{hiera('region')}"
+quantum::agents::metadata::auth_region: "%{hiera('region')}"
+neutron::agents::metadata::auth_region: "%{hiera('region')}"
+ceilometer::keystone::auth::region: "%{hiera('region')}"
+ceilometer::agent::auth::auth_region: "%{hiera('region')}"
+heat::keystone::auth::region: "%{hiera('region')}"
+heat::keystone::auth_cfn::region: "%{hiera('region')}"
+nova::network::neutron::neutron_region_name: "%{hiera('region')}"
+neutron::keystone::auth::region: "%{hiera('region')}"
+openstack-ha::controller::region: "%{hiera('region')}"
+openstack::controller::region: "%{hiera('region')}"
+openstack::keystone::region: "%{hiera('region')}"
+openstack::all::region: "%{hiera('region')}"
+openstack::auth_file::region_name: "%{hiera('region')}"
+swift::keystone::auth::region: "%{hiera('region')}"
+
+# build_node_name
+coe::base::build_node_name: "%{hiera('build_node_name')}"
+collectd::graphitehost: "%{hiera('build_node_name')}"
+graphite::graphitehost: "%{hiera('build_node_name')}"
+
+# %{db_type}://%{network_service}:%{network_db_password}@%{controller_internal_address}/%{network_service}
+quantum::plugins::ovs::sql_connection: "%{hiera('db_type')}://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}"
+quantum::plugins::linuxbridge::sql_connection: "%{hiera('db_type')}://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}"
+neutron::server::database_connection: "%{hiera('db_type')}://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}"
+
+# %{controller_internal_address}:9292
+nova::glance_api_servers: "%{hiera('controller_internal_address')}:9292"
+cinder::glance::glance_api_servers: "%{hiera('controller_internal_address')}:9292"
+# Global Hiera Params:
+enable_ha: false
+password_management: individual
+compute_type: libvirt
+glance_backend: file
+db_type: mysql
+ceilometer_db_type: mysql
+rpc_type: rabbitmq
+cinder_backend: iscsi
+application: ['openstack']
+network_service: neutron
+tenant_network_type: gre
+install_tempest: false
+network_type: per-tenant-router
+network_plugin: ovs

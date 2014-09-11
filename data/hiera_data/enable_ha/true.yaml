@@ -20,7 +20,7 @@ coe::base::supplemental_repo: false
 openstack-ha::load-balancer::controller_state: MASTER
 openstack-ha::load-balancer::swift_proxy_state: MASTER
 
-sql_idle_timeout: 30
+sql_idle_timeout: &sql_idle_timeout  30
 
 # Galera / Percona settings
 #
@@ -52,3 +52,108 @@ apache::default_vhost: false
 #mongodb::bind_ip: ['127.0.0.1', "%{ipaddress}"]
 #
 #
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+keystone::idle_timeout: *sql_idle_timeout
+glance::registry::sql_idle_timeout: *sql_idle_timeout
+glance::api::sql_idle_timeout: *sql_idle_timeout
+nova::database_idle_timeout: *sql_idle_timeout
+cinder::sql_idle_timeout: *sql_idle_timeout
+quantum::plugins::ovs::sql_idle_timeout: *sql_idle_timeout
+neutron::server::database_idle_timeout: *sql_idle_timeout
+heat::database_idle_timeout: *sql_idle_timeout
+#################
+# Data Mappings #
+#################
+
+# swift_admin_address
+swift::keystone::auth::admin_address: "%{hiera('swift_admin_address')}"
+
+# galera_master_ipaddress
+openstack-ha::load-balancer::galera_master_ipaddress: "%{hiera('galera_master_ipaddress')}"
+
+# http://%{controller_public_address}:5000/v2.0/
+glance::backend::swift::swift_store_auth_address: "http://%{hiera('controller_public_address')}:5000/v2.0/"
+glance::api::auth_url: "http://%{hiera('controller_public_address')}:5000/v2.0/"
+
+# mysql://cinder:%{cinder_db_password}@%{controller_internal_address}/cinder?charset=utf8
+cinder::sql_connection: "mysql://cinder:%{hiera('cinder_db_password')}@%{hiera('controller_internal_address')}/cinder?charset=utf8"
+
+# galera_master_name
+openstack-ha::load-balancer::galera_master_name: "%{hiera('galera_master_name')}"
+
+# allowed_hosts
+ceilometer::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+cinder::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+glance::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+keystone::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+nova::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+quantum::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+neutron::db::mysql::allowed_hosts: "%{hiera('allowed_hosts')}"
+
+# mysql://%{network_service}:%{network_db_password}@%{controller_internal_address}/%{network_service}?charset=utf8
+quantum::plugins::ovs::sql_connection: "mysql://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}?charset=utf8"
+quantum::plugins::linuxbridge::sql_connection: "mysql://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}?charset=utf8"
+neutron::server::database_connection: "mysql://%{hiera('network_service')}:%{hiera('network_db_password')}@%{hiera('controller_internal_address')}/%{hiera('network_service')}?charset=utf8"
+
+# swift_public_address
+swift::keystone::auth::public_address: "%{hiera('swift_public_address')}"
+
+# swift_storage_interface
+openstack-ha::load-balancer::swift_proxy_interface: "%{hiera('swift_storage_interface')}"
+
+# controller_internal_address
+openstack-ha::load-balancer::controller_virtual_ip: "%{hiera('controller_internal_address')}"
+
+# mysql://glance:%{glance_db_password}@%{controller_internal_address}/glance
+glance::api::sql_connection: "mysql://glance:%{hiera('glance_db_password')}@%{hiera('controller_internal_address')}/glance"
+glance::registry::sql_connection: "mysql://glance:%{hiera('glance_db_password')}@%{hiera('controller_internal_address')}/glance"
+
+# private_interface
+openstack-ha::load-balancer::controller_interface: "%{hiera('private_interface')}"
+
+# mysql://heat:%{heat_db_password}@%{controller_internal_address}/heat
+heat::sql_connection: "mysql://heat:%{hiera('heat_db_password')}@%{hiera('controller_internal_address')}/heat"
+
+# bind_address
+galera::local_ip: "%{hiera('bind_address')}"
+galera::bind_address: "%{hiera('bind_address')}"
+horizon::bind_address: "%{hiera('bind_address')}"
+horizon::cache_server_ip: "%{hiera('bind_address')}"
+ceilometer::api::host: "%{hiera('bind_address')}"
+cinder::api::bind_host: "%{hiera('bind_address')}"
+glance::registry::bind_host: "%{hiera('bind_address')}"
+glance::api::bind_host: "%{hiera('bind_address')}"
+nova::vncproxy::host: "%{hiera('bind_address')}"
+nova::api::api_bind_address: "%{hiera('bind_address')}"
+mysql::config::bind_address: "%{hiera('bind_address')}"
+keystone::bind_host: "%{hiera('bind_address')}"
+memcached::listen_ip: "%{hiera('bind_address')}"
+quantum::bind_host: "%{hiera('bind_address')}"
+neutron::bind_host: "%{hiera('bind_address')}"
+heat::api::bind_host: "%{hiera('bind_address')}"
+heat::api_cfn::bind_host: "%{hiera('bind_address')}"
+heat::api_cloudwatch::bind_host: "%{hiera('bind_address')}"
+openstack::swift::proxy::swift_proxy_net_ip: "%{hiera('bind_address')}"
+
+# mysql://keystone:%{keystone_db_password}@%{controller_internal_address}/keystone
+keystone::sql_connection: "mysql://keystone:%{hiera('keystone_db_password')}@%{hiera('controller_internal_address')}/keystone"
+
+# mysql://nova:%{nova_db_password}@%{controller_internal_address}/nova
+nova::database_connection: "mysql://nova:%{hiera('nova_db_password')}@%{hiera('controller_internal_address')}/nova"
+
+# swift_internal_address
+swift::keystone::auth::internal_address: "%{hiera('swift_internal_address')}"
+openstack-ha::load-balancer::swift_proxy_virtual_ip: "%{hiera('swift_internal_address')}"
+
+# localhost
+ceilometer::db::mysql::host: "%{hiera('localhost')}"
+cinder::db::mysql::host: "%{hiera('localhost')}"
+glance::db::mysql::host: "%{hiera('localhost')}"
+keystone::db::mysql::host: "%{hiera('localhost')}"
+nova::db::mysql::host: "%{hiera('localhost')}"
+quantum::db::mysql::host: "%{hiera('localhost')}"
+neutron::db::mysql::host: "%{hiera('localhost')}"

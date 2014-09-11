@@ -112,7 +112,7 @@ controller_internal_url: "%{hiera('controller_internal_protocol')}://%{hiera('co
 
 # Bind options to be passed to HAproxy if ssl is enabled. This
 # will only affect the public endpoints and dashboard.
-ssl_bind_options:
+ssl_bind_options: &ssl_bind_options 
   - ssl
   - crt
   - "%{hiera('haproxy_cert_path')}"
@@ -190,3 +190,15 @@ openstack_extras::repo::redhat::redhat::package_require: true
 
 # Manage epel ourselves
 openstack_extras::repo::redhat::redhat::manage_epel: false
+
+#########################################
+# Anchor mappings for non-string elements
+#########################################
+
+openstacklib::loadbalance::haproxy::ceilometer::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::cinder::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::glance::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::heat::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::keystone::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::nova::bind_options: *ssl_bind_options
+openstacklib::loadbalance::haproxy::neutron::bind_options: *ssl_bind_options

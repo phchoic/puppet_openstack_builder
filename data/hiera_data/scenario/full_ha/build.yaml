@@ -1,0 +1,5 @@
+classes:
+  - "coe::base"
+class_groups:
+  - "test_file"
+  - "build"
