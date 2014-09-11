@@ -40,24 +40,6 @@ if reposource != 'downstream'
 end
 mod 'puppetlabs/concat', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-concat.git", :ref => ref
 
-# devtools
-if reposource != 'downstream'
-  author = 'Spredzy'
-end
-mod 'Spredzy/devtools', :git => "#{git_protocol}://github.com/#{author}/puppet-devtools.git", :ref => ref
-
-# dnsmasq
-if reposource != 'downstream'
-  author = 'netmanagers'
-end
-mod 'netmanagers/dnsmasq', :git => "#{git_protocol}://github.com/#{author}/puppet-dnsmasq.git", :ref => ref
-
-# edeploy
-if reposource != 'downstream'
-  author = 'michaeltchapman'
-end
-mod 'michaeltchapman/edeploy', :git => "#{git_protocol}://github.com/#{author}/puppet-edeploy.git", :ref => ref
-
 # firewall
 if reposource != 'downstream'
   author = 'puppetlabs'
@@ -144,33 +126,15 @@ mod 'stackforge/openstack', :git => "#{git_protocol}://github.com/#{author}/pupp
 
 # openstacklib
 if reposource != 'downstream'
-  author = 'michaeltchapman'
+  author = 'stackforge'
 end
-mod 'michaeltchapman/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
+mod 'stackforge/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
 
 # openstack_extras
 if reposource != 'downstream'
   author = 'stackforge'
 end
 mod 'stackforge/openstack_extras', :git => "#{git_protocol}://github.com/#{author}/puppet-openstack_extras.git", :ref => ref
-
-# postgresql
-if reposource != 'downstream'
-  author = 'puppetlabs'
-end
-mod 'puppetlabs/postgresql', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-postgresql.git", :ref => ref
-
-# puppet
-if reposource != 'downstream'
-  author = 'stephenrjohnson'
-end
-mod 'stephenrjohnson/puppet', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-puppet.git", :ref => ref
-
-# puppetdb
-if reposource != 'downstream'
-  author = 'puppetlabs'
-end
-mod 'puppetlabs/puppetdb', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-puppetdb.git", :ref => ref
 
 # rabbitmq
 if reposource != 'downstream'
@@ -183,12 +147,6 @@ if reposource != 'downstream'
   author = 'puppetlabs'
 end
 mod 'puppetlabs/rsync', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-rsync.git", :ref => ref
-
-# ruby-puppetdb
-if reposource != 'downstream'
-  author = 'ripienaar'
-end
-mod 'ripienaar/ruby-puppetdb', :git => "#{git_protocol}://github.com/#{author}/ruby-puppetdb.git", :ref => ref
 
 # staging
 if reposource != 'downstream'
@@ -225,12 +183,6 @@ if reposource != 'downstream'
   author = 'puppetlabs'
 end
 mod 'puppetlabs/tftp', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-tftp.git", :ref => ref
-
-# vcsrepo
-if reposource != 'downstream'
-  author = 'puppetlabs'
-end
-mod 'puppetlabs/vcsrepo', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-vcsrepo.git", :ref => ref
 
 # vswitch
 if reposource != 'downstream'
