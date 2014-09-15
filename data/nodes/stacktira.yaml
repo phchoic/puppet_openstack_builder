@@ -2,14 +2,15 @@ nodes:
   mgmt1:
     vagrant_name: mgmt1
     memory:       4096
-    ip_number:    200 
+    ip_number:    200
   mgmt2:
     vagrant_name: mgmt2
     memory:       4096
-    ip_number:    200 
+    ip_number:    201
   mgmt3:
     vagrant_name: mgmt2
     memory:       4096
+    ip_number:    202
   control1:
     vagrant_name: control1
     memory:       4096
@@ -35,7 +36,7 @@ nodes:
     memory:       4096
     ip_number:    10
   converged2:
-    vagrant_name: converged2 
+    vagrant_name: converged2
     memory:       4096
     ip_number:    11
   converged3:
