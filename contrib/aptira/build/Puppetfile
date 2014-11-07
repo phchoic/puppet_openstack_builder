@@ -142,15 +142,21 @@ mod 'stackforge/openstack', :git => "#{git_protocol}://github.com/#{author}/pupp
 
 # openstacklib
 if reposource != 'downstream'
-  author = 'michaeltchapman'
+  author = 'stackforge'
 end
-mod 'michaeltchapman/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
+mod 'stackforge/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
 
 # postgresql
 if reposource != 'downstream'
   author = 'puppetlabs'
 end
 mod 'puppetlabs/postgresql', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-postgresql.git", :ref => ref
+
+# puppeels
+if reposource != 'downstream'
+  author = 'Mylezeem'
+end
+mod 'Mylezeem/puppeels', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
 
 # puppet
 if reposource != 'downstream'
@@ -181,6 +187,12 @@ if reposource != 'downstream'
   author = 'ripienaar'
 end
 mod 'ripienaar/ruby-puppetdb', :git => "#{git_protocol}://github.com/#{author}/ruby-puppetdb.git", :ref => ref
+
+# stacktira
+if reposource != 'downstream'
+  author = 'aptira'
+end
+mod 'aptira/stacktira', :git => "#{git_protocol}://github.com/#{author}/puppet-stacktira.git", :ref => ref
 
 # staging
 if reposource != 'downstream'
