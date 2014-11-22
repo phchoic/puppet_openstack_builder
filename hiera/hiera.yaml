@@ -1,5 +1,3 @@
-
----
 :backends:
   - yaml
 :yaml:
@@ -7,8 +5,8 @@
 :hierarchy:
   - "hostname/%{hostname}"
   - "user.%{role}"
-  - "user.%{environment}"
   - user
+  - "%{scenario}"
   - identity
   - image
   - compute
@@ -24,4 +22,6 @@
   - logging
   - highavailability
   - firewall
+  - "roles/%{role}"
   - common
+
