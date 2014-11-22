@@ -1,0 +1,22 @@
+glance::api::keystone_password: glance_pass
+glance::api::bind_host: "%{ipaddress_eth2}"
+glance::api::auth_host: "%{hiera('control_public')}"
+glance::api::database_connection: "mysql://glance:glance_pass@%{hiera('control_internal')}/glance"
+glance::api::mysql_module: "%{hiera('mysql_module')}"
+glance::api::workers: 1
+glance::api::registry_host: "%{hiera('control_public')}"
+
+glance::registry::keystone_password: glance_pass
+glance::registry::bind_host: "%{ipaddress_eth2}"
+glance::registry::auth_host: "%{hiera('control_public')}"
+glance::registry::database_connection: "mysql://glance:glance_pass@%{hiera('control_internal')}/glance"
+glance::registry::mysql_module: "%{hiera('mysql_module')}"
+
+glance::db::mysql::password: glance_pass
+glance::db::mysql::host: "%{hiera('control_internal')}"
+glance::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+
+glance::keystone::auth::password: glance_pass
+glance::keystone::auth::public_address: "%{hiera('control_public')}"
+glance::keystone::auth::admin_address: "%{hiera('control_public')}"
+glance::keystone::auth::internal_address: "%{hiera('control_public')}"

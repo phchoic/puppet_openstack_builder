@@ -1,0 +1,49 @@
+neutron::bind_host: "%{hiera('control_public')}"
+neutron::core_plugin: neutron.plugins.ml2.plugin.Ml2Plugin
+neutron::rabbit_password: guest
+neutron::service_plugins:
+  - neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
+neutron::rabbit_host: "%{hiera('control_internal')}"
+
+neutron::server::sync_db: true
+neutron::server::auth_host: "%{hiera('control_public')}"
+neutron::server::database_connection: "mysql://neutron:neutron_pass@%{hiera('control_internal')}/neutron"
+neutron::server::auth_password: neutron_pass
+neutron::server::mysql_module: "%{hiera('mysql_module')}"
+
+neutron::server::notifications::notify_nova_on_port_status_changes: true
+neutron::server::notifications::notify_nova_on_port_data_changes: true
+neutron::server::notifications::nova_admin_auth_url: "http://%{hiera('control_public')}:35357/v2.0"
+neutron::server::notifications::nova_url: "http://%{hiera('control_public')}:8774/v2"
+neutron::server::notifications::nova_admin_username: nova
+neutron::server::notifications::nova_admin_password: nova_pass
+
+
+neutron::agents::metadata::auth_password: neutron_pass
+neutron::agents::metadata::shared_secret: a_secret
+neutron::agents::metadata::auth_url: "http://%{hiera('control_public')}:35357/v2.0"
+neutron::agents::metadata::metadata_ip: "%{hiera('control_public')}"
+
+neutron::agents::ml2::ovs::bridge_uplinks:
+  - 'br-ex:eth2'
+neutron::agents::ml2::ovs::bridge_mappings:
+  - 'default:br-ex'
+neutron::agents::ml2::ovs::local_ip: "%{ipaddress_eth3}"
+neutron::agents::ml2::ovs::enable_tunneling: true
+neutron::agents::ml2::ovs::tunnel_types:
+  - gre
+neutron::plugins::ml2::type_drivers:
+  - gre
+neutron::plugins::ml2::tenant_network_types:
+  - gre
+neutron::plugins::ml2::mechanism_drivers:
+  - openvswitch
+
+neutron::db::mysql::password: neutron_pass
+neutron::db::mysql::host: "%{hiera('control_internal')}"
+neutron::db::mysql::mysql_module: "%{hiera('mysql_module')}"
+
+neutron::keystone::auth::password: neutron_pass
+neutron::keystone::auth::public_address: "%{hiera('control_public')}"
+neutron::keystone::auth::admin_address: "%{hiera('control_public')}"
+neutron::keystone::auth::internal_address: "%{hiera('control_public')}"

@@ -46,12 +46,12 @@ Vagrant.configure("2") do |config|
       configure(control)
     end
 
-    config.vm.define "compute#{i}" do |compute|
-      compute.vm.hostname = "compute#{i}"
-      compute.vm.network "private_network", :ip => "192.168.242.2#{i}"
-      compute.vm.network "private_network", :ip => "10.2.3.2#{i}"
-      compute.vm.network "private_network", :ip => "10.3.3.2#{i}"
-      configure(compute)
+    config.vm.define "hypervisor#{i}" do |hypervisor|
+      hypervisor.vm.hostname = "hypervisor#{i}"
+      hypervisor.vm.network "private_network", :ip => "192.168.242.2#{i}"
+      hypervisor.vm.network "private_network", :ip => "10.2.3.2#{i}"
+      hypervisor.vm.network "private_network", :ip => "10.3.3.2#{i}"
+      configure(hypervisor)
     end
 
   end

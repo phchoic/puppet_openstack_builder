@@ -6,7 +6,7 @@
   - "hostname/%{hostname}"
   - "user.%{role}"
   - user
-  - "%{scenario}"
+  - "roles/%{role}"
   - identity
   - image
   - compute
@@ -22,6 +22,6 @@
   - logging
   - highavailability
   - firewall
-  - "roles/%{role}"
+  - repositories
   - common
 

@@ -1,0 +1,10 @@
+hypervisor_classes:
+  - openstack_extras::repo::redhat::redhat
+  - nova
+  - nova::compute
+  - nova::compute::libvirt
+  - nova::network::neutron
+  - nova::compute::neutron
+  - neutron
+  - neutron::plugins::ml2
+  - neutron::agents::ml2::ovs

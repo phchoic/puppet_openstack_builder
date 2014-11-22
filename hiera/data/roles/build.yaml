@@ -1,0 +1,4 @@
+build_classes:
+  - "openstacklib::repo"
+  - "openstacklib::hosts"
+# todo
