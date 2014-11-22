@@ -132,6 +132,12 @@ mod 'stackforge/openstack', :git => "#{git_protocol}://github.com/#{author}/pupp
 if reposource != 'downstream'
   author = 'stackforge'
 end
+mod 'stackforge/openstack_extras', :git => "#{git_protocol}://github.com/#{author}/puppet-openstack_extras.git", :ref => ref
+
+# openstacklib
+if reposource != 'downstream'
+  author = 'stackforge'
+end
 mod 'stackforge/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
 
 # postgresql
