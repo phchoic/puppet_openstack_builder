@@ -44,24 +44,6 @@ if reposource != 'downstream'
 end
 mod 'puppetlabs/concat', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-concat.git", :ref => ref
 
-# devtools
-if reposource != 'downstream'
-  author = 'Spredzy'
-end
-mod 'Spredzy/devtools', :git => "#{git_protocol}://github.com/#{author}/puppet-devtools.git", :ref => ref
-
-# dnsmasq
-if reposource != 'downstream'
-  author = 'netmanagers'
-end
-mod 'netmanagers/dnsmasq', :git => "#{git_protocol}://github.com/#{author}/puppet-dnsmasq.git", :ref => ref
-
-# edeploy
-if reposource != 'downstream'
-  author = 'michaeltchapman'
-end
-mod 'michaeltchapman/edeploy', :git => "#{git_protocol}://github.com/#{author}/puppet-edeploy.git", :ref => ref
-
 # firewall
 if reposource != 'downstream'
   author = 'puppetlabs'
@@ -151,6 +133,12 @@ if reposource != 'downstream'
   author = 'stackforge'
 end
 mod 'stackforge/openstacklib', :git => "#{git_protocol}://github.com/#{author}/puppet-openstacklib.git", :ref => ref
+
+# postgresql
+if reposource != 'downstream'
+  author = 'michaeltchapman'
+end
+mod 'puppetlabs/partial', :git => "#{git_protocol}://github.com/#{author}/puppet-partial.git", :ref => ref
 
 # postgresql
 if reposource != 'downstream'
