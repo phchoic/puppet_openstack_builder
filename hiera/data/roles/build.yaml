@@ -1,4 +1,3 @@
 build_classes:
-  - "openstacklib::repo"
-  - "openstacklib::hosts"
+  - "openstack_extras::repo::redhat::redhat"
 # todo

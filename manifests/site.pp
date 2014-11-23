@@ -16,5 +16,7 @@ define site::role
     include $node_classes
     $s = join($node_classes, ' ')
     notice("Including node classes : ${s}")
+  } else {
+    notice("No classes found for role: ${role}")
   }
 }

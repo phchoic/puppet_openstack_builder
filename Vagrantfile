@@ -19,11 +19,12 @@ def configure(config)
     shell.inline = 'bash /vagrant/provision/bootstrap.sh'
   end
 
-  config.vm.provision :puppet do |puppet|
-    puppet.module_path = "modules"
-    puppet.manifest_file = "site.pp"
-    puppet.hiera_config_path = "hiera/hiera.yaml"
-    puppet.working_directory = "/vagrant/hiera/data"
+  config.vm.synced_folder "modules", "/etc/puppet/modules"
+  config.vm.synced_folder "manifests", "/etc/puppet/manifests"
+  config.vm.synced_folder "hiera", "/etc/puppet/hiera"
+
+  config.vm.provision :shell do |shell|
+    shell.inline = 'cp /vagrant/hiera/hiera.yaml /etc/puppet; puppet apply /etc/puppet/manifests/site.pp'
   end
 end
 
@@ -32,9 +33,9 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "build#{i}" do |build|
       build.vm.hostname = "build#{i}"
-      build.vm.network "private_network", :ip => "192.168.242.0#{i}"
-      build.vm.network "private_network", :ip => "10.2.3.0#{i}"
-      build.vm.network "private_network", :ip => "10.3.3.0#{i}"
+      build.vm.network "private_network", :ip => "192.168.242.3#{i}"
+      build.vm.network "private_network", :ip => "10.2.3.3#{i}"
+      build.vm.network "private_network", :ip => "10.3.3.3#{i}"
       configure(build)
     end
 

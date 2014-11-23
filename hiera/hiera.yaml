@@ -1,7 +1,7 @@
 :backends:
   - yaml
 :yaml:
-   :datadir: /etc/puppet/data/hiera_data
+   :datadir: /etc/puppet/hiera/data
 :hierarchy:
   - "hostname/%{hostname}"
   - "user.%{role}"
