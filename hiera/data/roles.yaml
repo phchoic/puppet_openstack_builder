@@ -1,0 +1,90 @@
+all_classes:
+  - openstack_extras::repo::redhat::redhat
+  - mysql::server
+
+  - keystone
+  - keystone::roles::admin
+  - keystone::db::mysql
+  - openstack::auth_file
+
+  - glance::api
+  - glance::registry
+  - glance::db::mysql
+  - glance::keystone::auth
+  - glance::backend::file
+
+  - nova::rabbitmq
+
+  - nova
+  - nova::api
+  - nova::scheduler
+  - nova::network::neutron
+  - nova::conductor
+  - nova::db::mysql
+  - nova::keystone::auth
+
+  - neutron
+  - neutron::server
+  - neutron::server::notifications
+  - neutron::agents::metadata
+  - neutron::agents::l3
+  - neutron::agents::dhcp
+  - neutron::agents::ml2::ovs
+  - neutron::plugins::ml2
+  - neutron::db::mysql
+  - neutron::keystone::auth
+
+  - nova::compute
+  - nova::compute::libvirt
+  - nova::compute::neutron
+
+build_classes:
+  - "openstack_extras::repo::redhat::redhat"
+  - partial::mirror
+
+control_classes:
+  - openstack_extras::repo::redhat::redhat
+  - mysql::server
+
+  - keystone
+  - keystone::roles::admin
+  - keystone::db::mysql
+  - openstack::auth_file
+
+  - glance::api
+  - glance::registry
+  - glance::db::mysql
+  - glance::keystone::auth
+  - glance::backend::file
+
+  - nova::rabbitmq
+
+  - nova
+  - nova::api
+  - nova::scheduler
+  - nova::network::neutron
+  - nova::conductor
+  - nova::db::mysql
+  - nova::keystone::auth
+
+  - neutron
+  - neutron::server
+  - neutron::server::notifications
+  - neutron::agents::metadata
+  - neutron::agents::l3
+  - neutron::agents::dhcp
+  - neutron::agents::ml2::ovs
+  - neutron::plugins::ml2
+  - neutron::db::mysql
+  - neutron::keystone::auth
+
+hypervisor_classes:
+  - openstack_extras::repo::redhat::redhat
+  - nova
+  - nova::compute
+  - nova::compute::libvirt
+  - nova::network::neutron
+  - nova::compute::neutron
+  - neutron
+  - neutron::plugins::ml2
+  - neutron::agents::ml2::ovs
