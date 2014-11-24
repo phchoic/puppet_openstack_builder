@@ -28,7 +28,7 @@ neutron::agents::ml2::ovs::bridge_uplinks:
   - 'br-ex:eth2'
 neutron::agents::ml2::ovs::bridge_mappings:
   - 'default:br-ex'
-neutron::agents::ml2::ovs::local_ip: "%{ipaddress_eth3}"
+neutron::agents::ml2::ovs::local_ip: "%{ipaddress_enp0s10}"
 neutron::agents::ml2::ovs::enable_tunneling: true
 neutron::agents::ml2::ovs::tunnel_types:
   - gre
