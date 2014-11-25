@@ -7,3 +7,14 @@ yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
 apache::default_mods: false
 apache::default_vhost: false
 apache::default_confd_files: false
+
+openstack_extras::repo::redhat::redhat::repo_hash:
+  'local':
+    'descr': 'Local Mirror'
+    'baseurl': 'http://192.168.242.31/'
+    'gpgcheck': 0
+
+openstack_extras::repo::redhat::redhat::purge_unmanaged: true
+openstack_extras::repo::redhat::redhat::package_require: true
+openstack_extras::repo::redhat::redhat::manage_epel: false
+openstack_extras::repo::redhat::redhat::manage_rdo: false
