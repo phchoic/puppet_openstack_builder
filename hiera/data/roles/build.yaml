@@ -1,4 +1,6 @@
-# Repository Management
+yum_base_mirror: 'http://centos.mirror.uber.com.au'
+yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
+
 openstack_extras::repo::redhat::redhat::repo_hash:
   'CentOS-Base':
     'descr': 'CentOS-$releasever - Base'
@@ -14,6 +16,11 @@ openstack_extras::repo::redhat::redhat::repo_hash:
     'baseurl': "%{hiera('yum_epel_mirror')}/$releasever/$basearch/"
     'gpgkey': 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'
     'failovermethod': 'priority'
+  'puppetlabs':
+    'descr':    'Puppetlabs Yum Repo'
+    'baseurl':  'http://yum.puppetlabs.com/el/$releasever/products/$basearch/'
+    'gpgkey':   'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs'
+    'gpgcheck': 1
 openstack_extras::repo::redhat::redhat::gpgkey_hash:
   '/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7':
     'source': 'puppet:///modules/openstack_extras/RPM-GPG-KEY-EPEL-7'
