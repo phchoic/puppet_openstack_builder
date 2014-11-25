@@ -1,7 +1,6 @@
 nova::database_connection: "mysql://nova:nova_pass@%{hiera('control_internal')}/nova"
 nova::glance_api_servers: "%{hiera('control_public')}:9292"
 nova::rabbit_host: "%{hiera('control_internal')}"
-nova::mysql_module: "%{hiera('mysql_module')}"
 
 nova::api::admin_password: nova_pass
 nova::api::enabled: true
@@ -19,7 +18,6 @@ nova::conductor::enabled: true
 
 nova::db::mysql::password: nova_pass
 nova::db::mysql::host: "%{hiera('control_internal')}"
-nova::db::mysql::mysql_module: "%{hiera('mysql_module')}"
 
 nova::keystone::auth::password: nova_pass
 nova::keystone::auth::public_address: "%{hiera('control_public')}"

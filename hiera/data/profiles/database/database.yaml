@@ -1,5 +1,5 @@
 mysql::server::root_password: test123
 mysql::server::override_options:
   mysqld:
-    bind-address: "%{ipaddress_eth3}"
+    bind-address: "%{ipaddress_enp0s10}"
     default_table_type: InnoDB
