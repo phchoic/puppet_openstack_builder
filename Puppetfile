@@ -130,7 +130,7 @@ mod 'stackforge/openstack', :git => "#{git_protocol}://github.com/#{author}/pupp
 
 # openstack_extras
 if reposource == 'upstream'
-  author = 'stackforge'
+  author = 'michaeltchapman'
 end
 mod 'stackforge/openstack_extras', :git => "#{git_protocol}://github.com/#{author}/puppet-openstack_extras.git", :ref => ref
 
