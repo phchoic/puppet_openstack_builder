@@ -11,7 +11,7 @@
 #   - ???
 # - make sure the fqdn is set and working
 #
-network=eth1
+network=enp0s8
 domain='domain.name'
 proxy="${proxy:-}"
 
@@ -57,7 +57,7 @@ fi
 
 if [ "${puppet_version}" != "${desired_puppet}" ] ; then
   echo '[puppetlabs]' > /etc/yum.repos.d/puppetlabs.repo
-  echo "name=\"Puppetlabs Yum Repo\"" >> /etc/yum.repos.d/puppetlabs.repo
+  echo "name=Puppetlabs Yum Repo" >> /etc/yum.repos.d/puppetlabs.repo
   echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/products/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs.repo
   echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs.repo
   echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs.repo
@@ -93,3 +93,11 @@ fi
 # Set role fact
 mkdir -p /etc/facter/facts.d
 echo "role: `hostname | grep -oh '^[[:alpha:]]*'`" > /etc/facter/facts.d/role.yaml
+
+# Lock network facts
+if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
+  facter | grep ipaddress | sed 's/\ =>/:/' > /etc/facter/facts.d/ipaddress.yaml
+fi
+
+
+
