@@ -17,7 +17,7 @@ openstack_extras::repo::redhat::redhat::repo_hash:
     'gpgkey': 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'
     'failovermethod': 'priority'
   'puppetlabs':
-    'descr':    'Puppetlabs Yum Repo'
+    'descr': Puppetlabs Yum Repo
     'baseurl':  'http://yum.puppetlabs.com/el/$releasever/products/$basearch/'
     'gpgkey':   'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs'
     'gpgcheck': 1
