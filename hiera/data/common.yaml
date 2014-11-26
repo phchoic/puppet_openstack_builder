@@ -1,6 +1,5 @@
-control_public: 10.2.3.10
-control_internal: 10.3.3.10
-mysql_module: '2.2'
+control_public: 10.2.3.11
+control_internal: 10.3.3.11
 yum_base_mirror: 'http://centos.mirror.uber.com.au'
 yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
 
