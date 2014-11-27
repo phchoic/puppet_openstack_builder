@@ -16,6 +16,12 @@ end
 
 # apache
 if reposource == 'upstream'
+  author = 'Mylezeem'
+end
+mod 'Mylezeem/account', :git => "#{git_protocol}://github.com/#{author}/puppet-account.git", :ref => ref
+
+# apache
+if reposource == 'upstream'
   author = 'puppetlabs'
 end
 mod 'puppetlabs/apache', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-apache.git", :ref => ref
