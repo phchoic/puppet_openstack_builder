@@ -162,19 +162,13 @@ mod 'puppetlabs/postgresql', :git => "#{git_protocol}://github.com/#{author}/pup
 if reposource == 'upstream'
   author = 'Mylezeem'
 end
-mod 'Mylezeem/puppeels', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
+mod 'Mylezeem/profiles', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
 
 # puppet
 if reposource == 'upstream'
   author = 'stephenrjohnson'
 end
 mod 'stephenrjohnson/puppet', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-puppet.git", :ref => ref
-
-# puppetdb
-if reposource == 'upstream'
-  author = 'puppetlabs'
-end
-mod 'puppetlabs/puppetdb', :git => "#{git_protocol}://github.com/#{author}/puppetlabs-puppetdb.git", :ref => ref
 
 # rabbitmq
 if reposource == 'upstream'
