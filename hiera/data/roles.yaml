@@ -1,16 +1,22 @@
 all_classes:
   - openstack_extras::repo::redhat::redhat
-  - mysql::server
 
-  - keystone
-  - keystone::roles::admin
+  - profile::webserver::apache
+  - profile::base::base
+  - partial::mirror
+
+  - profile::openstack::identity
+
+  - mysql::server
   - keystone::db::mysql
+  - glance::db::mysql
+  - nova::db::mysql
+  - neutron::db::mysql
+
   - openstack::auth_file
 
   - glance::api
   - glance::registry
-  - glance::db::mysql
-  - glance::keystone::auth
   - glance::backend::file
 
   - nova::rabbitmq
@@ -20,8 +26,6 @@ all_classes:
   - nova::scheduler
   - nova::network::neutron
   - nova::conductor
-  - nova::db::mysql
-  - nova::keystone::auth
 
   - neutron
   - neutron::server
@@ -31,30 +35,33 @@ all_classes:
   - neutron::agents::dhcp
   - neutron::agents::ml2::ovs
   - neutron::plugins::ml2
-  - neutron::db::mysql
-  - neutron::keystone::auth
 
   - nova::compute
   - nova::compute::libvirt
   - nova::compute::neutron
 
 build_classes:
-  - "openstack_extras::repo::redhat::redhat"
+  - openstack_extras::repo::redhat::redhat
+  - profile::webserver::apache
+  - profile::base::base
   - partial::mirror
 
 control_classes:
   - openstack_extras::repo::redhat::redhat
-  - mysql::server
+  - profile::base::base
 
-  - keystone
-  - keystone::roles::admin
-  - keystone::db::mysql
+  - profile::openstack::identity
+
   - openstack::auth_file
+
+  - mysql::server
+  - keystone::db::mysql
+  - glance::db::mysql
+  - nova::db::mysql
+  - neutron::db::mysql
 
   - glance::api
   - glance::registry
-  - glance::db::mysql
-  - glance::keystone::auth
   - glance::backend::file
 
   - nova::rabbitmq
@@ -64,8 +71,6 @@ control_classes:
   - nova::scheduler
   - nova::network::neutron
   - nova::conductor
-  - nova::db::mysql
-  - nova::keystone::auth
 
   - neutron
   - neutron::server
@@ -75,8 +80,6 @@ control_classes:
   - neutron::agents::dhcp
   - neutron::agents::ml2::ovs
   - neutron::plugins::ml2
-  - neutron::db::mysql
-  - neutron::keystone::auth
 
 hypervisor_classes:
   - openstack_extras::repo::redhat::redhat
