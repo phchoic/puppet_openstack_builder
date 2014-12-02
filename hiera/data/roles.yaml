@@ -6,6 +6,7 @@ all_classes:
   - partial::mirror
 
   - profile::openstack::identity
+  - profile::openstack::image
 
   - mysql::server
   - keystone::db::mysql
@@ -14,10 +15,6 @@ all_classes:
   - neutron::db::mysql
 
   - openstack::auth_file
-
-  - glance::api
-  - glance::registry
-  - glance::backend::file
 
   - nova::rabbitmq
 
@@ -52,6 +49,8 @@ control_classes:
 
   - profile::openstack::identity
 
+  - profile::openstack::image
+
   - openstack::auth_file
 
   - mysql::server
@@ -59,10 +58,6 @@ control_classes:
   - glance::db::mysql
   - nova::db::mysql
   - neutron::db::mysql
-
-  - glance::api
-  - glance::registry
-  - glance::backend::file
 
   - nova::rabbitmq
 
