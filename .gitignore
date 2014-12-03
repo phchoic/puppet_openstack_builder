@@ -1,5 +1,4 @@
-modules
-module/*
+modules/*
 .tmp
 .vagrant
 *.log*

@@ -7,21 +7,7 @@
   - "user.%{role}"
   - user
   - "roles/%{role}"
-  - profiles/openstack/identity
-  - profiles/openstack/image
-  - profiles/openstack/compute
-  - profiles/openstack/network
-  - profiles/openstack/volume
-  - profiles/openstack/telemetry
-  - profiles/openstack/orchestration
-  - profiles/openstack/dashboard
-  - profiles/openstack/cache
-  - profiles/database/mysql
-  - profiles/messaging/rabbitmq
-  - profiles/monitoring/sensu
-  - profiles/logging/logstash
-  - profiles/highavailability/haproxy
-  - profiles/base/firewall
-  - profiles/base/repositories
+  - "classes/%{calling_class}"
+  - "modules/%{calling_module}"
   - roles
   - common

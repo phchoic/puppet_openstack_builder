@@ -2,29 +2,3 @@ control_public: 10.2.3.11
 control_internal: 10.3.3.11
 yum_base_mirror: 'http://centos.mirror.uber.com.au'
 yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
-
-apache::default_mods: false
-apache::default_vhost: false
-apache::default_confd_files: false
-
-openstack_extras::repo::redhat::redhat::repo_hash:
-  'local':
-    'descr': 'Local Mirror'
-    'baseurl': 'http://192.168.242.31/'
-    'gpgcheck': 0
-
-openstack_extras::repo::redhat::redhat::purge_unmanaged: true
-openstack_extras::repo::redhat::redhat::package_require: true
-openstack_extras::repo::redhat::redhat::manage_epel: false
-openstack_extras::repo::redhat::redhat::manage_rdo: false
-
-profile::base::base::manage_augeasproviders: false
-profile::base::base::manage_epel: false
-profile::base::base::manage_accounts: false
-profile::base::base::manage_logging: false
-profile::base::base::manage_monitoring: false
-profile::base::base::manage_sshd: false
-profile::base::base::manage_ntp: false
-profile::base::base::manage_sudo: false
-profile::base::base::manage_authconfig: false
-profile::base::base::manage_firewall: true

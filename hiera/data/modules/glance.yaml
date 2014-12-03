@@ -17,5 +17,3 @@ glance::keystone::auth::password: glance_pass
 glance::keystone::auth::public_address: "%{hiera('control_public')}"
 glance::keystone::auth::admin_address: "%{hiera('control_public')}"
 glance::keystone::auth::internal_address: "%{hiera('control_public')}"
-
-profile::openstack::image::api::backend: file
