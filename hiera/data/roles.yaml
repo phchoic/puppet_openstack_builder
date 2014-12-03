@@ -16,26 +16,17 @@ all_classes:
 
   - openstack::auth_file
 
-  - nova::rabbitmq
+  - profile::messaging::rabbitmq
 
-  - nova
-  - nova::api
-  - nova::scheduler
-  - nova::network::neutron
-  - nova::conductor
+  - profile::openstack::compute::api
+  - profile::openstack::compute::scheduler
+  - profile::openstack::compute::conductor
 
-  - neutron
-  - neutron::server
-  - neutron::server::notifications
-  - neutron::agents::metadata
-  - neutron::agents::l3
-  - neutron::agents::dhcp
-  - neutron::agents::ml2::ovs
-  - neutron::plugins::ml2
-
-  - nova::compute
-  - nova::compute::libvirt
-  - nova::compute::neutron
+  - profile::openstack::network::controller
+  - profile::openstack::network::metadata
+  - profile::openstack::network::l3
+  - profile::openstack::network::dhcp
+  - profile::openstack::compute::hypervisor
 
 build_classes:
   - openstack_extras::repo::redhat::redhat
@@ -46,43 +37,24 @@ build_classes:
 control_classes:
   - openstack_extras::repo::redhat::redhat
   - profile::base::base
-
   - profile::openstack::identity
-
   - profile::openstack::image
-
+  - profile::messaging::rabbitmq
+  - profile::openstack::compute::api
+  - profile::openstack::compute::scheduler
+  - profile::openstack::compute::conductor
+  - profile::openstack::network::controller
+  - profile::openstack::network::metadata
+  - profile::openstack::network::l3
+  - profile::openstack::network::dhcp
   - openstack::auth_file
 
-  - mysql::server
+  - profile::database::mariadb
   - keystone::db::mysql
   - glance::db::mysql
   - nova::db::mysql
   - neutron::db::mysql
 
-  - nova::rabbitmq
-
-  - nova
-  - nova::api
-  - nova::scheduler
-  - nova::network::neutron
-  - nova::conductor
-
-  - neutron
-  - neutron::server
-  - neutron::server::notifications
-  - neutron::agents::metadata
-  - neutron::agents::l3
-  - neutron::agents::dhcp
-  - neutron::agents::ml2::ovs
-  - neutron::plugins::ml2
-
-hypervisor_classes:
+hyper_classes:
   - openstack_extras::repo::redhat::redhat
-  - nova
-  - nova::compute
-  - nova::compute::libvirt
-  - nova::network::neutron
-  - nova::compute::neutron
-  - neutron
-  - neutron::plugins::ml2
-  - neutron::agents::ml2::ovs
+  - profile::openstack::compute::hypervisor

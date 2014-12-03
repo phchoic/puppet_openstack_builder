@@ -1,1 +1,3 @@
 rabbitmq::manage_repos: false
+rabbitmq::delete_guest_user: false
+

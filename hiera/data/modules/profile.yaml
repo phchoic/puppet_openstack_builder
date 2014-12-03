@@ -18,3 +18,25 @@ profile::base::base::manage_ntp: false
 profile::base::base::manage_sudo: false
 profile::base::base::manage_authconfig: false
 profile::base::base::manage_firewall: true
+
+profile::openstack::network::l3::manage_metering: false
+profile::openstack::compute::hypervisor::manage_telemetry: false
+
+profile::database::mariadb::manage_repo: false
+
+#profile::messaging::rabbitmq::users:
+#  'guest':
+#    admin: true
+#    password: guest
+#    provider: rabbitmqctl
+
+profile::messaging::rabbitmq::vhosts:
+  '/':
+    provider: rabbitmqctl
+
+#profile::messaging::rabbitmq::user_permissions:
+#  'guest@/':
+#    configure_permission: '.*'
+#    write_permission: '.*'
+#    read_permission: '.*'
+#    provider: rabbitmqctl
