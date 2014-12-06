@@ -90,6 +90,14 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
   fi
 fi
 
+# This might be a cloud instance. Grab config data if so.
+# Try config drive first
+if [ -e /dev/disk/by-label/config-2 ]; then
+    mkdir -p /mnt/config
+    mount /dev/disk/by-label/config-2 /mnt/config
+    python -c "import sys, yaml, json; yaml.dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
+fi
+
 # Set role fact
 mkdir -p /etc/facter/facts.d
 echo "role: `hostname | grep -oh '^[[:alpha:]]*'`" > /etc/facter/facts.d/role.yaml

@@ -6,6 +6,7 @@
   - "hostname/%{hostname}"
   - "user.%{role}"
   - user
+  - cloudinit
   - "roles/%{role}"
   - "classes/%{calling_class}"
   - "modules/%{calling_module}"
