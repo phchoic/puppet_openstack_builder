@@ -63,6 +63,13 @@ if [ "${puppet_version}" != "${desired_puppet}" ] ; then
   echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs.repo
   echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs.repo
 
+  echo '[puppetlabs-deps]' > /etc/yum.repos.d/puppetlabs-deps.repo
+  echo "name=Puppetlabs Dependencies Yum Repo" >> /etc/yum.repos.d/puppetlabs-deps.repo
+  echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/dependencies/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs-deps.repo
+  echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
+  echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
+  echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs-deps.repo
+
   yum install puppet hiera -y -q
 fi
 
