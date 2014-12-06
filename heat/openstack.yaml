@@ -4,6 +4,13 @@ description: >
   HOT template to create a stack that instantiates the currently selected scenario
 
 parameters:
+  pubnet:
+    type: string
+    description: Name of the public network for this cloud
+  floating_pool:
+    type: string
+    default: PublicNet
+    description: Name of the floating ip pool for this cloud
   image:
     type: string
     default: centos7-64
@@ -20,36 +27,80 @@ parameters:
     type: string
     default: e2a412df-3163-4aa0-8069-3dde625462cd
     description: The shared build network to use
+  mgmt_network_name:
+    type: string
+    description: The name of the management network
+    default: testmgmt
   internal_network_name:
     type: string
     description: The name of the internal network
     default: testint
   external_network_name:
     type: string
-    description: The name of the internal network
+    description: The name of the external network
     default: testext
 
 resources:
-  build1_ci:
-    type: OS::Neutron::Port
+  mgmt_router:
+    type: OS::Neutron::Router
     properties:
-      network_id: { get_param: ci_network_id }
-      fixed_ips:
-        - subnet_id: { get_param: ci_subnet_id  }
+      name: test_router
+      external_gateway_info:
+        network: { get_param: pubnet }
 
-  control1_ci:
-    type: OS::Neutron::Port
+  mgmt_router_interface:
+    type: OS::Neutron::RouterInterface
     properties:
-      network_id: { get_param: ci_network_id }
-      fixed_ips:
-        - subnet_id: { get_param: ci_subnet_id  }
+      subnet_id: { get_resource: mgmt_subnet }
+      router_id: { get_resource: mgmt_router }
 
-  compute1_ci:
+  mgmt_network:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: mgmt_network_name }
+
+  mgmt_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: mgmt_network }
+      cidr: 192.168.242.0/24
+      dns_nameservers:
+        - 8.8.8.8
+
+  build1_floatingip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: { get_param: floating_pool }
+
+  build1_floatingip_ass:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: build1_floatingip }
+      server_id: { get_resource: build1 }
+    depends_on:
+      - mgmt_router_interface
+      - mgmt_router
+
+  build1_mgmt:
     type: OS::Neutron::Port
     properties:
-      network_id: { get_param: ci_network_id }
+      network_id: { get_resource: mgmt_network }
       fixed_ips:
-        - subnet_id: { get_param: ci_subnet_id  }
+        - subnet_id: { get_resource: mgmt_subnet  }
+
+  control1_mgmt:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_resource: mgmt_network }
+      fixed_ips:
+        - subnet_id: { get_resource: mgmt_subnet  }
+
+  compute1_mgmt:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_resource: mgmt_network }
+      fixed_ips:
+        - subnet_id: { get_resource: mgmt_subnet  }
 
   internal_net:
     type: OS::Neutron::Net
@@ -102,9 +153,9 @@ resources:
       name: build1
       image: { get_param: image}
       flavor: m1.medium
-      key_name: { get_param: key_name}
+      key_name: { get_param: key_name }
       networks:
-        - port: { get_resource: build1_ci}
+        - port: { get_resource: build1_mgmt}
       user_data:
         get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
 
@@ -116,11 +167,13 @@ resources:
       flavor: m1.medium
       key_name: { get_param: key_name}
       networks:
-        - port: { get_resource: control1_ci}
+        - port: { get_resource: control1_mgmt}
         - port: { get_resource: control1_int}
         - port: { get_resource: control1_ext}
       user_data:
         get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
+      metadata: 
+        build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
 
   compute1:
     type: OS::Nova::Server
@@ -130,10 +183,11 @@ resources:
       flavor: m1.medium
       key_name: { get_param: key_name}
       networks:
-        - port: { get_resource: compute1_ci}
+        - port: { get_resource: compute1_mgmt}
         - port: { get_resource: compute1_int}
       user_data:
         get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
       metadata: 
-        - control_public: { get_attr [ control1, networks, 0, fixed_ip ]}
-        - control_internal: { get_attr [ control1, networks, 0, fixed_ip ]}
+        control_public: { get_attr: [ control1, networks, 2, fixed_ip ]}
+        control_internal: { get_attr: [ control1, networks, 1, fixed_ip ]}
+        build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
