@@ -33,6 +33,7 @@ build_classes:
   - profile::webserver::apache
   - profile::base::base
   - partial::mirror
+  - partial
 
 control_classes:
   - openstack_extras::repo::redhat::redhat
