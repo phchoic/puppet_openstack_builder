@@ -162,7 +162,7 @@ mod 'puppetlabs/postgresql', :git => "#{git_protocol}://github.com/#{author}/pup
 if reposource == 'upstream'
   author = 'Mylezeem'
 end
-mod 'Mylezeem/profiles', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
+mod 'Mylezeem/profile', :git => "#{git_protocol}://github.com/#{author}/puppeels.git", :ref => ref
 
 # puppet
 if reposource == 'upstream'
