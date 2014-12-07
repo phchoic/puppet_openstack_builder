@@ -100,7 +100,7 @@ cp -r $configure_dir/manifests /etc/puppet
 
 # Convert puppet+hiera if cloud instance
 if [ -e /dev/disk/by-label/config-2 ]; then
-    python -c "import sys, yaml, json; yaml.dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
+    python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
 fi
 
 # Set role fact (mc - this should be from metadata)
