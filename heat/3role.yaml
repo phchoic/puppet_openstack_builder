@@ -248,4 +248,4 @@ resources:
 outputs:
   build_ip:
     description: IP address of the build node
-    value: { get_attr: [ build1_floatingip, ip }
+    value: { get_attr: [ build1_floatingip, ip ]}
