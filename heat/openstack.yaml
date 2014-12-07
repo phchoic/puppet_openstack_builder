@@ -229,7 +229,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh
+            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
