@@ -14,7 +14,7 @@
 network=enp0s8
 domain='domain.name'
 proxy="${proxy:-}"
-
+desired_puppet=3.7.3
 while getopts "h?p:" opt; do
     case "$opt" in
     h|\?)
