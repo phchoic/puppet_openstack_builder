@@ -84,31 +84,7 @@ fi
 
 yum install git -y -q
 
-# Ensure puppet isn't going to sign a cert with the wrong time or
-# name
-ipaddress=$(facter ipaddress_$network)
-fqdn=$(facter hostname).${domain}
-facter_fqdn=$(facter fqdn)
-# If it doesn't match what puppet will be setting for fqdn, just redo
-# to the point where we can see the master and have fqdn
-if [ "${facter_fqdn}" != "${fqdn}" ] ; then
-  if ! grep -q "$ipaddress\s$fqdn" /etc/hosts ; then
-    echo 'configuring /etc/hosts for fqdn'
-    if [ -f /etc/redhat-release ] ; then
-        echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
-        echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
-        echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
-        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
-    elif [ -f /etc/debian_version ] ; then
-        echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
-        echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
-        echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
-        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
-    fi
-  fi
-fi
-
-if [ ! -d /etc/puppet/hiera/data ]
+if [ ! -d /etc/puppet/hiera/data ]; then
     mkdir -p /etc/puppet/hiera/data
 fi
 
@@ -148,5 +124,29 @@ vendor/bin/librarian-puppet install
 # Install puppet modules
 rm -rf /etc/puppet/modules
 cp -r modules /etc/puppet/modules /etc/puppet
+
+# Ensure puppet isn't going to sign a cert with the wrong time or
+# name
+ipaddress=$(facter ipaddress_$network)
+fqdn=$(facter hostname).${domain}
+facter_fqdn=$(facter fqdn)
+# If it doesn't match what puppet will be setting for fqdn, just redo
+# to the point where we can see the master and have fqdn
+if [ "${facter_fqdn}" != "${fqdn}" ] ; then
+  if ! grep -q "$ipaddress\s$fqdn" /etc/hosts ; then
+    echo 'configuring /etc/hosts for fqdn'
+    if [ -f /etc/redhat-release ] ; then
+        echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
+        echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
+        echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
+        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
+    elif [ -f /etc/debian_version ] ; then
+        echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
+        echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
+        echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
+        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
+    fi
+  fi
+fi
 
 puppet apply /etc/puppet/manifests/site.pp
