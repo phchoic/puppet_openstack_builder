@@ -239,8 +239,13 @@ resources:
         control_internal: { get_attr: [ control1, networks, 1, fixed_ip ]}
         build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
         mgmt_iface: eth0
-        mgmt_address: '"%{ipaddress_eth0}"'
+        mgmt_address: "%{ipaddress_eth0}"
         public_iface: eth0
-        public_address: '"%{ipaddress_eth0}"'
+        public_address: "%{ipaddress_eth0}"
         internal_iface: eth1
-        internal_address: '"%{ipaddress_eth1}"'
+        internal_address: "%{ipaddress_eth1}"
+
+outputs:
+  build_ip:
+    description: IP address of the build node
+    value: { get_attr: [ build1_floatingip, ip }

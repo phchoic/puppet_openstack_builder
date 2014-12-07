@@ -1,0 +1,115 @@
+heat_template_version: 2013-05-23
+
+description: >
+  HOT template to create a stack that instantiates the currently selected scenario
+
+parameters:
+  pubnet:
+    type: string
+    description: Name of the public network for this cloud
+  floating_pool:
+    type: string
+    default: PublicNet
+    description: Name of the floating ip pool for this cloud
+  image:
+    type: string
+    default: centos7-64
+    description: The image to use for all nodes
+  key_name:
+    type: string
+    default: test2
+    description: The key name to use for all nodes
+  config_repo:
+    type: string
+    default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
+    description: Git repo that contains the configuration for this test run
+  config_ref:
+    type: string
+    default: master
+    description: Git ref to checkout
+  mgmt_network_name:
+    type: string
+    description: The name of the management network
+    default: testmgmt
+
+resources:
+  mgmt_router:
+    type: OS::Neutron::Router
+    properties:
+      name: test_router
+      external_gateway_info:
+        network: { get_param: pubnet }
+
+  mgmt_router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      subnet_id: { get_resource: mgmt_subnet }
+      router_id: { get_resource: mgmt_router }
+
+  mgmt_network:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: mgmt_network_name }
+
+  mgmt_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: mgmt_network }
+      cidr: 192.168.242.0/24
+      dns_nameservers:
+        - 8.8.8.8
+
+  build1_floatingip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: { get_param: floating_pool }
+
+  build1_floatingip_ass:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: build1_floatingip }
+      server_id: { get_resource: build1 }
+    depends_on:
+      - mgmt_router_interface
+      - mgmt_router
+
+  build1_mgmt:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_resource: mgmt_network }
+      fixed_ips:
+        - subnet_id: { get_resource: mgmt_subnet  }
+
+  build1:
+    type: OS::Nova::Server
+    properties:
+      name: build1
+      image: { get_param: image}
+      flavor: m1.medium
+      key_name: { get_param: key_name }
+      networks:
+        - port: { get_resource: build1_mgmt}
+      metadata:
+        mgmt_iface: eth0
+        mgmt_address: '"%{ipaddress_eth0}"'
+        public_iface: eth0
+        public_address: '"%{ipaddress_eth0}"'
+        internal_iface: eth0
+        internal_address: '"%{ipaddress_eth0}"'
+      user_data:
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
+
+outputs:
+  build_ip:
+    description: IP address of the mirror
+    value: { get_attr: [ build1_floatingip, ip }

@@ -29,3 +29,55 @@ openstack_extras::repo::redhat::redhat::purge_unmanaged: true
 openstack_extras::repo::redhat::redhat::package_require: true
 openstack_extras::repo::redhat::redhat::manage_epel: false
 openstack_extras::repo::redhat::redhat::manage_rdo: true
+
+# This is the @core group
+profile::base::base_packages:
+  - audit
+  - basesystem
+  - bash
+  - biosdevname
+  - btrfs-progs
+  - coreutils
+  - cronie
+  - curl
+  - dhclient
+  - e2fsprogs
+  - filesystem
+  - glibc
+  - hostname
+  - initscripts
+  - iproute
+  - iprutils
+  #- iptables # Managed by firewall module
+  - iputils
+  - irqbalance
+  - kbd
+  - kexec-tools
+  - less
+  - man-db
+  - ncurses
+  - openssh-clients
+  - openssh-server # managed by ssh module
+  - parted
+  - passwd
+  - plymouth
+  - policycoreutils
+  - procps-ng
+  - rootfiles
+  - rpm
+  - rsyslog
+  - selinux-policy-targeted
+  - setup
+  - shadow-utils
+  - sudo
+  - systemd
+  - tar
+  - tuned
+  - util-linux
+  - vim-minimal
+  - xfsprogs
+  - yum
+
+# Other basics
+  - kernel
+  - puppet

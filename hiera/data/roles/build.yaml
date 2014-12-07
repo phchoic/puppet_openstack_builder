@@ -21,6 +21,11 @@ openstack_extras::repo::redhat::redhat::repo_hash:
     'baseurl':  'http://yum.puppetlabs.com/el/$releasever/products/$basearch/'
     'gpgkey':   'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs'
     'gpgcheck': 1
+  'puppetlabs-deps':
+    'descr': Puppetlabs Dependencies Yum Repo
+    'baseurl':  'http://yum.puppetlabs.com/el/$releasever/dependencies/$basearch/'
+    'gpgkey':   'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs'
+    'gpgcheck': 1
 openstack_extras::repo::redhat::redhat::gpgkey_hash:
   '/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7':
     'source': 'puppet:///modules/openstack_extras/RPM-GPG-KEY-EPEL-7'
