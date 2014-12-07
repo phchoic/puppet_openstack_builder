@@ -2,5 +2,16 @@ build_mgmt: 192.168.242.31
 control_public: 10.2.3.11
 control_internal: 10.3.3.11
 
+# These settings match vagrant/centos7. cloudinit will override
+# them on cloud builds
+mgmt_iface: enp0s9
+mgmt_address: "%{ipaddress_enp0s9}"
+
+internal_iface: enp0s8
+internal_address: "%{ipaddress_enp0s8}"
+
+public_iface: enp0s10
+public_address: "%{ipaddress_enp0s10}"
+
 yum_base_mirror: 'http://centos.mirror.uber.com.au'
 yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'

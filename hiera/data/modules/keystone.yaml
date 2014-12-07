@@ -5,7 +5,7 @@ keystone::roles::admin::email: user@example.com
 keystone::roles::admin::password: admin_pass
 
 keystone::admin_token: supersecret
-keystone::public_bind_host: "%{ipaddress_enp0s9}"
-keystone::admin_bind_host: "%{ipaddress_enp0s9}"
+keystone::public_bind_host: "%{hiera('public_address')}"
+keystone::admin_bind_host: "%{hiera('public_address')}"
 keystone::database_connection: "mysql://keystone:key_pass@%{hiera('control_internal')}/keystone"
 

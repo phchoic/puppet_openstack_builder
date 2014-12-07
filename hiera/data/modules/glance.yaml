@@ -1,12 +1,12 @@
 glance::api::keystone_password: glance_pass
-glance::api::bind_host: "%{ipaddress_enp0s9}"
+glance::api::bind_host: "%{hiera('public_address')}"
 glance::api::auth_host: "%{hiera('control_public')}"
 glance::api::database_connection: "mysql://glance:glance_pass@%{hiera('control_internal')}/glance"
 glance::api::workers: 1
 glance::api::registry_host: "%{hiera('control_public')}"
 
 glance::registry::keystone_password: glance_pass
-glance::registry::bind_host: "%{ipaddress_enp0s9}"
+glance::registry::bind_host: "%{hiera('public_address')}"
 glance::registry::auth_host: "%{hiera('control_public')}"
 glance::registry::database_connection: "mysql://glance:glance_pass@%{hiera('control_internal')}/glance"
 

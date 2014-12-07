@@ -24,10 +24,10 @@ neutron::agents::metadata::auth_url: "http://%{hiera('control_public')}:35357/v2
 neutron::agents::metadata::metadata_ip: "%{hiera('control_public')}"
 
 neutron::agents::ml2::ovs::bridge_uplinks:
-  - 'br-ex:enp0s9'
+  - "br-ex:%{hiera('public_iface')}"
 neutron::agents::ml2::ovs::bridge_mappings:
   - 'default:br-ex'
-neutron::agents::ml2::ovs::local_ip: "%{ipaddress_enp0s10}"
+neutron::agents::ml2::ovs::local_ip: "%{hiera('internal_address')"
 neutron::agents::ml2::ovs::enable_tunneling: true
 neutron::agents::ml2::ovs::tunnel_types:
   - gre
