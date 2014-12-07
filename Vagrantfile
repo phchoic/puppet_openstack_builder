@@ -18,14 +18,6 @@ def configure(config)
   config.vm.provision :shell do |shell|
     shell.inline = 'bash /vagrant/provision/bootstrap.sh'
   end
-
-  config.vm.synced_folder "modules", "/etc/puppet/modules"
-  config.vm.synced_folder "manifests", "/etc/puppet/manifests"
-  config.vm.synced_folder "hiera", "/etc/puppet/hiera"
-
-  config.vm.provision :shell do |shell|
-    shell.inline = 'cp /vagrant/hiera/hiera.yaml /etc/puppet; puppet apply /etc/puppet/manifests/site.pp'
-  end
 end
 
 Vagrant.configure("2") do |config|

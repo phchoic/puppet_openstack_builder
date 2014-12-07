@@ -19,14 +19,14 @@ parameters:
     type: string
     default: test2
     description: The key name to use for all nodes
-  ci_network_id:
+  config_repo:
     type: string
-    default: a9009b4d-b121-4ac1-9bd3-a4ac385c6acd
-    description: The shared build network to use
-  ci_subnet_id:
+    default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
+    description: Git repo that contains the configuration for this test run
+  config_ref:
     type: string
-    default: e2a412df-3163-4aa0-8069-3dde625462cd
-    description: The shared build network to use
+    default: master
+    description: Git ref to checkout
   mgmt_network_name:
     type: string
     description: The name of the management network
@@ -156,8 +156,19 @@ resources:
       key_name: { get_param: key_name }
       networks:
         - port: { get_resource: build1_mgmt}
+
       user_data:
-        get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
 
   control1:
     type: OS::Nova::Server
@@ -170,9 +181,21 @@ resources:
         - port: { get_resource: control1_mgmt}
         - port: { get_resource: control1_int}
         - port: { get_resource: control1_ext}
+
       user_data:
-        get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
-      metadata: 
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
+
+      metadata:
         build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
 
   compute1:
@@ -185,9 +208,21 @@ resources:
       networks:
         - port: { get_resource: compute1_mgmt}
         - port: { get_resource: compute1_int}
+
       user_data:
-        get_file: 'https://raw.githubusercontent.com/michaeltchapman/puppet_openstack_builder/r7/provision/bootstrap.sh'
-      metadata: 
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
+
+      metadata:
         control_public: { get_attr: [ control1, networks, 2, fixed_ip ]}
         control_internal: { get_attr: [ control1, networks, 1, fixed_ip ]}
         build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}

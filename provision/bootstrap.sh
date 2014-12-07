@@ -26,6 +26,15 @@ while getopts "h?p:" opt; do
     esac
 done
 
+# This might be a cloud instance. Grab config data if so.
+# Try config drive first
+if [ -e /dev/disk/by-label/config-2 ]; then
+    if [ ! -d /mnt/config ]; then
+      mkdir -p /mnt/config
+      mount /dev/disk/by-label/config-2 /mnt/config
+    fi
+fi
+
 # Set either yum or apt to use an http proxy.
 if [ $proxy ] ; then
     echo 'setting proxy'
@@ -73,6 +82,8 @@ if [ "${puppet_version}" != "${desired_puppet}" ] ; then
   yum install puppet hiera -y -q
 fi
 
+yum install git -y -q
+
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
 ipaddress=$(facter ipaddress_$network)
@@ -97,22 +108,45 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
   fi
 fi
 
-# This might be a cloud instance. Grab config data if so.
-# Try config drive first
+if [ ! -d /etc/puppet/hiera/data ]
+    mkdir -p /etc/puppet/hiera/data
+fi
+
+configure_dir=/vagrant
+cp $configure_dir/hiera/hiera.yaml /etc/puppet
+cp $configure_dir/hiera/hiera.yaml /etc
+
+rm -rf /etc/puppet/hiera/data
+cp -r $configure_dir/hiera/data /etc/puppet/hiera
+
+rm -rf /etc/puppet/manifests
+cp -r $configure_dir/manifests /etc/puppet
+
+# Convert puppet+hiera if cloud instance
 if [ -e /dev/disk/by-label/config-2 ]; then
-    mkdir -p /mnt/config
-    mount /dev/disk/by-label/config-2 /mnt/config
     python -c "import sys, yaml, json; yaml.dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
 fi
 
-# Set role fact
+# Set role fact (mc - this should be from metadata)
 mkdir -p /etc/facter/facts.d
 echo "role: `hostname | grep -oh '^[[:alpha:]]*'`" > /etc/facter/facts.d/role.yaml
 
-# Lock network facts
+# Lock network facts to prevent bridge malarky
 if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
   facter | grep ipaddress | sed 's/\ =>/:/' > /etc/facter/facts.d/ipaddress.yaml
 fi
 
+# Use librarian-puppet-simple
+mkdir -p /vagrant/vendor
+export GEM_HOME=/vagrant/vendor
+if [ ! -f /vagrant/vendor/bin/librarian-puppet ]; then
+  gem install --no-ri --no-rdoc librarian-puppet-simple
+fi
+cd /vagrant
+vendor/bin/librarian-puppet install
 
+# Install puppet modules
+rm -rf /etc/puppet/modules
+cp -r modules /etc/puppet/modules /etc/puppet
 
+puppet apply /etc/puppet/manifests/site.pp
