@@ -1,132 +1,134 @@
+destdir: 'modules/'
 git_protocol: https
 ref: master
 stackforge:
   author: stackforge
   vswitch:
     source: "%{git_protocol}://github.com/%{author}/puppet-vswitch"
-    dest: vswitch
+    dest: "%{destdir}vswitch"
   tempest:
     source: "%{git_protocol}://github.com/%{author}/puppet-tempest"
-    dest: tempest
+    dest: "%{destdir}tempest"
   swift:
     source: "%{git_protocol}://github.com/%{author}/puppet-swift"
-    dest: swift
+    dest: "%{destdir}swift"
   neutron:
     source: "%{git_protocol}://github.com/%{author}/puppet-neutron"
-    dest: neutron
+    dest: "%{destdir}neutron"
   nova:
     source: "%{git_protocol}://github.com/%{author}/puppet-nova"
-    dest: nova
+    dest: "%{destdir}nova"
   openstack:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstack"
-    dest: openstack
+    dest: "%{destdir}openstack"
   openstack_extras:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstack_extras"
-    dest: openstack_extras
+    dest: "%{destdir}openstack_extras"
   openstacklib:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstacklib"
-    dest: openstacklib
+    dest: "%{destdir}openstacklib"
   keystone:
     source: "%{git_protocol}://github.com/%{author}/puppet-keystone"
-    dest: keystone
+    dest: "%{destdir}keystone"
   horizon:
     source: "%{git_protocol}://github.com/%{author}/puppet-horizon"
-    dest: horizon
+    dest: "%{destdir}horizon"
   heat:
     source: "%{git_protocol}://github.com/%{author}/puppet-heat"
-    dest: heat
+    dest: "%{destdir}heat"
   glance:
     source: "%{git_protocol}://github.com/%{author}/puppet-glance"
-    dest: glance
+    dest: "%{destdir}glance"
   ceilometer:
     source: "%{git_protocol}://github.com/%{author}/puppet-ceilometer"
-    dest: ceilometer
+    dest: "%{destdir}ceilometer"
 puppetlabs:
   author: puppetlabs
   apache:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-apache"
-    dest: apache 
+    dest: "%{destdir}apache"
   apt:
-    source: "%{git_protocol}://github.com/%{author}/puppetlabs-apache"
-    dest: apache 
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-apt"
+    dest: "%{destdir}apt"
   concat:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-concat"
-    dest: concat
+    dest: "%{destdir}concat"
   firewall:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-firewall"
-    dest: firewall
-  galera:
-    source: "%{git_protocol}://github.com/%{author}/puppetlabs-galera"
-    dest: galera 
+    dest: "%{destdir}firewall"
   haproxy:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-haproxy"
-    dest: haproxy
+    dest: "%{destdir}haproxy"
   inifile:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-inifile"
-    dest: inifile
+    dest: "%{destdir}inifile"
   mysql:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-mysql"
-    dest: mysql
+    dest: "%{destdir}mysql"
   postgresql:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-postgresql"
-    dest: postgresql
+    dest: "%{destdir}postgresql"
   rabbitmq:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-rabbitmq"
-    dest: rabbitmq
+    dest: "%{destdir}rabbitmq"
   stdlib:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-stdlib"
-    dest: stdlib 
+    dest: "%{destdir}stdlib"
   tftp:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-tftp"
-    dest: tftp
+    dest: "%{destdir}tftp"
   vcsrepo:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-vcsrepo"
-    dest: vcsrepo
+    dest: "%{destdir}vcsrepo"
   xinetd:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-xinetd"
-    dest: xinetd 
+    dest: "%{destdir}xinetd"
 other_repos:
   account:
     source: "%{git_protocol}://github.com/%{author}/puppet-account"
-    dest: account
+    dest: "%{destdir}account"
     author: Mylezeem
+  galera:
+    source: "%{git_protocol}://github.com/%{author}/puppet-galera"
+    dest: "%{destdir}galera"
+    author: michaeltchapman
   keepalived:
     source: "%{git_protocol}://github.com/%{author}/puppet-keepalived"
-    dest: keepalived 
+    dest: "%{destdir}keepalived"
     author: arioch 
   memcached:
     source: "%{git_protocol}://github.com/%{author}/puppet-memcached"
-    dest: memcached
+    dest: "%{destdir}memcached"
     author: saz
   partial:
     source: "%{git_protocol}://github.com/%{author}/puppet-partial"
-    dest: partial
+    dest: "%{destdir}partial"
     author: michaeltchapman
   profile:
     source: "%{git_protocol}://github.com/%{author}/puppeels"
-    dest: profile
+    dest: "%{destdir}profile"
     author: Mylezeem
   puppet:
     source: "%{git_protocol}://github.com/%{author}/puppet-puppet"
-    dest: profile
+    dest: "%{destdir}puppet"
     author: stephenrjohnson 
   rsync:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-rsync"
-    dest: rsync
+    dest: "%{destdir}rsync"
     author: puppetlabs
   ruby-puppetdb:
     source: "%{git_protocol}://github.com/%{author}/ruby-puppetdb"
-    dest: ruby-puppetdb
+    dest: "%{destdir}ruby-puppetdb"
     author: ripienaar 
   stacktira:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
-    dest: stacktira 
+    dest: "%{destdir}stacktira"
     author: aptira 
   staging:
     source: "%{git_protocol}://github.com/%{author}/puppet-staging"
-    dest: staging 
+    dest: "%{destdir}staging"
     author: nanliu 
   sysctl:
     source: "%{git_protocol}://github.com/%{author}/puppet-sysctl"
-    dest: sysctl 
+    dest: "%{destdir}sysctl"
     author: thias 
