@@ -1,0 +1,132 @@
+git_protocol: https
+ref: master
+stackforge:
+  author: stackforge
+  vswitch:
+    source: "%{git_protocol}://github.com/%{author}/puppet-vswitch"
+    dest: vswitch
+  tempest:
+    source: "%{git_protocol}://github.com/%{author}/puppet-tempest"
+    dest: tempest
+  swift:
+    source: "%{git_protocol}://github.com/%{author}/puppet-swift"
+    dest: swift
+  neutron:
+    source: "%{git_protocol}://github.com/%{author}/puppet-neutron"
+    dest: neutron
+  nova:
+    source: "%{git_protocol}://github.com/%{author}/puppet-nova"
+    dest: nova
+  openstack:
+    source: "%{git_protocol}://github.com/%{author}/puppet-openstack"
+    dest: openstack
+  openstack_extras:
+    source: "%{git_protocol}://github.com/%{author}/puppet-openstack_extras"
+    dest: openstack_extras
+  openstacklib:
+    source: "%{git_protocol}://github.com/%{author}/puppet-openstacklib"
+    dest: openstacklib
+  keystone:
+    source: "%{git_protocol}://github.com/%{author}/puppet-keystone"
+    dest: keystone
+  horizon:
+    source: "%{git_protocol}://github.com/%{author}/puppet-horizon"
+    dest: horizon
+  heat:
+    source: "%{git_protocol}://github.com/%{author}/puppet-heat"
+    dest: heat
+  glance:
+    source: "%{git_protocol}://github.com/%{author}/puppet-glance"
+    dest: glance
+  ceilometer:
+    source: "%{git_protocol}://github.com/%{author}/puppet-ceilometer"
+    dest: ceilometer
+puppetlabs:
+  author: puppetlabs
+  apache:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-apache"
+    dest: apache 
+  apt:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-apache"
+    dest: apache 
+  concat:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-concat"
+    dest: concat
+  firewall:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-firewall"
+    dest: firewall
+  galera:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-galera"
+    dest: galera 
+  haproxy:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-haproxy"
+    dest: haproxy
+  inifile:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-inifile"
+    dest: inifile
+  mysql:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-mysql"
+    dest: mysql
+  postgresql:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-postgresql"
+    dest: postgresql
+  rabbitmq:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-rabbitmq"
+    dest: rabbitmq
+  stdlib:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-stdlib"
+    dest: stdlib 
+  tftp:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-tftp"
+    dest: tftp
+  vcsrepo:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-vcsrepo"
+    dest: vcsrepo
+  xinetd:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-xinetd"
+    dest: xinetd 
+other_repos:
+  account:
+    source: "%{git_protocol}://github.com/%{author}/puppet-account"
+    dest: account
+    author: Mylezeem
+  keepalived:
+    source: "%{git_protocol}://github.com/%{author}/puppet-keepalived"
+    dest: keepalived 
+    author: arioch 
+  memcached:
+    source: "%{git_protocol}://github.com/%{author}/puppet-memcached"
+    dest: memcached
+    author: saz
+  partial:
+    source: "%{git_protocol}://github.com/%{author}/puppet-partial"
+    dest: partial
+    author: michaeltchapman
+  profile:
+    source: "%{git_protocol}://github.com/%{author}/puppeels"
+    dest: profile
+    author: Mylezeem
+  puppet:
+    source: "%{git_protocol}://github.com/%{author}/puppet-puppet"
+    dest: profile
+    author: stephenrjohnson 
+  rsync:
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-rsync"
+    dest: rsync
+    author: puppetlabs
+  ruby-puppetdb:
+    source: "%{git_protocol}://github.com/%{author}/ruby-puppetdb"
+    dest: ruby-puppetdb
+    author: ripienaar 
+  stacktira:
+    source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
+    dest: stacktira 
+    author: aptira 
+  staging:
+    source: "%{git_protocol}://github.com/%{author}/puppet-staging"
+    dest: staging 
+    author: nanliu 
+  sysctl:
+    source: "%{git_protocol}://github.com/%{author}/puppet-sysctl"
+    dest: sysctl 
+    author: thias 
