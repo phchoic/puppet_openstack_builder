@@ -1,1 +1,1 @@
-partial::server_name: "%{hiera('mgmt_ipaddress')}"
+partial::server_name: "%{hiera('mgmt_address')}"
