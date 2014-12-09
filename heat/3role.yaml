@@ -44,7 +44,7 @@ resources:
   mgmt_router:
     type: OS::Neutron::Router
     properties:
-      name: test_router
+      #name: test_router
       external_gateway_info:
         network: { get_param: pubnet }
 
@@ -56,8 +56,8 @@ resources:
 
   mgmt_network:
     type: OS::Neutron::Net
-    properties:
-      name: { get_param: mgmt_network_name }
+    #properties:
+      #name: { get_param: mgmt_network_name }
 
   mgmt_subnet:
     type: OS::Neutron::Subnet
@@ -104,8 +104,8 @@ resources:
 
   internal_net:
     type: OS::Neutron::Net
-    properties:
-      name: { get_param: internal_network_name }
+    #properties:
+      #name: { get_param: internal_network_name }
 
   control1_int:
     type: OS::Neutron::Port
@@ -130,8 +130,8 @@ resources:
 
   external_net:
     type: OS::Neutron::Net
-    properties:
-      name: { get_param: external_network_name }
+    #properties:
+    #  name: { get_param: external_network_name }
 
   external_subnet:
     type: OS::Neutron::Subnet
@@ -171,7 +171,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh
+            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
@@ -229,7 +229,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
+            bash -x provision/bootstrap.sh
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
