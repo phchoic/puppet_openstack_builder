@@ -35,6 +35,8 @@ if [ -e /dev/disk/by-label/config-2 ]; then
     fi
 fi
 
+
+
 # Set either yum or apt to use an http proxy.
 if [ $proxy ] ; then
     echo 'setting proxy'
@@ -81,6 +83,12 @@ if [ "${puppet_version}" != "${desired_puppet}" ] ; then
 
   yum install puppet hiera -y -q
 fi
+
+# Bring up any additional networks
+for i in `facter interfaces | sed 's/,/\ /g'`; do
+    ifconfig $i up
+    dhclient $i -v
+done
 
 yum install git -y -q
 
