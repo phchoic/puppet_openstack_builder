@@ -19,6 +19,10 @@ parameters:
     type: string
     default: test2
     description: The key name to use for all nodes
+  mirror_cache:
+    type: string
+    default: 'false'
+    description: location of a http mirror from which a yum repo can be built
   config_repo:
     type: string
     default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
@@ -77,6 +81,20 @@ resources:
     properties:
       floating_ip: { get_resource: build1_floatingip }
       server_id: { get_resource: build1 }
+    depends_on:
+      - mgmt_router_interface
+      - mgmt_router
+
+  control1_floatingip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: { get_param: floating_pool }
+
+  control1_floatingip_ass:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: control1_floatingip }
+      server_id: { get_resource: control1 }
     depends_on:
       - mgmt_router_interface
       - mgmt_router
@@ -196,7 +214,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh
+            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
@@ -229,7 +247,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh
+            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }

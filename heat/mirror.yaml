@@ -91,11 +91,11 @@ resources:
         - port: { get_resource: build1_mgmt}
       metadata:
         mgmt_iface: eth0
-        mgmt_address: '"%{ipaddress_eth0}"'
+        mgmt_address: "%{ipaddress_eth0}"
         public_iface: eth0
-        public_address: '"%{ipaddress_eth0}"'
+        public_address: "%{ipaddress_eth0}"
         internal_iface: eth0
-        internal_address: '"%{ipaddress_eth0}"'
+        internal_address: "%{ipaddress_eth0}"
       user_data:
         str_replace:
           template: |
