@@ -15,6 +15,9 @@ network=enp0s8
 domain='domain.name'
 proxy="${proxy:-}"
 desired_puppet=3.7.3
+
+date
+
 while getopts "h?p:" opt; do
     case "$opt" in
     h|\?)
@@ -65,7 +68,6 @@ hash puppet 2>/dev/null || {
 if [ "${puppet_version}" != '0' ] ; then
   puppet_version=$(puppet --version)
 fi
-
 if [ "${puppet_version}" != "${desired_puppet}" ] ; then
   echo '[puppetlabs]' > /etc/yum.repos.d/puppetlabs.repo
   echo "name=Puppetlabs Yum Repo" >> /etc/yum.repos.d/puppetlabs.repo
@@ -83,15 +85,16 @@ if [ "${puppet_version}" != "${desired_puppet}" ] ; then
 
   yum install puppet hiera -y -q
 fi
-
+date
 # Bring up any additional networks
 for i in `facter interfaces | sed 's/,/\ /g'`; do
+    ethtool -K $i tso off
     ifconfig $i up
     dhclient $i -v
 done
-
+date
 yum install git -y -q
-
+date
 if [ ! -d /etc/puppet/hiera/data ]; then
     mkdir -p /etc/puppet/hiera/data
 fi
@@ -119,16 +122,17 @@ echo "role: `hostname | grep -oh '^[[:alpha:]]*'`" > /etc/facter/facts.d/role.ya
 if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
   facter | grep ipaddress | sed 's/\ =>/:/' > /etc/facter/facts.d/ipaddress.yaml
 fi
-
+date
 # Use librarian-puppet-simple
 mkdir -p /vagrant/vendor
 export GEM_HOME=/vagrant/vendor
 if [ ! -f /vagrant/vendor/bin/librarian-puppet ]; then
   gem install --no-ri --no-rdoc librarian-puppet-simple
+  date
 fi
 cd /vagrant
 vendor/bin/librarian-puppet install
-
+date
 # Install puppet modules
 rm -rf /etc/puppet/modules
 cp -r modules /etc/puppet/modules /etc/puppet
