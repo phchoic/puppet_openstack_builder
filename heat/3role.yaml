@@ -181,6 +181,7 @@ resources:
         public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
+        partial::mirror::upstream_cache: { get_param: mirror_cache }
       user_data:
         str_replace:
           template: |
