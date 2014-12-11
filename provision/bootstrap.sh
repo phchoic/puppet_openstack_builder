@@ -171,7 +171,7 @@ fi
 
 while true ; do
   puppet apply /etc/puppet/manifests/site.pp --detailed-exitcodes ;
-  if (($? != 4 && $? != 6)) ; then
+  if (($? != 1 && $? != 4 && $? != 6)) ; then
     exit 0
   fi;
 done;
