@@ -37,10 +37,13 @@ if [ -e /dev/disk/by-label/config-2 ]; then
 fi
 
 
-for i in `ip -o link show | grep eth[[:digit:]] | cut -d ':' -f 2`; do
+for i in `ip -o link show | grep eth[1-9] | cut -d ':' -f 2`; do
+    if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
+      cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-$i
+    fi
     ethtool -K $i tso off
+    ifconfig $i down
     ifconfig $i up
-    dhclient $i -v
 done
 
 for i in `ip -o link show | grep enp[[:digit:]] | cut -d ':' -f 2`; do
