@@ -21,9 +21,6 @@ stackforge:
   openstack:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstack"
     dest: "%{destdir}openstack"
-  openstack_extras:
-    source: "%{git_protocol}://github.com/%{author}/puppet-openstack_extras"
-    dest: "%{destdir}openstack_extras"
   openstacklib:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstacklib"
     dest: "%{destdir}openstacklib"
@@ -124,6 +121,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
     dest: "%{destdir}stacktira"
     author: aptira 
+  openstack_extras:
+    source: "%{git_protocol}://github.com/%{author}/puppet-openstack_extras"
+    dest: "%{destdir}openstack_extras"
+    author: michaeltchapman
   staging:
     source: "%{git_protocol}://github.com/%{author}/puppet-staging"
     dest: "%{destdir}staging"
