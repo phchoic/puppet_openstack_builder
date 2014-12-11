@@ -1,0 +1,105 @@
+#!/usr/bin/env python
+from subprocess import Popen
+import yaml
+import json
+import sys
+import os
+from copy import copy
+
+FNULL = open(os.devnull, 'w')
+
+def main():
+    arguments = parse_args(sys.argv[2:])
+
+    infile = sys.argv[1]
+    with open(infile) as repo_file:
+         raw = repo_file.read()
+    raw_repos = None
+    try:
+        raw_repos = yaml.load(raw)
+    except:
+        pass
+        sys.exit(1)
+
+    if not raw_repos:
+        try:
+            raw_repos = json.loads(raw)
+        except:
+            pass
+            sys.exit(1)
+
+    if not raw_repos:
+        print 'Unable to load file using either json or yaml'
+
+    overridden_repos = parse_overrides(arguments,raw_repos)
+    repos = parse_repos(overridden_repos)
+    for repo, values in repos.items():
+        source = values['source']
+        ref = values['ref']
+        dest = values['dest']
+        for key, value in values.items():
+            if key != 'source':
+                source = source.replace('%{'+key+'}', value)
+                ref = ref.replace('%{'+key+'}', value)
+                dest = dest.replace('%{'+key+'}', value)
+        cmd = ' '.join(['git', 'clone', '--branch', ref, source, dest])
+        print cmd
+        #commands.append(Popen(cmd, shell=True))
+    #for c in commands:
+    #    c.wait()
+
+def parse_repos(dictionary):
+    repos = {}
+    def _parse(dictionary, carry):
+        mine = copy(carry)
+        for key, value in dictionary.items():
+            if not isinstance(value, dict):
+                mine[key] = value
+        for key, value in dictionary.items():
+            if isinstance(value, dict) and 'source' in value.keys():
+                repos[key] = dict(mine.items() + value.items())
+            elif isinstance(value, dict):
+                _parse(value, mine)
+    _parse(dictionary, {})
+    return repos
+
+def parse_overrides(arguments, repos):
+    print arguments 
+    for key, value in arguments.items():
+        ns = key.split('::')
+        if len(ns) > 1:
+            ns.reverse()
+        print key
+        print ns
+        currentlevel = repos
+        currentindex = ns[0]
+        while len(ns) > 0:
+            currentindex = ns.pop()
+            if currentindex in currentlevel and isinstance(currentlevel[currentindex], dict):
+                currentlevel = currentlevel[currentindex]
+            else:
+                break
+        print currentlevel
+        print currentindex
+        currentlevel[currentindex] = value
+    print yaml.dump(repos, default_flow_style=False)
+    return repos
+
+def parse_args(arguments):
+    formatted = {}
+    passthis = False
+    for i,arg in enumerate(arguments):
+        if not passthis:
+            if arg[:2] == '--':
+                a = arg[2:].split('=')
+                if len(a) == 2:
+                    formatted[a[0]] = a[1]
+                else:
+                    passthis = True
+                    formatted[arg[2:]] = arguments[i+1]
+        else:
+            passthis = False
+    return formatted
+
+if __name__ == '__main__':
+    main()
