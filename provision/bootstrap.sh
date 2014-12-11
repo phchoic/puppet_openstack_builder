@@ -39,6 +39,11 @@ if [ -e /dev/disk/by-label/config-2 ]; then
 fi
 
 
+for i in `ip link show | grep UP | cut -d ':' -f 2`; do
+    ethtool -K $i tso off
+    ifconfig $i up
+    dhclient $i -v
+done
 
 # Set either yum or apt to use an http proxy.
 if [ $proxy ] ; then
@@ -85,13 +90,6 @@ if [ "${puppet_version}" != "${desired_puppet}" ] ; then
 
   yum install puppet hiera -y -q
 fi
-date
-# Bring up any additional networks
-for i in `facter interfaces | sed 's/,/\ /g'`; do
-    ethtool -K $i tso off
-    ifconfig $i up
-    dhclient $i -v
-done
 date
 yum install git -y -q
 date
