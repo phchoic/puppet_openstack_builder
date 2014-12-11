@@ -33,6 +33,7 @@ def main():
 
     overridden_repos = parse_overrides(arguments,raw_repos)
     repos = parse_repos(overridden_repos)
+    commands = []
     for repo, values in repos.items():
         source = values['source']
         ref = values['ref']
@@ -44,9 +45,9 @@ def main():
                 dest = dest.replace('%{'+key+'}', value)
         cmd = ' '.join(['git', 'clone', '--branch', ref, source, dest])
         print cmd
-        #commands.append(Popen(cmd, shell=True))
-    #for c in commands:
-    #    c.wait()
+        commands.append(Popen(cmd, shell=True))
+    for c in commands:
+        c.wait()
 
 def parse_repos(dictionary):
     repos = {}
