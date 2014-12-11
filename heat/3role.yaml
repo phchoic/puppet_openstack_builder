@@ -145,6 +145,8 @@ resources:
       network_id: { get_resource: internal_net }
       cidr: 10.3.3.0/24
       gateway_ip: null
+      dns_nameservers:
+        - 8.8.8.8
 
   external_net:
     type: OS::Neutron::Net
@@ -157,6 +159,8 @@ resources:
       network_id: { get_resource: external_net }
       cidr: 10.2.3.0/24
       gateway_ip: null
+      dns_nameservers:
+        - 8.8.8.8
 
   control1_ext:
     type: OS::Neutron::Port
