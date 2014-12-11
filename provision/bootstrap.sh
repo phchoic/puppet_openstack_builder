@@ -40,17 +40,26 @@ fi
 for i in `ip -o link show | grep eth[1-9] | cut -d ':' -f 2`; do
     if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
       cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-$i
+      sed -i "s/eth0/$i" /etc/sysconfig/network-scripts/ifcfg-$i
     fi
     ethtool -K $i tso off
     ifconfig $i down
     ifconfig $i up
 done
 
+# not working yet
 for i in `ip -o link show | grep enp[[:digit:]] | cut -d ':' -f 2`; do
     ethtool -K $i tso off
     ifconfig $i up
-    dhclient $i -v
 done
+
+if ip -o link show | grep eth[1-9] ; then
+  dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+fi
+
+if ip -o link show | grep enp[[:digit:]]  ; then
+  dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+fi
 
 # Set either yum or apt to use an http proxy.
 if [ $proxy ] ; then
