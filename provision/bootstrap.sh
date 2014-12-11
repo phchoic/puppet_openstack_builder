@@ -170,7 +170,7 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
 fi
 
 while true ; do
-  puppet apply test.pp --detailed-exitcodes ;
+  puppet apply /etc/puppet/manifests/site.pp --detailed-exitcodes ;
   if (($? != 4 && $? != 6)) ; then
     exit 0
   fi;
