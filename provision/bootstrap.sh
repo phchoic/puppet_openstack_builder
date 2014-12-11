@@ -55,6 +55,7 @@ done
 
 if ip -o link show | grep eth[1-9] ; then
   dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+  dhclient eth0
 fi
 
 if ip -o link show | grep enp[[:digit:]]  ; then
