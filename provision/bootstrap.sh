@@ -40,7 +40,7 @@ fi
 for i in `ip -o link show | grep eth[1-9] | cut -d ':' -f 2`; do
     if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
       cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-$i
-      sed -i "s/eth0/$i" /etc/sysconfig/network-scripts/ifcfg-$i
+      sed -i "s/eth0/$i/g" /etc/sysconfig/network-scripts/ifcfg-$i
     fi
     ethtool -K $i tso off
     ifconfig $i down
