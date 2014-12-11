@@ -33,6 +33,9 @@ stackforge:
   heat:
     source: "%{git_protocol}://github.com/%{author}/puppet-heat"
     dest: "%{destdir}heat"
+  cinder:
+    source: "%{git_protocol}://github.com/%{author}/puppet-cinder"
+    dest: "%{destdir}cinder"
   glance:
     source: "%{git_protocol}://github.com/%{author}/puppet-glance"
     dest: "%{destdir}glance"
