@@ -125,15 +125,20 @@ if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
   facter | grep ipaddress | sed 's/\ =>/:/' > /etc/facter/facts.d/ipaddress.yaml
 fi
 date
-# Use librarian-puppet-simple
+
 mkdir -p /vagrant/vendor
-export GEM_HOME=/vagrant/vendor
-if [ ! -f /vagrant/vendor/bin/librarian-puppet ]; then
-  gem install --no-ri --no-rdoc librarian-puppet-simple
-  date
-fi
+mkdir -p /vagrant/modules
+# Use cloner (exp)
 cd /vagrant
-vendor/bin/librarian-puppet install
+./provision/cloner repos.yaml
+# Use librarian-puppet-simple
+#export GEM_HOME=/vagrant/vendor
+#if [ ! -f /vagrant/vendor/bin/librarian-puppet ]; then
+#  gem install --no-ri --no-rdoc librarian-puppet-simple
+#  date
+#fi
+#cd /vagrant
+#vendor/bin/librarian-puppet install
 date
 # Install puppet modules
 rm -rf /etc/puppet/modules
