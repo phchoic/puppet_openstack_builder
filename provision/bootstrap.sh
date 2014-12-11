@@ -37,7 +37,13 @@ if [ -e /dev/disk/by-label/config-2 ]; then
 fi
 
 
-for i in `ip link show | grep UP | cut -d ':' -f 2`; do
+for i in `ip -o link show | grep eth[[:digit:]] | cut -d ':' -f 2`; do
+    ethtool -K $i tso off
+    ifconfig $i up
+    dhclient $i -v
+done
+
+for i in `ip -o link show | grep enp[[:digit:]] | cut -d ':' -f 2`; do
     ethtool -K $i tso off
     ifconfig $i up
     dhclient $i -v
