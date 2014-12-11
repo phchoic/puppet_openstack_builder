@@ -11,8 +11,6 @@
 #   - ???
 # - make sure the fqdn is set and working
 #
-network=enp0s8
-domain='domain.name'
 proxy="${proxy:-}"
 desired_puppet=3.7.3
 
@@ -137,7 +135,8 @@ cp -r modules /etc/puppet/modules /etc/puppet
 
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
-ipaddress=$(facter ipaddress_$network)
+domain=$(hiera domain)
+ipaddress=$(facter mgmt_paddress)
 fqdn=$(facter hostname).${domain}
 facter_fqdn=$(facter fqdn)
 # If it doesn't match what puppet will be setting for fqdn, just redo
@@ -159,4 +158,9 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
   fi
 fi
 
-puppet apply /etc/puppet/manifests/site.pp
+while true ; do
+  puppet apply test.pp --detailed-exitcodes ;
+  if (($? != 4 && $? != 6)) ; then
+    exit 0
+  fi;
+done;
