@@ -250,6 +250,7 @@ resources:
         str_replace:
           template: |
             #!/usr/bin/env bash
+            ethtool -K eth0 tso off
             yum install -y git
             git clone __config_repo /vagrant
             cd /vagrant
