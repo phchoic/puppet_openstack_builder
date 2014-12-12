@@ -120,6 +120,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/ruby-puppetdb"
     dest: "%{destdir}ruby-puppetdb"
     author: ripienaar 
+  selinux:
+    source: "%{git_protocol}://github.com/%{author}/puppet-selinux"
+    dest: "%{destdir}selinux"
+    author: spiette 
   stacktira:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
     dest: "%{destdir}stacktira"
