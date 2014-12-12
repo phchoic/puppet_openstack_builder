@@ -27,7 +27,7 @@ neutron::agents::ml2::ovs::bridge_uplinks:
   - "br-ex:%{hiera('public_iface')}"
 neutron::agents::ml2::ovs::bridge_mappings:
   - 'default:br-ex'
-neutron::agents::ml2::ovs::local_ip: "%{hiera('internal_address')"
+neutron::agents::ml2::ovs::local_ip: "%{hiera('internal_address')}"
 neutron::agents::ml2::ovs::enable_tunneling: true
 neutron::agents::ml2::ovs::tunnel_types:
   - gre
