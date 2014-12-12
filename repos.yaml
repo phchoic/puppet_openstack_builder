@@ -107,7 +107,7 @@ other_repos:
   profile:
     source: "%{git_protocol}://github.com/%{author}/puppeels"
     dest: "%{destdir}profile"
-    author: Mylezeem
+    author: michaeltchapman 
   puppet:
     source: "%{git_protocol}://github.com/%{author}/puppet-puppet"
     dest: "%{destdir}puppet"
