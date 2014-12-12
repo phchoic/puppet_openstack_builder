@@ -123,7 +123,7 @@ other_repos:
   selinux:
     source: "%{git_protocol}://github.com/%{author}/puppet-selinux"
     dest: "%{destdir}selinux"
-    author: spiette 
+    author: michaeltchapman
   stacktira:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
     dest: "%{destdir}stacktira"
