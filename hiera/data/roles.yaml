@@ -33,8 +33,14 @@ build_classes:
   - partial::mirror
   - partial
 
+infra_classes:
+  - profile::webserver::apache
+  - profile::base::base
+  - profile::application::consul
+
 control_classes:
   - profile::base::base
+  - profile::application::consul
   - profile::openstack::identity
   - profile::openstack::image
   - profile::messaging::rabbitmq
@@ -50,4 +56,5 @@ control_classes:
   - profile::openstack::database::sql
 
 hyper_classes:
+  - profile::application::consul
   - profile::openstack::compute::hypervisor
