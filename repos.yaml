@@ -88,6 +88,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-account"
     dest: "%{destdir}account"
     author: Mylezeem
+  consul:
+    source: "%{git_protocol}://github.com/%{author}/puppet-consul"
+    dest: "%{destdir}consul"
+    author: solarkennedy
   galera:
     source: "%{git_protocol}://github.com/%{author}/puppet-galera"
     dest: "%{destdir}galera"
@@ -95,7 +99,7 @@ other_repos:
   keepalived:
     source: "%{git_protocol}://github.com/%{author}/puppet-keepalived"
     dest: "%{destdir}keepalived"
-    author: arioch 
+    author: arioch
   memcached:
     source: "%{git_protocol}://github.com/%{author}/puppet-memcached"
     dest: "%{destdir}memcached"
@@ -107,11 +111,11 @@ other_repos:
   profile:
     source: "%{git_protocol}://github.com/%{author}/puppeels"
     dest: "%{destdir}profile"
-    author: michaeltchapman 
+    author: michaeltchapman
   puppet:
     source: "%{git_protocol}://github.com/%{author}/puppet-puppet"
     dest: "%{destdir}puppet"
-    author: stephenrjohnson 
+    author: stephenrjohnson
   rsync:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-rsync"
     dest: "%{destdir}rsync"
@@ -119,7 +123,7 @@ other_repos:
   ruby-puppetdb:
     source: "%{git_protocol}://github.com/%{author}/ruby-puppetdb"
     dest: "%{destdir}ruby-puppetdb"
-    author: ripienaar 
+    author: ripienaar
   selinux:
     source: "%{git_protocol}://github.com/%{author}/puppet-selinux"
     dest: "%{destdir}selinux"
@@ -127,7 +131,7 @@ other_repos:
   stacktira:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
     dest: "%{destdir}stacktira"
-    author: aptira 
+    author: aptira
   openstack_extras:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstack_extras"
     dest: "%{destdir}openstack_extras"
@@ -135,8 +139,8 @@ other_repos:
   staging:
     source: "%{git_protocol}://github.com/%{author}/puppet-staging"
     dest: "%{destdir}staging"
-    author: nanliu 
+    author: nanliu
   sysctl:
     source: "%{git_protocol}://github.com/%{author}/puppet-sysctl"
     dest: "%{destdir}sysctl"
-    author: thias 
+    author: thias
