@@ -31,7 +31,6 @@ build_classes:
   - profile::webserver::apache
   - profile::base::base
   - partial::mirror
-  - partial::rpm
   - partial
 
 control_classes:

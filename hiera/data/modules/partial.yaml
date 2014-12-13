@@ -1,6 +1,1 @@
 partial::server_name: "%{hiera('mgmt_address')}"
-
-partial::rpm::rpms:
-  'consul':
-    repo_source: 'https://github.com/michaeltchapman/consul-rpm'
-    build_command: 'rpmdev-setuptree; cp -r consul/* rpmbuild; spectool -g -R rpmbuild/SPECS/consul.spec; rpmbuild -ba rpmbuild/SPECS/consul.spec; cp rpmbuild/RPMS/x86_64/* .'
