@@ -34,3 +34,7 @@ openstack_extras::repo::redhat::redhat::purge_unmanaged: true
 openstack_extras::repo::redhat::redhat::package_require: true
 openstack_extras::repo::redhat::redhat::manage_epel: false
 openstack_extras::repo::redhat::redhat::manage_rdo: true
+
+consul::config_hash:
+  server: true
+  bootstrap_expect: 1

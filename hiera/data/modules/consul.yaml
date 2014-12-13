@@ -1,0 +1,10 @@
+consul::config_defaults:
+  data_dir: '/var/lib/consul'
+  bind_addr: "%{::ipaddress_enp0s8}"
+  enable_syslog: true
+  log_level: INFO
+  node_name: "%{::fqdn}"
+  retry_join:
+    - 192.168.242.11
+    - 192.168.242.12
+    - 192.168.242.13
