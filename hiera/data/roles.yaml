@@ -1,8 +1,7 @@
 all_classes:
-  - openstack_extras::repo::redhat::redhat
-
   - profile::webserver::apache
   - profile::base::base
+  - partial::rpm
   - partial::mirror
 
   - profile::openstack::identity
@@ -29,14 +28,13 @@ all_classes:
   - profile::openstack::compute::hypervisor
 
 build_classes:
-  - openstack_extras::repo::redhat::redhat
   - profile::webserver::apache
   - profile::base::base
   - partial::mirror
+  - partial::rpm
   - partial
 
 control_classes:
-  - openstack_extras::repo::redhat::redhat
   - profile::base::base
   - profile::openstack::identity
   - profile::openstack::image
@@ -50,12 +48,7 @@ control_classes:
   - profile::openstack::network::dhcp
   - openstack::auth_file
 
-  - profile::database::mariadb
-  - keystone::db::mysql
-  - glance::db::mysql
-  - nova::db::mysql
-  - neutron::db::mysql
+  - profile::openstack::database::sql
 
 hyper_classes:
-  - openstack_extras::repo::redhat::redhat
   - profile::openstack::compute::hypervisor
