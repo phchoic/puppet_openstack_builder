@@ -56,5 +56,6 @@ control_classes:
   - profile::openstack::database::sql
 
 hyper_classes:
+  - profile::base::base
   - profile::application::consul
   - profile::openstack::compute::hypervisor
