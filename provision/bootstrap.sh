@@ -160,7 +160,8 @@ cp -r modules /etc/puppet/modules /etc/puppet
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
 domain=$(hiera domain)
-ipaddress=$(hiera mgmt_address)
+fqdn_iface=$(hiera mgmt_iface)
+ipaddress=$(facter ipaddress_$fqdn_iface)
 fqdn=$(facter hostname).${domain}
 facter_fqdn=$(facter fqdn)
 # If it doesn't match what puppet will be setting for fqdn, just redo
