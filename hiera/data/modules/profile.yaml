@@ -23,7 +23,6 @@ profile::base::base::base_packages:
 
 profile::base::base::base_classes:
   - selinux
-  - consul
   - openstack_extras::repo::redhat::redhat
 
 profile::openstack::network::l3::manage_metering: false
