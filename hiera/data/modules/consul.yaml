@@ -6,3 +6,8 @@ consul::config_defaults:
   node_name: "%{::hostname}"
   retry_join:
     - "%{hiera('build_mgmt')}"
+
+consul::install_method: package
+consul::init_style: false
+consul::config_dir: 'etc/consul.d'
+consul::bin_diu: '/etc/consul.d'
