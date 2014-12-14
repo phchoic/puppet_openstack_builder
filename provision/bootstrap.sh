@@ -160,7 +160,7 @@ cp -r modules /etc/puppet/modules /etc/puppet
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
 domain=$(hiera domain)
-ipaddress=$(facter mgmt_paddress)
+ipaddress=$(hiera mgmt_address)
 fqdn=$(facter hostname).${domain}
 facter_fqdn=$(facter fqdn)
 # If it doesn't match what puppet will be setting for fqdn, just redo
@@ -172,12 +172,10 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
         echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
         echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
         echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
-        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
     elif [ -f /etc/debian_version ] ; then
         echo "$ipaddress $fqdn $(hostname)" > /etc/hosts
         echo "127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/hosts
         echo "::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
-        echo "$(hiera build_server_ip) $(hiera build_server_name) $(hiera build_server_name).$(hiera domain_name)" >> /etc/hosts
     fi
   fi
 fi
