@@ -6,6 +6,10 @@ consul::config_defaults:
   node_name: "%{::hostname}"
   retry_join:
     - "%{hiera('infra1_mgmt')}"
+  addresses:
+    http: "%{hiera('mgmt_address')}"
+    dns: "%{hiera('mgmt_address')}"
+    rpc: 127.0.0.1
 
 consul::install_method: package
 consul::init_style: false
