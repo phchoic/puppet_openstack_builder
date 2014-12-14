@@ -5,7 +5,7 @@ consul::config_defaults:
   log_level: INFO
   node_name: "%{::hostname}"
   retry_join:
-    - "%{hiera('build_mgmt')}"
+    - "%{hiera('infra1_mgmt')}"
 
 consul::install_method: package
 consul::init_style: false
