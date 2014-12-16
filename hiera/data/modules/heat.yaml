@@ -1,0 +1,18 @@
+heat::api::bind_host: "%{hiera('public_address')}"
+
+heat::api_cfn::bind_host: "%{hiera('public_address')}"
+
+heat::api_cloudwatch::bind_host: "%{hiera('public_address')}"
+
+heat::engine::auth_encryption_key: blahblahblah
+
+heat::rabbit_host: "%{hiera('control_internal')}"
+heat::keystone_host: "%{hiera('control_public')}"
+heat::database_connection: "mysql://heat:heat_pass@%{hiera('control_internal')}/heat"
+
+heat::db::mysql::host: "%{hiera('control_internal')}"
+heat::db::mysql::password: heat_pass
+
+heat::keystone::auth::admin_address: "%{hiera('control_public')}"
+
+heat::keystone::auth_cfn::admin_address: "%{hiera('control_public')}"

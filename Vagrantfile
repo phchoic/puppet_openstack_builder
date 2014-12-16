@@ -21,14 +21,23 @@ def configure(config)
 end
 
 Vagrant.configure("2") do |config|
+
+  config.vm.define "build1" do |infra|
+    infra.vm.hostname = "build1"
+    infra.vm.network "private_network", :ip => "192.168.242.5"
+    infra.vm.network "private_network", :ip => "10.2.3.5"
+    infra.vm.network "private_network", :ip => "10.3.3.5"
+    configure(infra)
+  end
+
   ['1','2','3'].each do | i |
 
-    config.vm.define "build#{i}" do |build|
-      build.vm.hostname = "build#{i}"
-      build.vm.network "private_network", :ip => "192.168.242.3#{i}"
-      build.vm.network "private_network", :ip => "10.2.3.3#{i}"
-      build.vm.network "private_network", :ip => "10.3.3.3#{i}"
-      configure(build)
+    config.vm.define "infra#{i}" do |infra|
+      infra.vm.hostname = "infra#{i}"
+      infra.vm.network "private_network", :ip => "192.168.242.3#{i}"
+      infra.vm.network "private_network", :ip => "10.2.3.3#{i}"
+      infra.vm.network "private_network", :ip => "10.3.3.3#{i}"
+      configure(infra)
     end
 
     config.vm.define "control#{i}" do |control|
@@ -46,6 +55,5 @@ Vagrant.configure("2") do |config|
       hyper.vm.network "private_network", :ip => "10.3.3.2#{i}"
       configure(hyper)
     end
-
   end
 end

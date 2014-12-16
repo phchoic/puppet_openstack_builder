@@ -8,6 +8,8 @@ profile::openstack::identity::glance_enabled: true
 
 profile::openstack::image::api::backend: file
 
+profile::openstack::database::sql::heat_enabled: true
+
 profile::base::base::manage_augeasproviders: false
 profile::base::base::manage_epel: false
 profile::base::base::manage_accounts: false

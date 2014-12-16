@@ -26,6 +26,8 @@ all_classes:
   - profile::openstack::network::l3
   - profile::openstack::network::dhcp
   - profile::openstack::compute::hypervisor
+  - profile::openstack::orchestration::api
+  - profile::openstack::orchestration::engine
 
 build_classes:
   - profile::webserver::apache
@@ -51,6 +53,8 @@ control_classes:
   - profile::openstack::network::metadata
   - profile::openstack::network::l3
   - profile::openstack::network::dhcp
+  - profile::openstack::orchestration::api
+  - profile::openstack::orchestration::engine
   - openstack::auth_file
 
   - profile::openstack::database::sql
