@@ -113,7 +113,7 @@ other_repos:
     dest: "%{destdir}profile"
     author: michaeltchapman
   puppet:
-    source: "%{git_protocol}://github.com/%{author}/puppet-puppet"
+    source: "%{git_protocol}://github.com/%{author}/puppetlabs-puppet"
     dest: "%{destdir}puppet"
     author: stephenrjohnson
   rsync:
