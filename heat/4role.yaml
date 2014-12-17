@@ -7,6 +7,9 @@ parameters:
   pubnet:
     type: string
     description: Name of the public network for this cloud
+  mirror_address:
+    type: string
+    description: Name of the public network for this cloud
   floating_pool:
     type: string
     default: PublicNet
@@ -19,10 +22,6 @@ parameters:
     type: string
     default: test2
     description: The key name to use for all nodes
-  mirror_cache:
-    type: string
-    default: 'false'
-    description: location of a http mirror from which a yum repo can be built
   config_repo:
     type: string
     default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
@@ -31,24 +30,11 @@ parameters:
     type: string
     default: master
     description: Git ref to checkout
-  mgmt_network_name:
-    type: string
-    description: The name of the management network
-    default: testmgmt
-  internal_network_name:
-    type: string
-    description: The name of the internal network
-    default: testint
-  external_network_name:
-    type: string
-    description: The name of the external network
-    default: testext
 
 resources:
   mgmt_router:
     type: OS::Neutron::Router
     properties:
-      #name: test_router
       external_gateway_info:
         network: { get_param: pubnet }
 
@@ -60,8 +46,6 @@ resources:
 
   mgmt_network:
     type: OS::Neutron::Net
-    #properties:
-      #name: { get_param: mgmt_network_name }
 
   mgmt_subnet:
     type: OS::Neutron::Subnet
@@ -70,20 +54,6 @@ resources:
       cidr: 192.168.242.0/24
       dns_nameservers:
         - 8.8.8.8
-
-  build1_floatingip:
-    type: OS::Nova::FloatingIP
-    properties:
-      pool: { get_param: floating_pool }
-
-  build1_floatingip_ass:
-    type: OS::Nova::FloatingIPAssociation
-    properties:
-      floating_ip: { get_resource: build1_floatingip }
-      server_id: { get_resource: build1 }
-    depends_on:
-      - mgmt_router_interface
-      - mgmt_router
 
   control1_floatingip:
     type: OS::Nova::FloatingIP
@@ -98,13 +68,6 @@ resources:
     depends_on:
       - mgmt_router_interface
       - mgmt_router
-
-  build1_mgmt:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: mgmt_network }
-      fixed_ips:
-        - subnet_id: { get_resource: mgmt_subnet  }
 
   infra1_mgmt:
     type: OS::Neutron::Port
@@ -129,8 +92,6 @@ resources:
 
   internal_net:
     type: OS::Neutron::Net
-    #properties:
-      #name: { get_param: internal_network_name }
 
   control1_int:
     type: OS::Neutron::Port
@@ -157,8 +118,6 @@ resources:
 
   external_net:
     type: OS::Neutron::Net
-    #properties:
-    #  name: { get_param: external_network_name }
 
   external_subnet:
     type: OS::Neutron::Subnet
@@ -183,39 +142,6 @@ resources:
       fixed_ips:
         - subnet_id: { get_resource: external_subnet  }
 
-  build1:
-    type: OS::Nova::Server
-    properties:
-      name: build1
-      image: { get_param: image}
-      flavor: m1.medium
-      key_name: { get_param: key_name }
-      networks:
-        - port: { get_resource: build1_mgmt}
-      metadata:
-        mgmt_iface: eth0
-        mgmt_address: '%{ipaddress_eth0}'
-        public_iface: eth0
-        public_address: '%{ipaddress_eth0}'
-        internal_iface: eth0
-        internal_address: '%{ipaddress_eth0}'
-        partial::mirror::upstream_cache: { get_param: mirror_cache }
-      user_data:
-        str_replace:
-          template: |
-            #!/usr/bin/env bash
-            ethtool -K eth0 tso off
-            ethtool -K eth0 gso off
-            ethtool -K eth0 gro off
-            yum install -y git
-            git clone __config_repo /vagrant
-            cd /vagrant
-            git checkout __config_ref
-            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
-          params:
-            __config_repo: { get_param: config_repo }
-            __config_ref: { get_param: config_ref }
-
   infra1:
     type: OS::Nova::Server
     properties:
@@ -232,7 +158,7 @@ resources:
         public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
-        build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
+        build_mgmt: { get_param: mirror_address }
       user_data:
         str_replace:
           template: |
@@ -278,7 +204,6 @@ resources:
             __config_ref: { get_param: config_ref }
 
       metadata:
-        build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
         mgmt_iface: eth0
         mgmt_address: "%{ipaddress_eth0}"
         public_iface: eth1
@@ -288,6 +213,7 @@ resources:
         control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
         control_internal: { get_attr: [ control1_int, fixed_ips, 0, ip_address ]}
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+        build_mgmt: { get_param: mirror_address }
 
   hyper1:
     type: OS::Nova::Server
@@ -320,7 +246,6 @@ resources:
       metadata:
         control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
         control_internal: { get_attr: [ control1_int, fixed_ips, 0, ip_address ]}
-        build_mgmt: { get_attr: [ build1_mgmt, fixed_ips, 0, ip_address ]}
         mgmt_iface: eth0
         mgmt_address: "%{ipaddress_eth0}"
         public_iface: eth1
@@ -328,8 +253,4 @@ resources:
         internal_iface: eth2
         internal_address: "%{ipaddress_eth2}"
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
-
-outputs:
-  build_ip:
-    description: IP address of the build node
-    value: { get_attr: [ build1_floatingip, ip ]}
+        build_mgmt: { get_param: mirror_address }
