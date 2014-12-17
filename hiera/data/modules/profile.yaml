@@ -22,6 +22,8 @@ profile::base::base::manage_authconfig: false
 profile::base::base::manage_firewall: true
 profile::base::base::base_packages:
   - 'openstack-selinux'
+  - 'screen'
+  - 'tcpdump'
 
 profile::base::base::base_classes:
   - selinux
