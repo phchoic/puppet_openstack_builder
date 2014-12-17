@@ -15,5 +15,5 @@ nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
 
 nova boot --flavor 1 --image cirros_image --key_name test --config-drive true testvm
-sleep 60
+sleep 120
 ip netns exec `ip netns` ping -c 1 10.0.0.2
