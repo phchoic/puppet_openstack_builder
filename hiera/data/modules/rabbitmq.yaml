@@ -1,4 +1,4 @@
-rabbitmq::manage_repos: false
+rabbitmq::repos_ensure: false
 rabbitmq::delete_guest_user: false
 rabbitmq::node_ip_address: "%{hiera('internal_address')}"
 
