@@ -1,0 +1,20 @@
+ssh::storeconfigs_enabled: false
+
+ssh::server_options:
+    Protocol: '2'
+    HostKey:
+      - /etc/ssh/ssh_host_rsa_key
+      - /etc/ssh/ssh_host_ecdsa_key
+    Protocol: '2'
+    PasswordAuthentication: 'no'
+    ChallengeResponseAuthentication: 'no'
+    GSSAPIAuthentication: 'no'
+    SyslogFacility: 'AUTHPRIV'
+    UsePAM: 'yes'
+    X11Forwarding: 'yes'
+
+ssh::client_options:
+    'Host *':
+        SendEnv: 'LANG LC_*'
+        ForwardX11Trusted: 'yes'
+        ServerAliveInterval: '10'

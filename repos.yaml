@@ -128,6 +128,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-selinux"
     dest: "%{destdir}selinux"
     author: djjudas21
+  ssh:
+    source: "%{git_protocol}://github.com/%{author}/puppet-ssh"
+    dest: "%{destdir}ssh"
+    author: saz
   stacktira:
     source: "%{git_protocol}://github.com/%{author}/puppet-stacktira"
     dest: "%{destdir}stacktira"

@@ -15,7 +15,6 @@ profile::base::base::manage_epel: false
 profile::base::base::manage_accounts: false
 profile::base::base::manage_logging: false
 profile::base::base::manage_monitoring: false
-profile::base::base::manage_sshd: false
 profile::base::base::manage_ntp: false
 profile::base::base::manage_sudo: false
 profile::base::base::manage_authconfig: false
