@@ -19,6 +19,14 @@ parameters:
     type: string
     default: test2
     description: The key name to use for all nodes
+  small_flavor:
+    type: string
+    default: m1.small
+    description: The flavor to use for small roles
+  medium_flavor:
+    type: string
+    default: m1.medium
+    description: The flavor to use for medium roles
   config_repo:
     type: string
     default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
@@ -85,7 +93,7 @@ resources:
     properties:
       name: build
       image: { get_param: image}
-      flavor: m1.small
+      flavor: { get_param: small_flavor }
       key_name: { get_param: key_name }
       networks:
         - port: { get_resource: build1_mgmt}
