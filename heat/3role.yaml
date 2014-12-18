@@ -178,7 +178,75 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
+
+  infra2:
+    type: OS::Nova::Server
+    properties:
+      name: infra2
+      image: { get_param: image}
+      flavor: { get_param: small_flavor}
+      key_name: { get_param: key_name }
+      networks:
+        - network: { get_resource: mgmt_network }
+      metadata:
+        mgmt_iface: eth0
+        mgmt_address: '%{ipaddress_eth0}'
+        public_iface: eth0
+        public_address: '%{ipaddress_eth0}'
+        internal_iface: eth0
+        internal_address: '%{ipaddress_eth0}'
+        build_mgmt: { get_param: mirror_address }
+        infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+      user_data:
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            ethtool -K eth0 tso off
+            ethtool -K eth0 gso off
+            ethtool -K eth0 gro off
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
+          params:
+            __config_repo: { get_param: config_repo }
+            __config_ref: { get_param: config_ref }
+
+  infra3:
+    type: OS::Nova::Server
+    properties:
+      name: infra3
+      image: { get_param: image}
+      flavor: { get_param: small_flavor}
+      key_name: { get_param: key_name }
+      networks:
+        - network: { get_resource: mgmt_network }
+      metadata:
+        mgmt_iface: eth0
+        mgmt_address: '%{ipaddress_eth0}'
+        public_iface: eth0
+        public_address: '%{ipaddress_eth0}'
+        internal_iface: eth0
+        internal_address: '%{ipaddress_eth0}'
+        build_mgmt: { get_param: mirror_address }
+        infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+      user_data:
+        str_replace:
+          template: |
+            #!/usr/bin/env bash
+            ethtool -K eth0 tso off
+            ethtool -K eth0 gso off
+            ethtool -K eth0 gro off
+            yum install -y git
+            git clone __config_repo /vagrant
+            cd /vagrant
+            git checkout __config_ref
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
@@ -206,7 +274,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
@@ -246,7 +314,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh > /root/bootstrap.log 2>&1
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
