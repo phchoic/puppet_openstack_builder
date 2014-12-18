@@ -30,6 +30,10 @@ parameters:
     type: string
     default: m1.medium
     description: The flavor name to use for medium roles
+  medium_flavor:
+    type: string
+    default: m1.medium
+    description: The flavor name to use for medium roles
   config_repo:
     type: string
     default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
