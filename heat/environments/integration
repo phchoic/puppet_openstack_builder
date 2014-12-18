@@ -1,0 +1,7 @@
+parameters:
+  pubnet: public-floating-601
+  floating_pool: public-floating-601
+  image: CentOS-7
+  key_name: test2
+  small_flavor: GP-Small
+  medium_flavor: GP-Medium
