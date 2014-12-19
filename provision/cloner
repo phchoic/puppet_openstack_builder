@@ -6,8 +6,6 @@ import sys
 import os
 from copy import copy
 
-FNULL = open(os.devnull, 'w')
-
 def main():
     arguments = parse_args(sys.argv[2:])
 
@@ -44,7 +42,6 @@ def main():
                 ref = ref.replace('%{'+key+'}', value)
                 dest = dest.replace('%{'+key+'}', value)
         cmd = ' '.join(['git', 'clone', '--branch', ref, source, dest])
-        print cmd
         commands.append(Popen(cmd, shell=True))
     for c in commands:
         c.wait()
@@ -70,8 +67,6 @@ def parse_overrides(arguments, repos):
         ns = key.split('::')
         if len(ns) > 1:
             ns.reverse()
-        print key
-        print ns
         currentlevel = repos
         currentindex = ns[0]
         while len(ns) > 0:
@@ -80,10 +75,7 @@ def parse_overrides(arguments, repos):
                 currentlevel = currentlevel[currentindex]
             else:
                 break
-        print currentlevel
-        print currentindex
         currentlevel[currentindex] = value
-    print yaml.dump(repos, default_flow_style=False)
     return repos
 
 def parse_args(arguments):
