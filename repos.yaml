@@ -96,6 +96,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-galera"
     dest: "%{destdir}galera"
     author: michaeltchapman
+  hiera-consul:
+    source: "%{git_protocol}://github.com/%{author}/hiera-consul"
+    dest: "%{destdir}hiera-consul"
+    author: michaeltchapman
   keepalived:
     source: "%{git_protocol}://github.com/%{author}/puppet-keepalived"
     dest: "%{destdir}keepalived"
