@@ -36,7 +36,7 @@ build_classes:
   - partial
 
 infra_classes:
-  - profile::webserver::apache
+  #- profile::webserver::apache
   - profile::base::base
   - profile::application::consul
 
