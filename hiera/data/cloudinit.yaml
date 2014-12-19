@@ -1,9 +1,9 @@
-build_mgmt: 127.0.0.1
-infra1_mgmt: 127.0.0.1
-control_public: 127.0.0.1
-control_internal: 127.0.0.1
+build_mgmt: 192.168.242.5
+infra1_mgmt: 192.168.242.31
+control_public: 10.2.3.11
+control_internal: 10.3.3.11
 
-# These settings match vagrant/centos7. cloudinit will override
+# These settings match vagrant/centos7. bootstrap will override
 # them on cloud builds
 mgmt_iface: enp0s8
 mgmt_address: "%{ipaddress_enp0s8}"
