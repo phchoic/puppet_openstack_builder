@@ -31,7 +31,7 @@ def main():
 
     overridden_repos = parse_overrides(arguments,raw_repos)
     repos = parse_repos(overridden_repos)
-    commands = []
+    final_repos = {}
     for repo, values in repos.items():
         source = values['source']
         ref = values['ref']
@@ -41,10 +41,37 @@ def main():
                 source = source.replace('%{'+key+'}', value)
                 ref = ref.replace('%{'+key+'}', value)
                 dest = dest.replace('%{'+key+'}', value)
-        cmd = ' '.join(['git', 'clone', '--branch', ref, source, dest])
-        commands.append(Popen(cmd, shell=True))
-    for c in commands:
-        c.wait()
+        final_repos[source] = {'ref': ref, 'dest': dest}
+
+    commands = [] 
+    for source, values in final_repos.items():
+        ref = values['ref']
+        dest = values['dest']
+        if not os.path.exists(dest):
+            if ref == 'master':
+                cmd = ' '.join(['git', 'clone', '--depth=1', source, dest])
+                commands.append(Popen(cmd, shell=True))
+            else: 
+                cmd = ' '.join(['git', 'clone', source, dest])
+                commands.append(Popen(cmd, shell=True))
+        else:
+            cmd = ' '.join(['git', 'fetch', 'origin'])
+            commands.append(Popen(cmd, shell=True, cwd=dest))
+
+    for command in commands:
+        command.wait()
+
+    refcommands = []
+    for source, values in final_repos.items():
+        ref = values['ref']
+        dest = values['dest']
+
+        cmd = ' '.join(['git', 'checkout', ref])
+        refcommands.append(Popen(cmd, shell=True, cwd=dest))
+
+    for command in refcommands:
+        command.wait()
+
 
 def parse_repos(dictionary):
     repos = {}
