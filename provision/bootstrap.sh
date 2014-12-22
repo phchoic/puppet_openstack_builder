@@ -175,7 +175,7 @@ date
 # Install puppet modules
 rm -rf /etc/puppet/modules/*
 mkdir -p /etc/puppet/modules
-cp -r modules/* /etc/puppet/modules /etc/puppet
+cp -r modules/* /etc/puppet/modules
 
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
