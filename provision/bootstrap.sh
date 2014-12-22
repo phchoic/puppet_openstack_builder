@@ -136,6 +136,18 @@ if [ -e /dev/disk/by-label/config-2 ]; then
     python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
 fi
 
+# This will be 'virtualbox' on osx vagrant systems
+productname=$(facter productname)
+if [ "$productname" = "OpenStack Nova" ]; then
+  # Use config drive if it's there
+  if [ -e /dev/disk/by-label/config-2 ]; then
+      python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
+  # Otherwise use metadata service
+  else
+      curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" > /etc/puppet/hiera/data/cloudinit.yaml
+  fi
+fi
+
 # Set role fact (mc - this should be from metadata)
 mkdir -p /etc/facter/facts.d
 echo "role: `hostname | grep -oh '^[[:alpha:]]*'`" > /etc/facter/facts.d/role.yaml
@@ -161,8 +173,9 @@ cd /vagrant
 #vendor/bin/librarian-puppet install
 date
 # Install puppet modules
-rm -rf /etc/puppet/modules
-cp -r modules /etc/puppet/modules /etc/puppet
+rm -rf /etc/puppet/modules/*
+mkdir -p /etc/puppet/modules
+cp -r modules/* /etc/puppet/modules /etc/puppet
 
 # Ensure puppet isn't going to sign a cert with the wrong time or
 # name
