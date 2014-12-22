@@ -87,6 +87,24 @@ resources:
       network_id: { get_resource: mgmt_network }
       fixed_ips:
         - subnet_id: { get_resource: mgmt_subnet  }
+      security_groups:
+        - { get_resource: build_secgroup }
+
+  build_secgroup:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: Security group for test build server allowing http and ssh
+      rules:
+        - direction: ingress
+          protocol: tcp
+          port_range_max: 22
+          port_range_min: 22
+          remote_ip_prefix: 0.0.0.0/0
+        - direction: ingress
+          protocol: tcp
+          port_range_max: 80
+          port_range_min: 80
+          remote_ip_prefix: 0.0.0.0/0
 
   build1:
     type: OS::Nova::Server
@@ -115,7 +133,7 @@ resources:
             git clone __config_repo /vagrant
             cd /vagrant
             git checkout __config_ref
-            bash -x provision/bootstrap.sh
+            bash -x provision/bootstrap.sh &> /root/bootstrap.log
           params:
             __config_repo: { get_param: config_repo }
             __config_ref: { get_param: config_ref }
