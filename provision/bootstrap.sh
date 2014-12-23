@@ -36,37 +36,40 @@ if [ -e /dev/disk/by-label/config-2 ]; then
     fi
 fi
 
+if mount | grep -q vagrant; then
+    echo 'Vagrant host detected via mount, not configuring network'
+else
+    for i in `ip -o link show | grep eth[1-9] | cut -d ':' -f 2`; do
+        if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
+            cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-$i
+            sed -i "s/eth0/$i/g" /etc/sysconfig/network-scripts/ifcfg-$i
+        fi
+        ethtool -K $i tso off
+        ethtool -K $i gro off
+        ethtool -K $i gso off
+        ifconfig $i down
+        ifconfig $i up
+    done
 
-for i in `ip -o link show | grep eth[1-9] | cut -d ':' -f 2`; do
-    if [ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
-      cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-$i
-      sed -i "s/eth0/$i/g" /etc/sysconfig/network-scripts/ifcfg-$i
+    # not working yet
+    for i in `ip -o link show | grep enp[[:digit:]] | cut -d ':' -f 2`; do
+        ethtool -K $i tso off
+        ethtool -K $i gro off
+        ethtool -K $i gso off
+        ifconfig $i up
+    done
+
+    if ip -o link show | grep eth[1-9] ; then
+        ethtool -K eth0 tso off
+        ethtool -K eth0 gro off
+        ethtool -K eth0 gso off
+        dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+        dhclient eth0
     fi
-    ethtool -K $i tso off
-    ethtool -K $i gro off
-    ethtool -K $i gso off
-    ifconfig $i down
-    ifconfig $i up
-done
 
-# not working yet
-for i in `ip -o link show | grep enp[[:digit:]] | cut -d ':' -f 2`; do
-    ethtool -K $i tso off
-    ethtool -K $i gro off
-    ethtool -K $i gso off
-    ifconfig $i up
-done
-
-if ip -o link show | grep eth[1-9] ; then
-  ethtool -K eth0 tso off
-  ethtool -K eth0 gro off
-  ethtool -K eth0 gso off
-  dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
-  dhclient eth0
-fi
-
-if ip -o link show | grep enp[[:digit:]]  ; then
-  dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+    if ip -o link show | grep enp[[:digit:]]  ; then
+        dhclient `ip -o link show | grep eth[1-9] | cut -d ':' -f 2 | tr '\n' ' '`
+    fi
 fi
 
 # Set either yum or apt to use an http proxy.
