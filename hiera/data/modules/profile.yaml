@@ -23,6 +23,8 @@ profile::base::base::base_packages:
   - 'openstack-selinux'
   - 'screen'
   - 'tcpdump'
+  - 'puppet'
+  - 'hiera'
 
 profile::base::base::base_classes:
   - selinux

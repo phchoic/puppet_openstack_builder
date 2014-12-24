@@ -75,7 +75,6 @@ fi
 # Set either yum or apt to use an http proxy.
 if [ $proxy ] ; then
     echo 'setting proxy'
-    export http_proxy=$proxy
 
     if [ -f /etc/redhat-release ] ; then
         if [ ! $(cat /etc/yum.conf | grep '^proxy=') ] ; then
@@ -87,38 +86,54 @@ if [ $proxy ] ; then
             apt-get update -q
         fi
     else
-        echo "OS not detected! Weirdness inbound!"
+        echo "OS not detected for proxy settings! Weirdness inbound!"
     fi
 else
     echo 'not setting proxy'
 fi
 
-hash puppet 2>/dev/null || {
-      puppet_version=0
-}
 
-if [ "${puppet_version}" != '0' ] ; then
-  puppet_version=$(puppet --version)
+mirror_address=None
+if [ -e /dev/disk/by-label/config-2 ]; then
+    mirror_address=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('mirror_address', None)"`
+elif curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json &> /dev/null; then
+    mirror_address=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('mirror_address', None)"`
 fi
-if [ "${puppet_version}" != "${desired_puppet}" ] ; then
-  echo '[puppetlabs]' > /etc/yum.repos.d/puppetlabs.repo
-  echo "name=Puppetlabs Yum Repo" >> /etc/yum.repos.d/puppetlabs.repo
-  echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/products/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs.repo
-  echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs.repo
-  echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs.repo
-  echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs.repo
 
-  echo '[puppetlabs-deps]' > /etc/yum.repos.d/puppetlabs-deps.repo
-  echo "name=Puppetlabs Dependencies Yum Repo" >> /etc/yum.repos.d/puppetlabs-deps.repo
-  echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/dependencies/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs-deps.repo
-  echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
-  echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
-  echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs-deps.repo
+if mount | grep -q vagrant; then
+    if [ "$(hostname | grep -oh '^[[:alpha:]]*')" = "build" ] ; then
+        mirror_address="None"
+    else
+        mirror_address="192.168.242.5"
+    fi
+fi
 
-  yum install puppet hiera -y -q
+# Mirror nodes need to pull in the PL repo to get started
+# Whereas others should use the local mirror for all packages
+if [ "${mirror_address}" = "None" ] ; then
+    echo '[puppetlabs]' > /etc/yum.repos.d/puppetlabs.repo
+    echo "name=Puppetlabs Yum Repo" >> /etc/yum.repos.d/puppetlabs.repo
+    echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/products/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs.repo
+    echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs.repo
+    echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs.repo
+    echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs.repo
+
+    echo '[puppetlabs-deps]' > /etc/yum.repos.d/puppetlabs-deps.repo
+    echo "name=Puppetlabs Dependencies Yum Repo" >> /etc/yum.repos.d/puppetlabs-deps.repo
+    echo "baseurl=\"http://yum.puppetlabs.com/el/\$releasever/dependencies/\$basearch/\"" >> /etc/yum.repos.d/puppetlabs-deps.repo
+    echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
+    echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs-deps.repo
+    echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs-deps.repo
+else
+    rm -f `find /etc/yum.repos.d/*.repo | grep -v local.repo`
+    echo '[local]' > /etc/yum.repos.d/local.repo
+    echo "name=Local Mirror" >> /etc/yum.repos.d/local.repo
+    echo "baseurl=http://$mirror_address" >> /etc/yum.repos.d/local.repo
+    echo 'enabled=1' >> /etc/yum.repos.d/local.repo
+    echo 'gpgcheck=0' >> /etc/yum.repos.d/local.repo
 fi
 date
-yum install git -y -q
+yum install puppet hiera python-yaml -y -q
 date
 if [ ! -d /etc/puppet/hiera/data ]; then
     mkdir -p /etc/puppet/hiera/data
@@ -133,11 +148,6 @@ cp -r $configure_dir/hiera/data /etc/puppet/hiera
 
 rm -rf /etc/puppet/manifests
 cp -r $configure_dir/manifests /etc/puppet
-
-# Convert puppet+hiera if cloud instance
-if [ -e /dev/disk/by-label/config-2 ]; then
-    python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
-fi
 
 # This will be 'virtualbox' on osx vagrant systems
 productname=$(facter productname)
