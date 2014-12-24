@@ -1,4 +1,4 @@
-build_mgmt: 192.168.242.5
+mirror_address: 192.168.242.5
 infra1_mgmt: 192.168.242.31
 control_public: 10.2.3.11
 control_internal: 10.3.3.11

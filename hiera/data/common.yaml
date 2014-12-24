@@ -1,4 +1,4 @@
-build_mgmt: 127.0.0.1
+mirror_address: 127.0.0.1
 infra1_mgmt: 127.0.0.1
 control_public: 127.0.0.1
 control_internal: 127.0.0.1

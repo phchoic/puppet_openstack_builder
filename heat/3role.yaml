@@ -196,7 +196,7 @@ resources:
         public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
-        build_mgmt: { get_param: mirror_address }
+        mirror_address: { get_param: mirror_address }
       user_data:
         str_replace:
           template: |
@@ -231,7 +231,7 @@ resources:
         public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
-        build_mgmt: { get_param: mirror_address }
+        mirror_address: { get_param: mirror_address }
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
       user_data:
         str_replace:
@@ -267,7 +267,7 @@ resources:
         public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
-        build_mgmt: { get_param: mirror_address }
+        mirror_address: { get_param: mirror_address }
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
       user_data:
         str_replace:
@@ -323,7 +323,7 @@ resources:
         control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
         control_internal: { get_attr: [ control1_int, fixed_ips, 0, ip_address ]}
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
-        build_mgmt: { get_param: mirror_address }
+        mirror_address: { get_param: mirror_address }
 
   hyper1:
     type: OS::Nova::Server
@@ -363,4 +363,4 @@ resources:
         internal_iface: eth2
         internal_address: "%{ipaddress_eth2}"
         infra1_mgmt: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
-        build_mgmt: { get_param: mirror_address }
+        mirror_address: { get_param: mirror_address }
