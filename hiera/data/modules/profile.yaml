@@ -19,6 +19,7 @@ profile::base::base::manage_ntp: false
 profile::base::base::manage_sudo: false
 profile::base::base::manage_authconfig: false
 profile::base::base::manage_firewall: true
+profile::base::base::package_ensure: latest
 profile::base::base::base_packages:
   - 'openstack-selinux'
   - 'screen'
