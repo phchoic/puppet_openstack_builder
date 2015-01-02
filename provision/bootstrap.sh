@@ -133,7 +133,7 @@ else
     echo 'gpgcheck=0' >> /etc/yum.repos.d/local.repo
 fi
 date
-yum install puppet hiera python-yaml -y -q
+yum install git puppet hiera python-yaml -y -q
 date
 if [ ! -d /etc/puppet/hiera/data ]; then
     mkdir -p /etc/puppet/hiera/data
@@ -176,14 +176,6 @@ mkdir -p /vagrant/modules
 # Use cloner (exp)
 cd /vagrant
 ./provision/cloner repos.yaml
-# Use librarian-puppet-simple
-#export GEM_HOME=/vagrant/vendor
-#if [ ! -f /vagrant/vendor/bin/librarian-puppet ]; then
-#  gem install --no-ri --no-rdoc librarian-puppet-simple
-#  date
-#fi
-#cd /vagrant
-#vendor/bin/librarian-puppet install
 date
 # Install puppet modules
 rm -rf /etc/puppet/modules/*
