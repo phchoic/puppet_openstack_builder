@@ -1,7 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-BOX = 'developervms/centos7-64'
+#BOX = 'developervms/centos7-64'
+BOX = 'vStone/centos-7.x-puppet.3.x'
 
 def configure(config)
   config.vm.box = BOX
