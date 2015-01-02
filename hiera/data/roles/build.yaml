@@ -16,6 +16,10 @@ openstack_extras::repo::redhat::redhat::repo_hash:
     'baseurl': "%{hiera('yum_epel_mirror')}/$releasever/$basearch/"
     'gpgkey': 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'
     'failovermethod': 'priority'
+  'aptira':
+    'descr': "Consul packages hosted at Aptira"
+    'baseurl': "http://stacktira.aptira.com/repo/consul/"
+    'gpgcheck': 0
   'puppetlabs':
     'descr': Puppetlabs Yum Repo
     'baseurl':  'http://yum.puppetlabs.com/el/$releasever/products/$basearch/'
