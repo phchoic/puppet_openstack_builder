@@ -2,6 +2,11 @@
   - yaml
 :yaml:
    :datadir: /etc/puppet/hiera/data
+:consul:
+  :host: 127.0.0.1
+  :port: 8500
+  :paths:
+    - services
 :hierarchy:
   - "hostname/%{hostname}"
   - "user.%{role}"
