@@ -1,15 +1,12 @@
 mirror_address: 192.168.242.5
-infra1_mgmt: 192.168.242.31
+infra1_internal: 192.168.242.31
 control_public: 10.2.3.11
-control_internal: 10.3.3.11
+control_internal: 192.168.242.11
 
 # These settings match vagrant/centos7. bootstrap will override
 # them on cloud builds
-mgmt_iface: enp0s8
-mgmt_address: "%{ipaddress_enp0s8}"
-
-internal_iface: enp0s10
-internal_address: "%{ipaddress_enp0s10}"
+internal_iface: enp0s8
+internal_address: "%{ipaddress_enp0s8}"
 
 public_iface: enp0s9
 public_address: "%{ipaddress_enp0s9}"

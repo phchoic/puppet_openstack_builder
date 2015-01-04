@@ -1,11 +1,11 @@
 consul::config_defaults:
   data_dir: '/var/lib/consul'
-  bind_addr: "%{hiera('mgmt_address')}"
+  bind_addr: "%{hiera('internal_address')}"
   enable_syslog: true
   log_level: INFO
   node_name: "%{::hostname}"
   retry_join:
-    - "%{hiera('infra1_mgmt')}"
+    - "%{hiera('infra1_internal')}"
   addresses:
     http: 127.0.0.1
     dns: 127.0.0.1

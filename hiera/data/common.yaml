@@ -1,18 +1,3 @@
-mirror_address: 127.0.0.1
-infra1_mgmt: 127.0.0.1
-control_public: 127.0.0.1
-control_internal: 127.0.0.1
-
-# These settings match vagrant/centos7. cloudinit will override
-# them on cloud builds
-mgmt_iface: enp0s8
-mgmt_address: "%{ipaddress_enp0s8}"
-
-internal_iface: enp0s10
-internal_address: "%{ipaddress_enp0s10}"
-
-public_iface: enp0s9
-public_address: "%{ipaddress_enp0s9}"
-
-yum_base_mirror: 'http://centos.mirror.uber.com.au'
-yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
+mysql_Address: 127.0.0.1
+rabbitmq_Address: 127.0.0.1
+keystone_Address: 127.0.0.1

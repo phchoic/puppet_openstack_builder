@@ -1,28 +1,28 @@
-nova::database_connection: "mysql://nova:nova_pass@%{hiera('control_internal')}/nova"
-nova::glance_api_servers: "%{hiera('control_public')}:9292"
-nova::rabbit_host: "%{hiera('control_internal')}"
+nova::database_connection: "mysql://nova:nova_pass@%{hiera('mysql_Address')}/nova"
+nova::glance_api_servers: "%{hiera('glance-api_Address')}:9292"
+nova::rabbit_host: "%{hiera('rabbitmq_Address')}"
 
 nova::api::admin_password: nova_pass
 nova::api::enabled: true
-nova::api::auth_host: "%{hiera('control_public')}"
-nova::api::bind_address: "%{hiera('control_public')}"
-nova::api::metadata_listen: "%{hiera('control_public')}"
+nova::api::auth_host: "%{hiera('keystone_Address')}"
+nova::api::bind_address: "%{hiera('internal_address')}"
+nova::api::metadata_listen: "%{hiera('internal_address')}"
 
 nova::scheduler::enabled: true
 
 nova::network::neutron::neutron_admin_password: neutron_pass
-nova::network::neutron::neutron_url: "http://%{hiera('control_public')}:9696"
-nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('control_public')}:35357/v2.0"
+nova::network::neutron::neutron_url: "http://%{hiera('neutron-server_Address')}:9696"
+nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('keystone_Address')}:35357/v2.0"
 
 nova::conductor::enabled: true
 
 nova::db::mysql::password: nova_pass
-nova::db::mysql::host: "%{hiera('control_internal')}"
+nova::db::mysql::host: "%{hiera('mysql_Address')}"
 
 nova::keystone::auth::password: nova_pass
-nova::keystone::auth::public_address: "%{hiera('control_public')}"
-nova::keystone::auth::admin_address: "%{hiera('control_public')}"
-nova::keystone::auth::internal_address: "%{hiera('control_public')}"
+nova::keystone::auth::public_address: "%{hiera('internal_address')}"
+nova::keystone::auth::admin_address: "%{hiera('keystone_Address')}"
+nova::keystone::auth::internal_address: "%{hiera('keystone_Address')}"
 
 nova::compute::enabled: true
 nova::compute::libvirt::libvirt_virt_type: qemu
