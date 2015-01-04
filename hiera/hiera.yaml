@@ -1,10 +1,14 @@
 :backends:
+  - consul
   - yaml
 :yaml:
    :datadir: /etc/puppet/hiera/data
 :consul:
   :host: 127.0.0.1
   :port: 8500
+  :failure: graceful
+  :http_connect_timeout: 1
+  :http_read_timeout: 1
   :paths:
     - services
 :hierarchy:
