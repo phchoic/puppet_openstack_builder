@@ -1,11 +1,11 @@
 keystone::db::mysql::password: key_pass
-keystone::db::mysql::host: "%{hiera('control_internal')}"
+keystone::db::mysql::host: "%{hiera('mysql_Address')}"
 
 keystone::roles::admin::email: user@example.com
 keystone::roles::admin::password: admin_pass
 
 keystone::admin_token: supersecret
-keystone::public_bind_host: "%{hiera('public_address')}"
-keystone::admin_bind_host: "%{hiera('public_address')}"
-keystone::database_connection: "mysql://keystone:key_pass@%{hiera('control_internal')}/keystone"
+keystone::public_bind_host: "%{hiera('internal_address')}"
+keystone::admin_bind_host: "%{hiera('internal_address')}"
+keystone::database_connection: "mysql://keystone:key_pass@%{hiera('mysql_Address')}/keystone"
 

@@ -20,9 +20,9 @@ nova::db::mysql::password: nova_pass
 nova::db::mysql::host: "%{hiera('mysql_Address')}"
 
 nova::keystone::auth::password: nova_pass
-nova::keystone::auth::public_address: "%{hiera('internal_address')}"
-nova::keystone::auth::admin_address: "%{hiera('keystone_Address')}"
-nova::keystone::auth::internal_address: "%{hiera('keystone_Address')}"
+nova::keystone::auth::public_address: "%{hiera('nova-api_address')}"
+nova::keystone::auth::admin_address: "%{hiera('nova-api_Address')}"
+nova::keystone::auth::internal_address: "%{hiera('nova-api_Address')}"
 
 nova::compute::enabled: true
 nova::compute::libvirt::libvirt_virt_type: qemu

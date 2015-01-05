@@ -1,3 +1,3 @@
 openstack::auth_file::admin_password: admin_pass
 openstack::auth_file::keystone_admin_token: supersecret
-openstack::auth_file::controller_node: "%{hiera('control_public')}"
+openstack::auth_file::controller_node: "%{hiera('keystone_Address')}"
