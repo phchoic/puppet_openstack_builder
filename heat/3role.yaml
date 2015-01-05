@@ -321,7 +321,7 @@ resources:
         internal_iface: eth0
         internal_address: "%{ipaddress_eth0}"
         control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
-        control_internal: { get_attr: [ control1_int, fixed_ips, 0, ip_address ]}
+        control_internal: { get_attr: [ control1_mgmt, fixed_ips, 0, ip_address ]}
         infra1_internal: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
         mirror_address: { get_param: mirror_address }
 
@@ -355,7 +355,7 @@ resources:
 
       metadata:
         control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
-        control_internal: { get_attr: [ control1_int, fixed_ips, 0, ip_address ]}
+        control_internal: { get_attr: [ control1_mgmt, fixed_ips, 0, ip_address ]}
         mgmt_iface: eth0
         mgmt_address: "%{ipaddress_eth0}"
         public_iface: eth1
