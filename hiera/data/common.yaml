@@ -1,3 +1,2 @@
 mysql_Address: 127.0.0.1
-rabbitmq_Address: 127.0.0.1
-keystone_Address: 127.0.0.1
+neutron-server_Address: 127.0.0.1
