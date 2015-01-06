@@ -17,7 +17,7 @@ def configure(config)
   end
 
   config.vm.provision :shell do |shell|
-    shell.inline = 'bash /vagrant/provision/bootstrap.sh'
+    shell.inline = 'bash /vagrant/provision/bootstrap.sh | tee /root/bootstrap.log'
   end
 end
 
