@@ -211,4 +211,5 @@ while true ; do
   if (($? != 1 && $? != 4 && $? != 6)) ; then
     exit 0
   fi;
+  systemctl restart consul
 done;
