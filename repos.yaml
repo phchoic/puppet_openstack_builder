@@ -92,6 +92,10 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-consul"
     dest: "%{destdir}consul"
     author: solarkennedy
+  consul_profile:
+    source: "%{git_protocol}://github.com/%{author}/consul_profile"
+    dest: "%{destdir}consul_profile"
+    author: michaeltchapman
   galera:
     source: "%{git_protocol}://github.com/%{author}/puppet-galera"
     dest: "%{destdir}galera"
