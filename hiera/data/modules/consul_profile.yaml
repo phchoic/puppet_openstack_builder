@@ -1,0 +1,7 @@
+consul_profile::openstack::identity::endpoints::ceilometer_enabled: false
+consul_profile::openstack::identity::endpoints::swift_enabled: false
+consul_profile::openstack::identity::endpoints::trove_enabled: false
+consul_profile::openstack::identity::endpoints::nova_enabled: true
+consul_profile::openstack::identity::endpoints::neutron_enabled: true
+consul_profile::openstack::identity::endpoints::cinder_enabled: false
+consul_profile::openstack::identity::endpoints::glance_enabled: true

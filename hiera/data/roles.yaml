@@ -44,23 +44,25 @@ infra_classes:
 control_classes:
   - profile::base::base
   - profile::application::consul
-  - profile::openstack::identity
-  - profile::openstack::image
-  - profile::messaging::rabbitmq
-  - profile::openstack::compute::api
-  - profile::openstack::compute::scheduler
-  - profile::openstack::compute::conductor
-  - profile::openstack::network::controller
-  - profile::openstack::network::metadata
-  - profile::openstack::network::l3
-  - profile::openstack::network::dhcp
-  - profile::openstack::orchestration::api
-  - profile::openstack::orchestration::engine
+  - consul_profile::openstack::identity
+  - consul_profile::openstack::image::api
+  - consul_profile::openstack::image::registry
+  - consul_profile::openstack::messaging
+  - consul_profile::openstack::compute::api
+  - consul_profile::openstack::compute::scheduler
+  - consul_profile::openstack::compute::conductor
+  - consul_profile::openstack::network::controller
+  #- consul_profile::openstack::network::metadata
+  - consul_profile::openstack::network::l3
+  - consul_profile::openstack::network::dhcp
+  #- consul_profile::openstack::orchestration::api
+  #- consul_profile::openstack::orchestration::engine
   - openstack::auth_file
 
-  - profile::openstack::database::sql
+  - consul_profile::openstack::database::sql
+  - consul_profile::database::mariadb
 
 hyper_classes:
   - profile::base::base
   - profile::application::consul
-  - profile::openstack::compute::hypervisor
+  - consul_profile::openstack::compute::hypervisor
