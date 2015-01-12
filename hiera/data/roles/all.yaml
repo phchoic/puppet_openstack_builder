@@ -81,3 +81,5 @@ profile::base::base_packages:
 # Other basics
   - kernel
   - puppet
+
+mysql_Address: 127.0.0.1
