@@ -128,7 +128,7 @@ else
     rm -f `find /etc/yum.repos.d/*.repo | grep -v local.repo`
     echo '[local]' > /etc/yum.repos.d/local.repo
     echo "name=Local Mirror" >> /etc/yum.repos.d/local.repo
-    echo "baseurl=http://$mirror_address" >> /etc/yum.repos.d/local.repo
+    echo "baseurl=http://$mirror_address/" >> /etc/yum.repos.d/local.repo
     echo 'enabled=1' >> /etc/yum.repos.d/local.repo
     echo 'gpgcheck=0' >> /etc/yum.repos.d/local.repo
 fi
@@ -211,5 +211,4 @@ while true ; do
   if (($? != 1 && $? != 4 && $? != 6)) ; then
     exit 0
   fi;
-  systemctl restart consul
 done;
