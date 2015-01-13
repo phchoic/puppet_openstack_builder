@@ -4,7 +4,7 @@
 #BOX = 'developervms/centos7-64'
 BOX = 'vStone/centos-7.x-puppet.3.x'
 
-def configure(config)
+def configure(config, memory="4096")
   config.vm.box = BOX
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
@@ -12,7 +12,7 @@ def configure(config)
   end
 
   config.vm.provider "virtualbox" do |vconfig|
-    vconfig.customize ["modifyvm", :id, "--memory", "4096"]
+    vconfig.customize ["modifyvm", :id, "--memory", memory]
     vconfig.cpus = 2
   end
 
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     infra.vm.hostname = "build1"
     infra.vm.network "private_network", :ip => "192.168.242.5"
     infra.vm.network "private_network", :ip => "10.2.3.5"
-    configure(infra)
+    configure(infra, memory='1024')
   end
 
   ['1','2','3'].each do | i |
@@ -36,21 +36,28 @@ Vagrant.configure("2") do |config|
       infra.vm.hostname = "infra#{i}"
       infra.vm.network "private_network", :ip => "192.168.242.3#{i}"
       infra.vm.network "private_network", :ip => "10.2.3.3#{i}"
-      configure(infra)
+      configure(infra, memory='768')
     end
 
     config.vm.define "control#{i}" do |control|
       control.vm.hostname = "control"
       control.vm.network "private_network", :ip => "192.168.242.1#{i}"
       control.vm.network "private_network", :ip => "10.2.3.1#{i}"
-      configure(control)
+      configure(control, memory='3096')
+    end
+
+    config.vm.define "proxy#{i}" do |proxy|
+      proxy.vm.hostname = "control"
+      proxy.vm.network "private_network", :ip => "192.168.242.4#{i}"
+      proxy.vm.network "private_network", :ip => "10.2.3.4#{i}"
+      configure(proxy, memory='1024')
     end
 
     config.vm.define "hyper#{i}" do |hyper|
       hyper.vm.hostname = "hyper#{i}"
       hyper.vm.network "private_network", :ip => "192.168.242.2#{i}"
       hyper.vm.network "private_network", :ip => "10.2.3.2#{i}"
-      configure(hyper)
+      configure(hyper, memory='2560')
     end
   end
 end
