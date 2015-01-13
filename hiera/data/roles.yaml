@@ -37,9 +37,13 @@ build_classes:
   - partial
 
 infra_classes:
-  #- profile::webserver::apache
   - profile::base::base
   - profile::application::consul
+
+proxy_classes:
+  - profile::base::base
+  - profile::application::consul
+  - consul_profile::highavavailability::loadbalancing::haproxy
 
 control_classes:
   - profile::base::base
