@@ -40,25 +40,25 @@ parameters:
     description: Git ref to checkout
 
 resources:
-  mgmt_router:
+  internal_router:
     type: OS::Neutron::Router
     properties:
       external_gateway_info:
         network: { get_param: pubnet }
 
-  mgmt_router_interface:
+  internal_router_interface:
     type: OS::Neutron::RouterInterface
     properties:
-      subnet_id: { get_resource: mgmt_subnet }
-      router_id: { get_resource: mgmt_router }
+      subnet_id: { get_resource: internal_subnet }
+      router_id: { get_resource: internal_router }
 
-  mgmt_network:
+  internal_network:
     type: OS::Neutron::Net
 
-  mgmt_subnet:
+  internal_subnet:
     type: OS::Neutron::Subnet
     properties:
-      network_id: { get_resource: mgmt_network }
+      network_id: { get_resource: internal_network }
       cidr: 192.168.242.0/24
       dns_nameservers:
         - 8.8.8.8
@@ -74,63 +74,27 @@ resources:
       floating_ip: { get_resource: control1_floatingip }
       server_id: { get_resource: control1 }
     depends_on:
-      - mgmt_router_interface
-      - mgmt_router
+      - internal_router_interface
+      - internal_router
 
-  infra1_mgmt:
+  infra1_internal:
     type: OS::Neutron::Port
     properties:
-      network_id: { get_resource: mgmt_network }
+      network_id: { get_resource: internal_network }
       fixed_ips:
-        - subnet_id: { get_resource: mgmt_subnet  }
+        - subnet_id: { get_resource: internal_subnet  }
       security_groups:
         - { get_resource: test_secgroup }
 
-  control1_mgmt:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: mgmt_network }
-      fixed_ips:
-        - subnet_id: { get_resource: mgmt_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
-
-  hyper1_mgmt:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: mgmt_network }
-      fixed_ips:
-        - subnet_id: { get_resource: mgmt_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
-
-  internal_net:
+  internal_network:
     type: OS::Neutron::Net
-
-  control1_int:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: internal_net  }
-      fixed_ips:
-        - subnet_id: { get_resource: internal_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
-
-  hyper1_int:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: internal_net  }
-      fixed_ips:
-        - subnet_id: { get_resource: internal_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
 
   internal_subnet:
     type: OS::Neutron::Subnet
     properties:
-      network_id: { get_resource: internal_net }
-      cidr: 10.3.3.0/24
-      gateway_ip: null
+      network_id: { get_resource: internal_network }
+      cidr: 192.168.242.0/24
+      gateway_ip: 192.168.242.1
       dns_nameservers:
         - 8.8.8.8
 
@@ -145,24 +109,6 @@ resources:
       gateway_ip: null
       dns_nameservers:
         - 8.8.8.8
-
-  hyper1_ext:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: external_net  }
-      fixed_ips:
-        - subnet_id: { get_resource: external_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
-
-  control1_ext:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_resource: external_net  }
-      fixed_ips:
-        - subnet_id: { get_resource: external_subnet  }
-      security_groups:
-        - { get_resource: test_secgroup }
 
   test_secgroup:
     type: OS::Neutron::SecurityGroup
@@ -188,14 +134,12 @@ resources:
       flavor: { get_param: small_flavor}
       key_name: { get_param: key_name }
       networks:
-        - port: { get_resource: infra1_mgmt }
+        - port: { get_resource: infra1_internal }
       metadata:
-        mgmt_iface: eth0
-        mgmt_address: '%{ipaddress_eth0}'
-        public_iface: eth0
-        public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
+        public_iface: eth0
+        public_address: '%{ipaddress_eth0}'
         mirror_address: { get_param: mirror_address }
       user_data:
         str_replace:
@@ -221,18 +165,16 @@ resources:
       flavor: { get_param: small_flavor}
       key_name: { get_param: key_name }
       networks:
-        - network: { get_resource: mgmt_network }
+        - network: { get_resource: internal_network }
       security_groups:
         - { get_resource: test_secgroup }
       metadata:
-        mgmt_iface: eth0
-        mgmt_address: '%{ipaddress_eth0}'
-        public_iface: eth0
-        public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
+        public_iface: eth0
+        public_address: '%{ipaddress_eth0}'
         mirror_address: { get_param: mirror_address }
-        infra1_internal: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+        infra1_internal: { get_attr: [ infra1_internal, fixed_ips, 0, ip_address ]}
       user_data:
         str_replace:
           template: |
@@ -257,18 +199,16 @@ resources:
       flavor: { get_param: small_flavor}
       key_name: { get_param: key_name }
       networks:
-        - network: { get_resource: mgmt_network }
+        - network: { get_resource: internal_network }
       security_groups:
         - { get_resource: test_secgroup }
       metadata:
-        mgmt_iface: eth0
-        mgmt_address: '%{ipaddress_eth0}'
-        public_iface: eth0
-        public_address: '%{ipaddress_eth0}'
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
+        public_iface: eth0
+        public_address: '%{ipaddress_eth0}'
         mirror_address: { get_param: mirror_address }
-        infra1_internal: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+        infra1_internal: { get_attr: [ infra1_internal, fixed_ips, 0, ip_address ]}
       user_data:
         str_replace:
           template: |
@@ -293,9 +233,8 @@ resources:
       flavor: { get_param: medium_flavor}
       key_name: { get_param: key_name}
       networks:
-        - port: { get_resource: control1_mgmt}
-        - port: { get_resource: control1_ext}
-        - port: { get_resource: control1_int}
+        - network: { get_resource: internal_network }
+        - network: { get_resource: external_net }
 
       user_data:
         str_replace:
@@ -314,15 +253,11 @@ resources:
             __config_ref: { get_param: config_ref }
 
       metadata:
-        mgmt_iface: eth0
-        mgmt_address: "%{ipaddress_eth0}"
-        public_iface: eth1
-        public_address: "%{ipaddress_eth1}"
         internal_iface: eth0
         internal_address: "%{ipaddress_eth0}"
-        control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
-        control_internal: { get_attr: [ control1_mgmt, fixed_ips, 0, ip_address ]}
-        infra1_internal: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+        public_iface: eth1
+        public_address: "%{ipaddress_eth1}"
+        infra1_internal: { get_attr: [ infra1_internal, fixed_ips, 0, ip_address ]}
         mirror_address: { get_param: mirror_address }
 
   hyper1:
@@ -333,10 +268,7 @@ resources:
       flavor: { get_param: medium_flavor}
       key_name: { get_param: key_name}
       networks:
-        - port: { get_resource: hyper1_mgmt}
-        - port: { get_resource: hyper1_ext}
-        - port: { get_resource: hyper1_int}
-
+        - network: { get_resource: internal_network }
       user_data:
         str_replace:
           template: |
@@ -354,13 +286,7 @@ resources:
             __config_ref: { get_param: config_ref }
 
       metadata:
-        control_public: { get_attr: [ control1_ext, fixed_ips, 0, ip_address ]}
-        control_internal: { get_attr: [ control1_mgmt, fixed_ips, 0, ip_address ]}
-        mgmt_iface: eth0
-        mgmt_address: "%{ipaddress_eth0}"
-        public_iface: eth1
-        public_address: "%{ipaddress_eth1}"
         internal_iface: eth0
         internal_address: "%{ipaddress_eth0}"
-        infra1_internal: { get_attr: [ infra1_mgmt, fixed_ips, 0, ip_address ]}
+        infra1_internal: { get_attr: [ infra1_internal, fixed_ips, 0, ip_address ]}
         mirror_address: { get_param: mirror_address }
