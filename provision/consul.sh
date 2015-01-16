@@ -4,9 +4,9 @@ fi
 
 infra1_internal=None
 if [ -e /dev/disk/by-label/config-2 ]; then
-    mirror_address=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('infra1_internal', None)"`
+    infra1_internal=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('infra1_internal', None)"`
 elif curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json &> /dev/null; then
-    mirror_address=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('infra1_internal', None)"`
+    infra1_internal=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('infra1_internal', None)"`
 fi
 if mount | grep -q vagrant; then
     if [ "$(hostname | grep -oh '^[[:alpha:]]*')" = "build" ] ; then
@@ -21,9 +21,9 @@ fi
 
 internal_iface=None
 if [ -e /dev/disk/by-label/config-2 ]; then
-    mirror_address=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('internal_iface', None)"`
+    internal_iface=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('internal_iface', None)"`
 elif curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json &> /dev/null; then
-    mirror_address=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('internal_iface', None)"`
+    internal_iface=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('internal_iface', None)"`
 fi
 if mount | grep -q vagrant; then
     if [ "$(hostname | grep -oh '^[[:alpha:]]*')" = "build" ] ; then
