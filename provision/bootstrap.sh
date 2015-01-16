@@ -165,11 +165,14 @@ mkdir -p /etc/facter/facts.d
 echo "role: $role" > /etc/facter/facts.d/role.yaml
 
 # get provisioner
-provisioner=puppet
+provisioner=None
 if [ -f /mnt/config/openstack/latest/meta_data.json ]; then
     provisioner=`cat /mnt/config/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('provisioner', None)"`
 elif curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json &> /dev/null; then
     provisioner=`curl --fail --silent --show-error http://169.254.169.254/openstack/latest/meta_data.json | python -c "import sys, json; print json.load(sys.stdin)['meta'].get('provisioner', None)"`
+fi
+if [ "${provisioner}" = "None" ] ; then
+    provisioner=puppet
 fi
 
 # Install and configure consul
