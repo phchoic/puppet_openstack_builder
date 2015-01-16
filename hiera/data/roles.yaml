@@ -30,6 +30,9 @@ all_classes:
   - profile::openstack::orchestration::api
   - profile::openstack::orchestration::engine
 
+  - profile::highavailability::loadbalancing::haproxy
+  - profile::highavailability::keepalived
+
 build_classes:
   - profile::webserver::apache
   - profile::base::base
@@ -43,7 +46,7 @@ infra_classes:
 proxy_classes:
   - profile::base::base
   - profile::application::consul
-  - consul_profile::highavavailability::loadbalancing::haproxy
+  - consul_profile::highavailability::loadbalancing::haproxy
 
 control_classes:
   - profile::base::base
