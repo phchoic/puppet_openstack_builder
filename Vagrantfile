@@ -56,17 +56,17 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.define "control#{i}" do |control|
-      control.vm.hostname = "control"
+      control.vm.hostname = "control#{i}"
       control.vm.network "private_network", :ip => "192.168.242.1#{i}"
       control.vm.network "private_network", :ip => "10.2.3.1#{i}"
       configure(control, memory='3096')
     end
 
     config.vm.define "proxy#{i}" do |proxy|
-      proxy.vm.hostname = "proxy"
+      proxy.vm.hostname = "proxy#{i}"
       proxy.vm.network "private_network", :ip => "192.168.242.4#{i}"
       proxy.vm.network "private_network", :ip => "10.2.3.4#{i}"
-      configure(proxy, memory='1024', provisioner='confd')
+      configure(proxy, memory='1024')
     end
 
     config.vm.define "hyper#{i}" do |hyper|
