@@ -175,8 +175,10 @@ if [ "${provisioner}" = "None" ] ; then
     provisioner=puppet
 fi
 
+if [ "${role}" != "build" ] ; then
 # Install and configure consul
-bash -x /vagrant/provision/consul.sh
+  bash -x /vagrant/provision/consul.sh
+fi
 
 if [ -f /vagrant/provision/$role ] ; then
   bash -x /vagrant/provision/${role}.sh
