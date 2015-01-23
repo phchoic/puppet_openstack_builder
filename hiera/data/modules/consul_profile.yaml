@@ -5,3 +5,12 @@ consul_profile::openstack::identity::endpoints::nova_enabled: true
 consul_profile::openstack::identity::endpoints::neutron_enabled: true
 consul_profile::openstack::identity::endpoints::cinder_enabled: false
 consul_profile::openstack::identity::endpoints::glance_enabled: true
+
+consul_profile::highavailability::loadbalancing::haproxy::service_hash: "%{alias('service_hash')}"
+consul_profile::highavailability::loadbalancing::haproxy::bind_address_hash:
+  internal:
+    interface: "%{hiera('internal_iface')}"
+    address: "%{hiera('internal_address')}"
+  external:
+    interface: "%{hiera('public_iface')}"
+    address: "%{hiera('public_address')}"
