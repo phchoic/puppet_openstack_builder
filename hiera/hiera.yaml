@@ -11,6 +11,7 @@
   :http_read_timeout: 1
   :paths:
     - services
+    - /v1/kv/hiera
 :hierarchy:
   - "hostname/%{hostname}"
   - "user.%{role}"
