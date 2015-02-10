@@ -1,6 +1,6 @@
 all_classes:
   - profile::webserver::apache
-  - profile::base::base
+  - profile::base::common
   - partial::rpm
   - partial::mirror
 
@@ -35,21 +35,21 @@ all_classes:
 
 build_classes:
   - profile::webserver::apache
-  - profile::base::base
+  - profile::base::common
   - partial::mirror
   - partial
 
 infra_classes:
-  - profile::base::base
+  - profile::base::common
   - profile::application::consul
 
 proxy_classes:
-  - profile::base::base
+  - profile::base::common
   - profile::application::consul
   - consul_profile::highavailability::loadbalancing::haproxy
 
 control_classes:
-  - profile::base::base
+  - profile::base::common
   - profile::application::consul
   - consul_profile::openstack::identity
   - consul_profile::openstack::image::api
@@ -70,6 +70,6 @@ control_classes:
   - consul_profile::database::mariadb
 
 hyper_classes:
-  - profile::base::base
+  - profile::base::common
   - profile::application::consul
   - consul_profile::openstack::compute::hypervisor

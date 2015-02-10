@@ -11,24 +11,24 @@ profile::openstack::image::api::discover_class: true
 
 profile::openstack::database::sql::heat_enabled: true
 
-profile::base::base::manage_augeasproviders: false
-profile::base::base::manage_epel: false
-profile::base::base::manage_accounts: false
-profile::base::base::manage_logging: false
-profile::base::base::manage_monitoring: false
-profile::base::base::manage_ntp: false
-profile::base::base::manage_sudo: false
-profile::base::base::manage_authconfig: false
-profile::base::base::manage_firewall: true
-profile::base::base::package_ensure: latest
-profile::base::base::base_packages:
+profile::base::common::manage_augeasproviders: false
+profile::base::common::manage_epel: false
+profile::base::common::manage_accounts: false
+profile::base::common::manage_logging: false
+profile::base::common::manage_monitoring: false
+profile::base::common::manage_ntp: false
+profile::base::common::manage_sudo: false
+profile::base::common::manage_authconfig: false
+profile::base::common::manage_firewall: true
+profile::base::common::package_ensure: latest
+profile::base::common::base_packages:
   - 'openstack-selinux'
   - 'screen'
   - 'tcpdump'
   - 'puppet'
   - 'hiera'
 
-profile::base::base::base_classes:
+profile::base::common::common_classes:
   - selinux
   - openstack_extras::repo::redhat::redhat
 
