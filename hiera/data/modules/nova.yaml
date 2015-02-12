@@ -1,28 +1,28 @@
-nova::database_connection: "mysql://nova:nova_pass@%{hiera('mysql_Address')}/nova"
-nova::glance_api_servers: "%{hiera('glance-api_Address')}:9292"
+nova::database_connection: "mysql://nova:nova_pass@%{hiera('service_hash__haproxy::balanced__mysql__Address')}/nova"
+nova::glance_api_servers: "%{hiera('service_hash__haproxy::balanced__glance-api__Address')}:9292"
 nova::rabbit_host: "%{hiera('rabbitmq_Address')}"
 
 nova::api::admin_password: nova_pass
 nova::api::enabled: true
-nova::api::auth_host: "%{hiera('keystone_Address')}"
+nova::api::auth_host: "%{hiera('service_hash__haproxy::balanced__keystone__Address')}"
 nova::api::bind_address: "%{hiera('internal_address')}"
 nova::api::metadata_listen: "%{hiera('internal_address')}"
 
 nova::scheduler::enabled: true
 
 nova::network::neutron::neutron_admin_password: neutron_pass
-nova::network::neutron::neutron_url: "http://%{hiera('neutron-server_Address')}:9696"
-nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('keystone_Address')}:35357/v2.0"
+nova::network::neutron::neutron_url: "http://%{hiera('service_hash__haproxy::balanced__neutron-server__Address')}:9696"
+nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('service_hash__haproxy::balanced__keystone__Address')}:35357/v2.0"
 
 nova::conductor::enabled: true
 
 nova::db::mysql::password: nova_pass
-nova::db::mysql::host: "%{hiera('mysql_Address')}"
+nova::db::mysql::host: "%{hiera('service_hash__haproxy::balanced__mysql__Address')}"
 
 nova::keystone::auth::password: nova_pass
-nova::keystone::auth::public_address: "%{hiera('nova-api_Address')}"
-nova::keystone::auth::admin_address: "%{hiera('nova-api_Address')}"
-nova::keystone::auth::internal_address: "%{hiera('nova-api_Address')}"
+nova::keystone::auth::public_address: "%{hiera('service_hash__haproxy::balanced__nova-api__Address')}"
+nova::keystone::auth::admin_address: "%{hiera('service_hash__haproxy::balanced__nova-api__Address')}"
+nova::keystone::auth::internal_address: "%{hiera('service_hash__haproxy::balanced__nova-api__Address')}"
 
 nova::compute::enabled: true
 nova::compute::libvirt::libvirt_virt_type: qemu

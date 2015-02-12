@@ -6,22 +6,22 @@ neutron::service_plugins:
 neutron::rabbit_host: "%{hiera('rabbitmq_Address')}"
 
 neutron::server::sync_db: true
-neutron::server::auth_host: "%{hiera('keystone_Address')}"
-neutron::server::database_connection: "mysql://neutron:neutron_pass@%{hiera('mysql_Address')}/neutron"
+neutron::server::auth_host: "%{hiera('service_hash__haproxy::balanced__keystone__Address')}"
+neutron::server::database_connection: "mysql://neutron:neutron_pass@%{hiera('service_hash__haproxy::balanced__mysql__Address')}/neutron"
 neutron::server::auth_password: neutron_pass
 
 neutron::server::notifications::notify_nova_on_port_status_changes: true
 neutron::server::notifications::notify_nova_on_port_data_changes: true
-neutron::server::notifications::nova_admin_auth_url: "http://%{hiera('keystone_Address')}:35357/v2.0"
-neutron::server::notifications::nova_url: "http://%{hiera('nova-api_Address')}:8774/v2"
+neutron::server::notifications::nova_admin_auth_url: "http://%{hiera('service_hash__haproxy::balanced__keystone__Address')}:35357/v2.0"
+neutron::server::notifications::nova_url: "http://%{hiera('service_hash__haproxy::balanced__nova-api__Address')}:8774/v2"
 neutron::server::notifications::nova_admin_username: nova
 neutron::server::notifications::nova_admin_password: nova_pass
 
 
 neutron::agents::metadata::auth_password: neutron_pass
 neutron::agents::metadata::shared_secret: a_secret
-neutron::agents::metadata::auth_url: "http://%{hiera('keystone_Address')}:35357/v2.0"
-neutron::agents::metadata::metadata_ip: "%{hiera('nova-api-metadata_Address')}"
+neutron::agents::metadata::auth_url: "http://%{hiera('service_hash__haproxy::balanced__keystone__Address')}:35357/v2.0"
+neutron::agents::metadata::metadata_ip: "%{hiera('service_hash__haproxy::balanced__nova-api-metadata__Address')}"
 
 neutron::agents::ml2::ovs::bridge_uplinks:
   - "br-ex:%{hiera('public_iface')}"
@@ -39,9 +39,9 @@ neutron::plugins::ml2::mechanism_drivers:
   - openvswitch
 
 neutron::db::mysql::password: neutron_pass
-neutron::db::mysql::host: "%{hiera('mysql_Address')}"
+neutron::db::mysql::host: "%{hiera('service_hash__haproxy::balanced__mysql__Address')}"
 
 neutron::keystone::auth::password: neutron_pass
-neutron::keystone::auth::public_address: "%{hiera('neutron-server_Address')}"
-neutron::keystone::auth::admin_address: "%{hiera('neutron-server_Address')}"
-neutron::keystone::auth::internal_address: "%{hiera('neutron-server_Address')}"
+neutron::keystone::auth::public_address: "%{hiera('service_hash__haproxy::balanced__neutron-server__Address')}"
+neutron::keystone::auth::admin_address: "%{hiera('service_hash__haproxy::balanced__neutron-server__Address')}"
+neutron::keystone::auth::internal_address: "%{hiera('service_hash__haproxy::balanced__neutron-server__Address')}"

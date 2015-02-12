@@ -1,5 +1,5 @@
 keystone::db::mysql::password: key_pass
-keystone::db::mysql::host: "%{hiera('mysql_Address')}"
+keystone::db::mysql::host: '192.168.242.%'
 
 keystone::roles::admin::email: user@example.com
 keystone::roles::admin::password: admin_pass
@@ -7,5 +7,7 @@ keystone::roles::admin::password: admin_pass
 keystone::admin_token: supersecret
 keystone::public_bind_host: "%{hiera('internal_address')}"
 keystone::admin_bind_host: "%{hiera('internal_address')}"
-keystone::database_connection: "mysql://keystone:key_pass@%{hiera('mysql_Address')}/keystone"
+#keystone::public_endpoint: "http://%{hiera('internal_address')}:5000"
+#keystone::admin_endpoint: "http://%{hiera('internal_address')}:35357"
+keystone::database_connection: "mysql://keystone:key_pass@%{hiera('service_hash__haproxy::balanced__mysql__Address')}/keystone"
 
