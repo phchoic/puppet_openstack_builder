@@ -40,7 +40,7 @@ openstack_extras::repo::redhat::redhat::manage_epel: false
 openstack_extras::repo::redhat::redhat::manage_rdo: true
 
 # This is the @core group
-profile::base::common::base_packages:
+profile::base::common::common_packages:
   - audit
   - basesystem
   - bash

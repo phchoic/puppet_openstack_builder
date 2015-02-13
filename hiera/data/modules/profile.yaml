@@ -20,8 +20,8 @@ profile::base::common::manage_ntp: false
 profile::base::common::manage_sudo: false
 profile::base::common::manage_authconfig: false
 profile::base::common::manage_firewall: true
-profile::base::common::package_ensure: latest
-profile::base::common::base_packages:
+profile::base::common::common_packages_ensure: latest
+profile::base::common::common_packages:
   - 'openstack-selinux'
   - 'screen'
   - 'tcpdump'
