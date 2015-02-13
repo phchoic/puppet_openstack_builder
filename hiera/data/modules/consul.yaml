@@ -1,5 +1,6 @@
 consul::config_defaults:
   data_dir: '/var/lib/consul'
+  ui_dir: '/usr/share/consul-ui/dist'
   bind_addr: "%{hiera('internal_address')}"
   enable_syslog: true
   log_level: INFO
@@ -14,4 +15,4 @@ consul::config_defaults:
 consul::install_method: package
 consul::init_style: false
 consul::config_dir: '/etc/consul.d'
-consul::bin_diu: '/etc/consul.d'
+consul::ui_package_name: consul-ui

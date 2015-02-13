@@ -33,6 +33,8 @@ all_classes:
   - profile::highavailability::loadbalancing::haproxy
   - profile::highavailability::keepalived
 
+  - consul_profile::highavailability::loadbalancing::haproxy
+
 build_classes:
   - profile::webserver::apache
   - profile::base::common
