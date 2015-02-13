@@ -87,7 +87,7 @@ profile::base::common::base_packages:
   - xfsprogs
   - yum
 
-  - openstack-selinux'
+  - openstack-selinux
   - screen
   - tcpdump
   - hiera
@@ -96,4 +96,4 @@ profile::base::common::base_packages:
   - kernel
   - puppet
 
-mysql_Address: 127.0.0.1
+service_hash__haproxy::balanced__mysql__Address: 127.0.0.1
