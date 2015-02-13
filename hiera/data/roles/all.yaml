@@ -57,7 +57,6 @@ profile::base::common::common_packages:
   - initscripts
   - iproute
   - iprutils
-  #- iptables # Managed by firewall module
   - iputils
   - irqbalance
   - kbd
@@ -86,13 +85,10 @@ profile::base::common::common_packages:
   - vim-minimal
   - xfsprogs
   - yum
-
   - openstack-selinux
   - screen
   - tcpdump
   - hiera
-
-# Other basics
   - kernel
   - puppet
 
