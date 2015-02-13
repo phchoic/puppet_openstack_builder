@@ -5,7 +5,7 @@ nova::rabbit_host: "%{hiera('rabbitmq_Address')}"
 nova::api::admin_password: nova_pass
 nova::api::enabled: true
 nova::api::auth_host: "%{hiera('service_hash__haproxy::balanced__keystone__Address')}"
-nova::api::bind_address: "%{hiera('internal_address')}"
+nova::api::api_bind_address: "%{hiera('internal_address')}"
 nova::api::metadata_listen: "%{hiera('internal_address')}"
 
 nova::scheduler::enabled: true
@@ -17,7 +17,7 @@ nova::network::neutron::neutron_admin_auth_url: "http://%{hiera('service_hash__h
 nova::conductor::enabled: true
 
 nova::db::mysql::password: nova_pass
-nova::db::mysql::host: "%{hiera('service_hash__haproxy::balanced__mysql__Address')}"
+nova::db::mysql::host: '192.168.242.%'
 
 nova::keystone::auth::password: nova_pass
 nova::keystone::auth::public_address: "%{hiera('service_hash__haproxy::balanced__nova-api__Address')}"

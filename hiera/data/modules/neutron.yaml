@@ -39,7 +39,7 @@ neutron::plugins::ml2::mechanism_drivers:
   - openvswitch
 
 neutron::db::mysql::password: neutron_pass
-neutron::db::mysql::host: "%{hiera('service_hash__haproxy::balanced__mysql__Address')}"
+neutron::db::mysql::host: '192.168.242.%'
 
 neutron::keystone::auth::password: neutron_pass
 neutron::keystone::auth::public_address: "%{hiera('service_hash__haproxy::balanced__neutron-server__Address')}"
