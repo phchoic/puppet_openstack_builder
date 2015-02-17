@@ -127,7 +127,7 @@ other_repos:
   orchestration_utils:
     source: "%{git_protocol}://github.com/%{author}/puppet-orchestration_utils"
     dest: "%{destdir}orchestration_utils"
-    author: JioCloud
+    author: michaeltchapman
   rsync:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-rsync"
     dest: "%{destdir}rsync"
