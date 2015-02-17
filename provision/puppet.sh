@@ -16,7 +16,7 @@ cp -r $configure_dir/manifests /etc/puppet
 
 # This will be 'virtualbox' on osx vagrant systems
 productname=$(facter productname)
-if [ "$productname" = "OpenStack Nova" ]; then
+if [ "$productname" != "VirtualBox" ]; then
   # Use config drive if it's there
   if [ -e /dev/disk/by-label/config-2 ]; then
       python -c "import sys, yaml, json; yaml.safe_dump(json.load(sys.stdin)['meta'], sys.stdout, default_flow_style=False)" < /mnt/config/openstack/latest/meta_data.json > /etc/puppet/hiera/data/cloudinit.yaml
