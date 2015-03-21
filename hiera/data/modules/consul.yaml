@@ -1,5 +1,9 @@
 consul::config_defaults:
   data_dir: '/var/lib/consul'
+  datacenter: dev
+  acl_datacenter: dev
+  acl_default_policy: allow
+  acl_down_policy: allow
   ui_dir: '/usr/share/consul-ui'
   bind_addr: "%{hiera('internal_address')}"
   enable_syslog: true

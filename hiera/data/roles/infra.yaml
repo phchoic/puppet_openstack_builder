@@ -1,3 +1,5 @@
 consul::config_hash:
   server: true
   bootstrap_expect: 3
+  acl_master_token: mtoken
+  acl_token: mtoken
