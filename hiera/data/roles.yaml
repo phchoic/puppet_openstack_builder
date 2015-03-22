@@ -18,6 +18,8 @@ all_classes:
 
   - profile::messaging::rabbitmq
 
+  - profile::openstack::dashboard
+
   - profile::openstack::compute::api
   - profile::openstack::compute::scheduler
   - profile::openstack::compute::conductor
@@ -54,6 +56,7 @@ control_classes:
   - profile::base::common
   - profile::application::consul
   - consul_profile::openstack::identity
+  - consul_profile::openstack::dashboard
   - consul_profile::openstack::image::api
   - consul_profile::openstack::image::registry
   - consul_profile::openstack::messaging

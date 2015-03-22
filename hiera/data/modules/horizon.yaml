@@ -1,0 +1,13 @@
+horizon::openstack_endpoint_type: internalURL
+horizon::fqdn: "*"
+horizon::secret_key: horizon_secret
+horizon::servername: "%{hiera('public_address')}"
+horizon::keystone_url: "http://%{hiera('service_hash__haproxy::balanced__keystone__Address')}:5000/v2.0/"
+horizon::neutron_options:
+  'enable_lb': true
+  'enable_firewall': true
+  'enable_vpn': true
+horizon::wsgi::apache::priority: 10
+horizon::wsgi::apache::bind_address: "%{hiera('private_address')}"
+horizon::bind_address: "%{hiera('private_address')}"
+horizon::keystone_host: "%{hiera('service_hash__haproxy::balanced__keystone__Address')}"
