@@ -63,6 +63,20 @@ resources:
       dns_nameservers:
         - 8.8.8.8
 
+  proxy1_floatingip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: { get_param: floating_pool }
+
+  proxy1_floatingip_ass:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: { get_resource: proxy1_floatingip }
+      server_id: { get_resource: proxy1 }
+    depends_on:
+      - internal_router_interface
+      - internal_router
+
   control1_floatingip:
     type: OS::Nova::FloatingIP
     properties:
