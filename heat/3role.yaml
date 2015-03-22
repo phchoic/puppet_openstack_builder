@@ -302,8 +302,8 @@ resources:
       metadata:
         internal_iface: eth0
         internal_address: "%{ipaddress_eth0}"
-        public_iface: eth1
-        public_address: "%{ipaddress_eth1}"
+        public_iface: eth0
+        public_address: "%{ipaddress_eth0}"
         infra1_internal: { get_attr: [ infra1_internal, fixed_ips, 0, ip_address ]}
         mirror_address: { get_param: mirror_address }
 
