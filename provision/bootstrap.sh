@@ -145,7 +145,8 @@ fi
 
 # Lock network facts to prevent bridge malarky and VIPs from doing strange things
 if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
-    facter | grep ipaddress | sed 's/\ =>/:/' > /etc/facter/facts.d/ipaddress.yaml
+    # Do in 2 phases due to odd 'could not interpret fact file' bug
+    facter | grep ipaddress | sed 's/\ =>/:/' > out.yaml && mv -f out.yaml /etc/facter/facts.d/ipaddress.yaml
 fi
 date
 
