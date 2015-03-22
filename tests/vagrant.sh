@@ -9,3 +9,4 @@ vagrant up infra3 &
 vagrant up proxy1
 sleep 3
 vagrant up control1
+vagrant up hyper1
