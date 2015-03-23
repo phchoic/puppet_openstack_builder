@@ -1,4 +1,4 @@
-vagrant destroy -f infra1 infra2 infra3 proxy1 control1
+vagrant destroy -f infra1 infra2 infra3 proxy1 control1 hyper1
 
 vagrant up infra1 &
 sleep 3
