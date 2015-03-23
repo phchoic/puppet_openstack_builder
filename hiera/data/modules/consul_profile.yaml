@@ -14,3 +14,5 @@ consul_profile::highavailability::loadbalancing::haproxy::bind_address_hash:
   external:
     interface: "%{hiera('public_iface')}"
     address: "%{hiera('public_address')}"
+
+consul_profile::base::common::authorized_host: control1
