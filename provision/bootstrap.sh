@@ -150,10 +150,12 @@ if ! yum list installed facter > /dev/null 2>&1; then
     yum install -y facter
 fi
 
+mkdir -p /etc/facter/facts.d
 # Lock network facts to prevent bridge malarky and VIPs from doing strange things
 if ! [ -f /etc/facter/facts.d/ipaddress.yaml ]; then
     # Do in 2 phases due to odd 'could not interpret fact file' bug
-    facter | grep ipaddress | sed 's/\ =>/:/' > out.yaml && mv -f out.yaml /etc/facter/facts.d/ipaddress.yaml
+    facter | grep ipaddress | sed 's/\ =>/:/' > /tmp/out.yaml
+    mv -f /tmp/out.yaml /etc/facter/facts.d/ipaddress.yaml
 fi
 date
 
