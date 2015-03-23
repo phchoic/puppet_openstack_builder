@@ -113,7 +113,8 @@ if mount | grep -q vagrant; then
     fi
 fi
 
-# Mirror nodes need to pull in the PL repo to get started
+# Mirror nodes need to pull in the PL repo to get started along
+# with the aptira mirror for the 'ts' rpm
 # Whereas others should use the local mirror for all packages
 if [ "${mirror_address}" = "None" ] ; then
     echo '[puppetlabs]' > /etc/yum.repos.d/puppetlabs.repo
@@ -122,6 +123,12 @@ if [ "${mirror_address}" = "None" ] ; then
     echo 'enabled=1' >> /etc/yum.repos.d/puppetlabs.repo
     echo 'gpgcheck=1' >> /etc/yum.repos.d/puppetlabs.repo
     echo 'gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs' >> /etc/yum.repos.d/puppetlabs.repo
+
+    echo '[aptira]' > /etc/yum.repos.d/aptira.repo
+    echo "name=Consul Packages hosted at Aptira" >> /etc/yum.repos.d/aptira.repo
+    echo "baseurl=\"https://stacktira.aptira.com/repo/consul\"" >> /etc/yum.repos.d/aptira.repo
+    echo 'enabled=1' >> /etc/yum.repos.d/aptira.repo
+    echo 'gpgcheck=0' >> /etc/yum.repos.d/aptira.repo
 
     echo '[puppetlabs-deps]' > /etc/yum.repos.d/puppetlabs-deps.repo
     echo "name=Puppetlabs Dependencies Yum Repo" >> /etc/yum.repos.d/puppetlabs-deps.repo

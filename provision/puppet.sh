@@ -1,5 +1,10 @@
 yum install git puppet hiera python-yaml -y -q
 
+# Install ts for queuing puppet runs
+if ! yum list installed ts > /dev/null 2>&1; then
+    yum install -y ts
+fi
+
 if [ ! -d /etc/puppet/hiera/data ]; then
     mkdir -p /etc/puppet/hiera/data
 fi
@@ -61,9 +66,4 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
   fi
 fi
 
-while true ; do
-  puppet apply /etc/puppet/manifests/site.pp --detailed-exitcodes ;
-  if (($? != 1 && $? != 4 && $? != 6)) ; then
-    exit 0
-  fi;
-done;
+ts /vagrant/provision/tspuppet.sh
