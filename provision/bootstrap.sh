@@ -126,7 +126,7 @@ if [ "${mirror_address}" = "None" ] ; then
 
     echo '[aptira]' > /etc/yum.repos.d/aptira.repo
     echo "name=Consul Packages hosted at Aptira" >> /etc/yum.repos.d/aptira.repo
-    echo "baseurl=\"https://stacktira.aptira.com/repo/consul\"" >> /etc/yum.repos.d/aptira.repo
+    echo "baseurl=\"http://stacktira.aptira.com/repo/consul\"" >> /etc/yum.repos.d/aptira.repo
     echo 'enabled=1' >> /etc/yum.repos.d/aptira.repo
     echo 'gpgcheck=0' >> /etc/yum.repos.d/aptira.repo
 
