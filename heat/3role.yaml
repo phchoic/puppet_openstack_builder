@@ -149,6 +149,8 @@ resources:
       key_name: { get_param: key_name }
       networks:
         - port: { get_resource: infra1_internal }
+      security_groups:
+        - { get_resource: test_secgroup }
       metadata:
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
@@ -283,6 +285,8 @@ resources:
       key_name: { get_param: key_name}
       networks:
         - network: { get_resource: internal_network }
+      security_groups:
+        - { get_resource: test_secgroup }
       user_data:
         str_replace:
           template: |
@@ -316,6 +320,8 @@ resources:
       key_name: { get_param: key_name}
       networks:
         - network: { get_resource: internal_network }
+      security_groups:
+        - { get_resource: test_secgroup }
       user_data:
         str_replace:
           template: |
