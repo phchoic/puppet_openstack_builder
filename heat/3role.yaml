@@ -149,8 +149,6 @@ resources:
       key_name: { get_param: key_name }
       networks:
         - port: { get_resource: infra1_internal }
-      security_groups:
-        - { get_resource: test_secgroup }
       metadata:
         internal_iface: eth0
         internal_address: '%{ipaddress_eth0}'
