@@ -92,6 +92,7 @@ other_repos:
     source: "%{git_protocol}://github.com/%{author}/puppet-consul"
     dest: "%{destdir}consul"
     author: solarkennedy
+    ref: 07d691ff26108d44f2142e6a181e2f154dc921e9
   consul_profile:
     source: "%{git_protocol}://github.com/%{author}/consul_profile"
     dest: "%{destdir}consul_profile"
