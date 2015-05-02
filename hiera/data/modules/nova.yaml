@@ -26,3 +26,5 @@ nova::keystone::auth::internal_address: "%{hiera('service_hash__haproxy::balance
 
 nova::compute::enabled: true
 nova::compute::libvirt::libvirt_virt_type: qemu
+nova::compute::libvirt::manage_device_mapper_libs: true
+nova::compute::libvirt::device_mapper_libs_ensure: latest
