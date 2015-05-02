@@ -53,6 +53,7 @@ puppetlabs:
   concat:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-concat"
     dest: "%{destdir}concat"
+    ref: 1.2.0
   firewall:
     source: "%{git_protocol}://github.com/%{author}/puppetlabs-firewall"
     dest: "%{destdir}firewall"
