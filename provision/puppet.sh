@@ -35,7 +35,9 @@ mkdir -p /vagrant/vendor
 mkdir -p /vagrant/modules
 # Use cloner (exp)
 cd /vagrant
-./provision/cloner repos.yaml
+if [ "$productname" != "VirtualBox" ]; then
+  ./provision/cloner repos.yaml
+fi
 date
 # Install puppet modules
 rm -rf /etc/puppet/modules/*
