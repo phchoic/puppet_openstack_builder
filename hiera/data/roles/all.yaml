@@ -93,3 +93,7 @@ profile::base::common::common_packages:
   - puppet
 
 service_hash__haproxy::balanced__mysql__Address: 127.0.0.1
+
+profile::base::common::common_classes:
+  - selinux
+  - openstack_extras::repo::redhat::redhat
