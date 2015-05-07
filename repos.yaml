@@ -15,33 +15,42 @@ stackforge:
   neutron:
     source: "%{git_protocol}://github.com/%{author}/puppet-neutron"
     dest: "%{destdir}neutron"
+    ref: stable/juno
   nova:
     source: "%{git_protocol}://github.com/%{author}/puppet-nova"
     dest: "%{destdir}nova"
+    ref: stable/juno
   openstack:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstack"
     dest: "%{destdir}openstack"
   openstacklib:
     source: "%{git_protocol}://github.com/%{author}/puppet-openstacklib"
     dest: "%{destdir}openstacklib"
+    ref: stable/juno
   keystone:
     source: "%{git_protocol}://github.com/%{author}/puppet-keystone"
     dest: "%{destdir}keystone"
+    ref: stable/juno
   horizon:
     source: "%{git_protocol}://github.com/%{author}/puppet-horizon"
     dest: "%{destdir}horizon"
+    ref: stable/juno
   heat:
     source: "%{git_protocol}://github.com/%{author}/puppet-heat"
     dest: "%{destdir}heat"
+    ref: stable/juno
   cinder:
     source: "%{git_protocol}://github.com/%{author}/puppet-cinder"
     dest: "%{destdir}cinder"
+    ref: stable/juno
   glance:
     source: "%{git_protocol}://github.com/%{author}/puppet-glance"
     dest: "%{destdir}glance"
+    ref: stable/juno
   ceilometer:
     source: "%{git_protocol}://github.com/%{author}/puppet-ceilometer"
     dest: "%{destdir}ceilometer"
+    ref: stable/juno
 puppetlabs:
   author: puppetlabs
   apache:
