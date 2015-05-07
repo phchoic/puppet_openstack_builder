@@ -4,7 +4,7 @@ heat::api_cfn::bind_host: "%{hiera('public_address')}"
 
 heat::api_cloudwatch::bind_host: "%{hiera('public_address')}"
 
-heat::engine::auth_encryption_key: blahblahblah
+heat::engine::auth_encryption_key: blahblahblahblah
 
 heat::rabbit_host: "%{hiera('control_internal')}"
 heat::keystone_host: "%{hiera('control_public')}"
