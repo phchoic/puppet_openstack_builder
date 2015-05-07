@@ -141,7 +141,7 @@ other_repos:
   selinux:
     source: "%{git_protocol}://github.com/%{author}/puppet-selinux"
     dest: "%{destdir}selinux"
-    author: djjudas21
+    author: jfryman 
   ssh:
     source: "%{git_protocol}://github.com/%{author}/puppet-ssh"
     dest: "%{destdir}ssh"

@@ -1,1 +1,1 @@
-selinux::mode: disabled
+selinux::mode: permissive
