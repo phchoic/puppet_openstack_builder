@@ -145,6 +145,8 @@ else
     echo 'gpgcheck=0' >> /etc/yum.repos.d/local.repo
 fi
 
+yum update -y
+
 # Install facter so we can find interfaces easily
 if ! yum list installed facter > /dev/null 2>&1; then
     yum install -y facter
