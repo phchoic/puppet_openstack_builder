@@ -1,5 +1,5 @@
-yum_base_mirror: 'http://centos.mirror.uber.com.au'
-yum_epel_mirror: 'http://fedora.mirror.uber.com.au/epel'
+yum_base_mirror: 'http://centos.mirror.digitalpacific.com.au/'
+yum_epel_mirror: 'http://epel.mirror.digitalpacific.com.au/'
 
 openstack_extras::repo::redhat::redhat::repo_hash:
   'CentOS-Base':
