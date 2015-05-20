@@ -32,7 +32,7 @@ parameters:
     description: The flavor name to use for medium roles
   config_repo:
     type: string
-    default: 'https://github.com/michaeltchapman/puppet_openstack_builder'
+    default: 'https://github.com/phchoic/puppet_openstack_builder'
     description: Git repo that contains the configuration for this test run
   config_ref:
     type: string

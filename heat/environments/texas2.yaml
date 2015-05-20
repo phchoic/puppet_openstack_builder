@@ -1,6 +1,7 @@
 parameters:
   pubnet: public-floating-601
   floating_pool: public-floating-601
-  image: CentOS-7
+  image: centos-7_x86_64-2015-01-27-v6
+  key_name: phchoi
   small_flavor: Micro-Small
   medium_flavor: GP2-Medium
