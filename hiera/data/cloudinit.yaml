@@ -11,5 +11,5 @@ internal_address: "%{ipaddress_enp0s8}"
 public_iface: enp0s9
 public_address: "%{ipaddress_enp0s9}"
 
-yum_base_mirror: 'http://centos.mirror.digitalpacific.com.au/'
-yum_epel_mirror: 'http://epel.mirror.digitalpacific.com.au/'
+yum_base_mirror: 'http://mirror.centos.org/centos-7'
+yum_epel_mirror: 'http://dl.fedoraproject.org/pub/epel'

@@ -1,4 +1,4 @@
 [gerrit]
 host=review.openstack.org
 port=29418
-project=stackforge/puppet_openstack_builder
+project=phchoic/puppet_openstack_builder
