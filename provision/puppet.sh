@@ -68,4 +68,5 @@ if [ "${facter_fqdn}" != "${fqdn}" ] ; then
   fi
 fi
 
-ts /vagrant/provision/tspuppet.sh
+cronentry='*/2 * * * * root /vagrant/provision/tspuppet.sh'
+echo "$cronentry" > /etc/cron.d/tspuppet
