@@ -55,5 +55,11 @@ cat > /etc/consul.d/config.json<<EOF
 }
 EOF
 
+grep -q config-dir=/etc/consul.d /etc/sysconfig/consul 
+if [ $? -ne 0 ]; then
+    sed -i 's%config-dir=/etc/consul%config-dir=/etc/consul.d%g' /etc/sysconfig/consul 
+    killall consul
+fi
+
 systemctl start consul
 systemctl enable consul
